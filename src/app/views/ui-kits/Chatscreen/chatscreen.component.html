@@ -1,0 +1,240 @@
+<!-- <div class="breadcrumb">
+    <h1>Popover</h1>
+    <ul>
+        <li><a href="">UI Kits</a></li>
+        <li>Popover</li>
+    </ul>
+</div>
+<div class="separator-breadcrumb border-top"></div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="card-title">Quick and easy popovers</div>
+                <button type="button" class="btn btn-outline-secondary btn-rounded me-2" placement="top"
+                    ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+                    popoverTitle="Popover on top">
+                    Popover on top
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary btn-rounded me-2" placement="right"
+                    ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+                    popoverTitle="Popover on right">
+                    Popover on right
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary btn-rounded me-2" placement="bottom"
+                    ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+                    popoverTitle="Popover on bottom">
+                    Popover on bottom
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary btn-rounded me-2" placement="left"
+                    ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."
+                    popoverTitle="Popover on left">
+                    Popover on left
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="card-title">HTML and bindings in popovers</div>
+                <p>
+                    Popovers can contain any arbitrary HTML, Angular bindings and even directives!
+                    Simply enclose desired content or title in a <code>&lt;ng-template&gt;</code> element.
+                </p>
+
+                <ng-template #popTitle>Popover Title</ng-template>
+                <ng-template #popContent>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, inventore?</p>
+                    <blockquote>Lorem ipsum dolor sit amet consectetur adipisicing.</blockquote>
+                </ng-template>
+                <button type="button" class="btn btn-outline-secondary btn-rounded" [ngbPopover]="popContent"
+                    [popoverTitle]="popTitle">
+                    I've got markup in my popover!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">Custom and manual triggers</div>
+                <p>
+                    You can easily override open and close triggers by specifying event names (separated by
+                    <code>:</code>)
+                    in the <code>triggers</code> property.
+                </p>
+
+                <button type="button" class="btn btn-outline-secondary btn-rounded"
+                    ngbPopover="You see, I show up on hover!" triggers="mouseenter:mouseleave" popoverTitle="Pop title">
+                    Hover over me!
+                </button>
+
+                <hr>
+                <p>
+                    Alternatively you can take full manual control over popover opening / closing events.
+                </p>
+
+                <button type="button" class="btn btn-outline-secondary btn-rounded me-2" ngbPopover="What a great tip!"
+                    [autoClose]="false" triggers="manual" #p="ngbPopover" (click)="p.open()" popoverTitle="Pop title">
+                    Click me to open a popover
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-rounded me-2" (click)="p.close()">
+                    Click me to close a popover
+                </button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+
+<!-- 
+<div class="forpadding"></div>
+
+    <div class="year-month-picker">
+        <mat-form-field>
+          <mat-label>Year:</mat-label>
+          <mat-select [(ngModel)]="selectedYear" (selectionChange)="onSelectionChange('year')">
+            <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      
+        <mat-form-field>
+          <mat-label>Month:</mat-label>
+          <mat-select [(ngModel)]="selectedMonth" (selectionChange)="onSelectionChange('month')">
+            <mat-option *ngFor="let month of months" [value]="month">{{ month }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      
+      
+
+    <div class="forpadding"></div>
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead class="thead-dark fixed-header">
+                <tr>
+                    <th>Sl No</th>
+                    <th>Booking ID</th>
+                    <th>VI Date</th>
+                    <th>Customer</th>
+                    <th>Mobile</th>
+                    <th>Veh No</th>
+                    <th>Brand-Model</th>
+                    <th>Estimate</th>
+                    <th>Invoice</th>
+                    <th>whatsapp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of totalgstreport ; let i = index">
+                    <td>{{i + 1}}</td>
+                    <td>{{data.booking_reference_id}}</td>
+                    <td>{{data.createddate | date:'dd-MM-yyyy'}}</td>
+                    <ng-container *ngFor="let customers of data.customers; let first = first">
+                        <td [attr.rowspan]="data.customers.length" *ngIf="first">{{customers.name}}</td>
+                        <td>{{customers.mobile}}</td>
+                    </ng-container>
+                    <ng-container *ngFor="let vehicle of data.vehicledetails; let first = first">
+                        <td [attr.rowspan]="data.vehicledetails.length" *ngIf="first">{{vehicle.vh_number}}</td>
+                        <td [attr.rowspan]="data.vehicledetails.length" *ngIf="first">{{vehicle.brand}} -{{vehicle.model}}</td>
+                    </ng-container>
+                    <td>{{formatEstimateAmount(data.estimate ? data.estimate.estimate_amount : null)}}</td>
+                    <td>{{formatInvoiceAmount(data.invoice ? data.invoice.invoice_amount : null)}}</td>
+                    <td><button (click)="sendWhatsApp(data.mobile,data)">chat</button></td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div> -->
+
+
+    <div class="container-fluid mt-4">
+        <div class="row mb-2">
+            <div class="col-6 col-sm-4 col-md-3">
+              <mat-form-field appearance="outline" class="w-100 custom-select">
+                <mat-label>Year:</mat-label>
+                <mat-select [(ngModel)]="selectedYear" (selectionChange)="onSelectionChange('year')">
+                  <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-6 col-sm-4 col-md-3">
+              <mat-form-field appearance="outline" class="w-100 custom-select">
+                <mat-label>Month:</mat-label>
+                <mat-select [(ngModel)]="selectedMonth" (selectionChange)="onSelectionChange('month')">
+                  <mat-option *ngFor="let month of months" [value]="month">{{ month }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- <form class="col-6 col-sm-4 col-md-3">
+        
+            <mat-form-field>
+              <mat-label>Msg View</mat-label>
+              <mat-select [(ngModel)]="selectedValue" name="status" (selectionChange)="onStatusChange($event)">
+                  <mat-option [value]="true">Sent</mat-option>
+                  <mat-option [value]="false">Not Sent</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </form> -->
+      
+        <div class="row">
+          <div class="col-md-12">
+            <div class="table-responsive">
+              <table class="table table-hover table-striped custom-table">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Sl No</th>
+                    <th>VI Date</th>
+                    <th>Customer</th>
+                    <th>Mobile</th>
+                    <th>Veh No</th>
+                    <th>Brand-Model</th>
+                    <th>Estimate</th>
+                    <th>Invoice</th>
+                    <th>WhatsApp</th>
+                    <th>MSG</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of totalgstreport; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ data.createddate | date:'dd-MM-yyyy' }}</td>
+                    <ng-container *ngFor="let customers of data.customers; let first = first">
+                      <td [attr.rowspan]="data.customers.length" *ngIf="first">{{ customers.name }}</td>
+                      <td>{{ customers.mobile }}</td>
+                    </ng-container>
+                    <ng-container *ngFor="let vehicle of data.vehicledetails; let first = first">
+                      <td [attr.rowspan]="data.vehicledetails.length" *ngIf="first">{{ vehicle.vh_number }}</td>
+                      <td [attr.rowspan]="data.vehicledetails.length" *ngIf="first">{{ vehicle.brand }} - {{ vehicle.model }}</td>
+                    </ng-container>
+                    <td>{{ formatEstimateAmount(data.estimate ? data.estimate.estimate_amount : null) }}</td>
+                    <td>{{ formatInvoiceAmount(data.invoice ? data.invoice.invoice_amount : null) }}</td>
+                    <td>
+                      <button mat-raised-button color="primary" (click)="sendWhatsApp(data.mobile, data)">
+                        <mat-icon>chat</mat-icon> WhatsApp
+                      </button>
+                    </td>
+                    <td>
+                        <input type="checkbox" [(ngModel)]="data.msg_sent" [checked]="data.msg_sent" disabled class="custom-checkbox">
+                      </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+      

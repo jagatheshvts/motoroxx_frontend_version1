@@ -1,0 +1,109 @@
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    // text-align: left;
+    text-align: center;
+  }
+
+
+
+
+
+  .header-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background color */
+  }
+  
+  
+  .scrollable-content {
+    max-height: 200px; /* Adjust the max-height according to your preference */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Enable vertical scrolling */
+}
+
+table {
+    width: 100%; /* Ensure the table fills the entire container */
+    border-collapse: collapse; /* Collapse table borders */
+}
+
+table th th, table td td {
+    border: 1px solid #ddd; /* Add borders to table cells */
+    padding: 8px; /* Add padding to table cells */
+    text-align: left; /* Align text to the left */
+}
+  .header-details {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Spacing between details */
+    margin-bottom: 10px; /* Bottom margin for spacing */
+  }
+  
+  .header-details strong {
+    font-size: 18px;
+  }
+  
+  .forpadding{
+    padding: 5px;
+  
+  }
+
+
+  .fixed-header-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.fixed-header-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #f8f9fa; /* Background color for the fixed header */
+}
+
+.fixed-header-table th {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 2px solid #dee2e6; /* Border for the fixed header */
+}
+
+
+.fixed-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+
+
+
+
+
+
+
+
+
+::-webkit-scrollbar {
+  width: 10px; /* Width of the scrollbar */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background color of the scrollbar track */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar handle */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the scrollbar handle on hover */
+}
+
+
+
+
+ 

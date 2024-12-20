@@ -1,0 +1,932 @@
+<!-- <h1 style="text-align: center;"><strong>Supplier Receipt</strong></h1>
+<div class="row">
+  <div class="col-lg-4">
+    <mat-form-field>
+      <mat-label>Select Supplier</mat-label>
+      <mat-select [(ngModel)]="selectedSupplier" (selectionChange)="onSelectionChange($event)" [(value)]="selectedSupplier">
+        <mat-option *ngFor="let item of allmasterdata" [value]="item">
+          {{ item.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div *ngIf="mandatoryfields && !selectedSupplier" class="mandatory">Please select a supplier</div>
+
+   
+    <div *ngIf="suppliercontainercard"  style="width:80%" >
+      <div >
+        <span>{{ supaddress }}</span>
+      </div>
+      <div >
+        <span>Ph : {{ supmobile }}</span>
+      </div>
+      <div >
+        <span >GSTIN : {{ supgstno }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4" >
+    <mat-form-field (click)="picker.open()">
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" (dateChange)="formatDate($event)" (click)="picker.open()" readonly> 
+      <mat-datepicker-toggle matSuffix [for]="picker" (focus)="picker.open()" ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <div *ngIf="mondatorydate" class="mandatory">Please fill this field</div>
+    <div >
+      <div>
+      <span>Inv No:</span>
+      </div>
+      <input id="sup_invno" style="height:39px;border-radius:4px;border:1px solid#ccc;padding:3px;width: 250px;" type="text" [(ngModel)]="sup_invno" name="sup_invno">
+      <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+    </div>
+  </div>
+</div>
+
+<div class="forpadding"></div>
+<button  *ngIf="!isspareclicked" [disabled]="!selectedSupplier || !sup_invno || !selectedDate" class="btn btn-icon btn-primary" id="addinput" (click)="additemsopen()" 
+  style="margin-right: 10px;">
+  Add Items
+</button>
+<div *ngIf="isspareclicked"></div>
+<div  *ngIf="isspareclicked">
+  
+
+
+<div class="forpadding"></div>
+<div class="row">
+    <div>
+      <b>Items</b>
+      <div class="input-container" >
+        <button *ngIf="inputDataArray.length === 0" class="btn btn-icon btn-primary" id="addinside"
+          (click)="addInputField()">+</button>
+        <div *ngFor="let data of inputDataArray; let i = index" class="item-row">
+          <div class="input-container spare">
+            <label *ngIf="i === 0">Item</label>
+            <input style="height:28px;border-radius: 4px;border:1px solid#ccc;" matInput [(ngModel)]="data.spare"  name="spare">
+            <div *ngIf="mandatoryfields && !data.spare" class="mandatory">***</div>
+          </div>
+        
+
+          <div class="input-container uom" >
+            <label *ngIf="i === 0" class="right" for="uom">UoM</label>
+            <select style="height:28px;border-radius: 4px;border:1px solid#ccc;" id="uom" [(ngModel)]="data.unitmeasurement" onchange="onUoMChange(event, data)">
+                <option value="pairs">pairs</option>
+                <option value="pcs">pcs</option>
+                <option value="ltrs">ltrs</option>
+                <option value="boxes">boxes</option>
+            </select>
+        </div>
+
+          <div class="input-container qty">
+            <label style="text-align: right; align-items: end;" *ngIf="i === 0">Qty</label>
+            <input style="height:28px;border-radius: 4px;border:1px solid#ccc;" type="text" [(ngModel)]="data.qty"  name="Qty" 
+              >
+          </div>
+
+            <div class="input-container rate">
+              <label class="right" *ngIf="i === 0">Rate</label>
+            <input style="height:28px;text-align: right;border-radius: 4px;border:1px solid#ccc;" type="text"   [(ngModel)]="data.rate"
+              name="rate" (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)">
+            <div *ngIf="mandatoryfields && !data.rate" class="mandatory">***</div>
+
+            </div>
+            
+
+          <div class="input-container rate">
+            <label class="right" *ngIf="i === 0">Amount</label>
+            <input style="height:28px;text-align: right;border-radius: 4px;border:1px solid#ccc;" type="text"   [(ngModel)]="data.amount"
+              name="amount" (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)">
+            <div *ngIf="mandatoryfields && !data.amount" class="mandatory">***</div>
+          </div>
+
+          <div class="gstContainer">
+            <mat-checkbox>
+              <input type="checkbox" [(ngModel)]="data.gst18" id="gst18"
+                (change)="handleCheckboxChange(data, 'gst18')" name="gst18{{i}}">
+              18%
+            </mat-checkbox>
+            <mat-checkbox>
+              <input type="checkbox" [(ngModel)]="data.gst28" id="gst28"
+                (change)="handleCheckboxChange(data, 'gst28')" name="gst28{{i}}">
+              28%
+            </mat-checkbox>
+          </div>
+          <div class="input-container qty">
+            <label class="right" *ngIf="i === 0">CGST</label>
+            <input style="height:28px;text-align: right;border-radius: 4px;border:1px solid#ccc;" type="text"   [(ngModel)]="data.cgst"
+              name="cgst" (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)">
+            <div *ngIf="mandatoryfields && !data.cgst" class="mandatory">***</div>
+          </div>
+          <div class="input-container qty" >
+            <label class="right"*ngIf="i === 0">SGST</label>
+            <input style="height:28px;text-align: right;border-radius: 4px;border:1px solid#ccc;" type="text"  [(ngModel)]="data.sgst"
+              name="sgst" (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)">
+            <div *ngIf="mandatoryfields && !data.sgst" class="mandatory">***</div>
+          </div>
+          <div class="input-container qty">
+            <label class="right" *ngIf="i === 0">IGST</label>
+            <input style="height:28px;text-align: right;border-radius: 4px;border:1px solid#ccc;" type="text"  [(ngModel)]="data.igst"
+              name="igst" (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)">
+            <div *ngIf="mandatoryfields && !data.igst" class="mandatory">***</div>
+          </div>
+
+          <span (click)="deleteInputField(i)" id="delBtn" class="material-icons">delete</span>
+          <div class="btnContainer">
+            <button *ngIf="inputDataArray.length > 0 && i === inputDataArray.length - 1"
+              class="btn btn-icon btn-primary" id="addinside" (click)="addInputField()"> + </button>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="col-md-12">
+  <div id="card2" class="total-container" *ngIf="isspareclicked">
+    <div class="total-row">
+      <label>Amount:</label>
+      <input style="height:28px;border-radius:4px;border:1px solid#ccc;  width: 43%; text-align: right;" type="text"
+        [(ngModel)]="total_amount_receipt" name="sup_invno" (focus)="handleFocus($event)" (blur)="handleBlur($event)"
+        (input)="handleInput($event)">
+      <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+    </div>
+    <div class="total-row">
+      <label>CGST:</label>
+      <input style="height:28px;border-radius:4px;border:1px solid#ccc; width: 43%; text-align: right;" type="text"
+        [(ngModel)]="total_cgst_receipt" name="sup_invno" (focus)="handleFocus($event)" (blur)="handleBlur($event)"
+        (input)="handleInput($event)">
+      <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+    </div>
+    <div class="total-row">
+      <label>SGST:</label>
+      <input style="height:28px;border-radius:4px;border:1px solid#ccc; width: 43%; text-align: right;" type="text"
+        [(ngModel)]="total_sgst_receipt" name="sup_invno" (focus)="handleFocus($event)" (blur)="handleBlur($event)"
+        (input)="handleInput($event)">
+      <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+    </div>
+    <div class="total-row">
+      <label>IGST:</label>
+      <input style="height:28px;border-radius:4px;border:1px solid#ccc; width: 43%; text-align: right;" type="text"
+        [(ngModel)]="total_igst_receipt" name="sup_invno" (focus)="handleFocus($event)" (blur)="handleBlur($event)"
+        (input)="handleInput($event)">
+      <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-end _forpadding1">
+  <button type="button" class="btn btn-primary btn-md update-spare-button" (click)="supplier_receipt()">Save</button>
+</div>
+</div> 
+
+
+
+
+
+<table class="trans-table" *ngIf="isspareclicked">
+  <thead>
+    <tr>
+      <th style="width: 1px;text-align: center;">Sl.No</th>
+      <th style="width: 15%;text-align: center;">Trans Date</th>
+      <th style="width: 57%;" >Particulars</th>
+      <th style="width: 11%;text-align: center;">Recipt</th>
+      <th style="width: 11%;text-align: center;">Payment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of sup_paymentdata.transaction ; let i = index">
+      <td style="text-align: center;">{{i+1}}</td>
+      <td style="text-align: center;">{{ data.receiptpayment.date | date:'dd-MM-yyyy' }}</td>
+      <td class="particulars-column" (click)="openparticularpopup(particularpage,data,sup_paymentdata.transaction,i,sup_paymentdata)"  [attr.data-content]="getTruncatedText(data.receiptpayment.joinedparticulars || data.receiptpayment.particulars)">
+        {{ getTruncatedText(data.receiptpayment.joinedparticulars || data.receiptpayment.particulars) }}
+      </td>
+      <td style="text-align: right;">{{ data.receiptpayment.totalreceipt_amount| number: '1.2-2' }}</td>
+      <td style="text-align: right;">{{ data.receiptpayment.payment| number: '1.2-2'  }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+<ng-template #particularpage>
+  <h3 style="text-align:center;">Particulars</h3>
+  <h4><b>Type:</b>{{particularpopupdata_for}}</h4>
+  <h4><b>Date:</b>{{particularpopupdata_transdate | date:'dd-MM-yyyy' }}</h4>
+  <h4><b>Supplier:</b>{{supname}}</h4>
+  <h4><b>Amount:</b>{{particularpopupdata_amount }}.00</h4>
+  <h4><b>Trans Ref:</b>{{particularpopupdata_transref }}</h4>
+  <h4><b>Particulars:</b>{{particularpopupdata }}</h4>
+  <button (click)="previousparticular()" type="button" class="btn btn-link btn-sm mt-2 see-more-button" style="float: left;">
+    previous
+  </button>
+  <button (click)="nextparticular()" type="button" class="btn btn-link btn-sm mt-2 see-more-button" style="float: right;">
+    Next
+  </button>
+</ng-template> -->
+
+<!-- aravind newly created -->
+
+<h3 style="text-align: left"><strong>Supplier Inward</strong></h3>
+<!-- <hr class="hr" /> -->
+<div class="container" style="position: sticky">
+  <div class="row" style="display: flex; align-items: flex-start">
+    <div class="group" style="flex: 1">
+      <label>
+        <strong>Select Supplier: &nbsp;</strong><select class="selectClass form-control" [(ngModel)]="selectedSupplier"
+          (change)="onSelectionChange($event)">
+          <option *ngFor="let item of allmasterdata" [ngValue]="item">
+            {{ item.name }} ({{ item.type }} - {{ item.head }})
+          </option>
+        </select>
+      </label>
+      <br />
+      <div *ngIf="mandatoryfields && !selectedSupplier" class="mandatory">
+        Please select a supplier
+      </div>
+      <div *ngIf="suppliercontainercard" style="width: 100%; margin-top: -19px; margin-left: 3px">
+        <span>{{ supaddress }}</span> <br />
+        <span>Ph : {{ supmobile }}</span> <br />
+        <span *ngIf="supgstno">GSTIN : {{ supgstno }}</span>
+      </div>
+    </div>
+
+    <div class="group" style="flex: 1">
+      <label for="date">
+        <strong>Date: &nbsp;</strong><input type="date" (click)="openCalendar($event)" [(ngModel)]="selectedDate"
+          class="dateClass form-control" (change)="formatDate($event)" /></label><br />
+      <div *ngIf="mondatorydate" class="mandatory">Please fill this field</div>
+    </div>
+
+    <div class="group" style="flex: 1">
+      <label for="inv"><strong>Inv No: &nbsp;</strong><input id="sup_invno" class="invClass form-control" type="text"
+          [(ngModel)]="sup_invno" name="sup_invno" />
+        <div *ngIf="mandatoryinvno" class="mandatory">
+          Please fill this field
+        </div>
+      </label>
+      <br />
+    </div>
+    <div class="group" style="flex: 1">
+      <button style="background-color: #5864ff" *ngIf="!isspareclicked" [disabled]="!sup_invno || !selectedDate"
+        class="btn btn-icon btn-primary" id="addinput" (click)="additemsopen()">
+        Add Items
+      </button>
+    </div>
+  </div>
+</div>
+<div *ngIf="isspareclicked"></div>
+<div *ngIf="isspareclicked && !inventorycustomer">
+  <div class="inputContainer">
+    <table class="full-width-table">
+      <thead>
+        <tr>
+          <th>No.Of.Items</th>
+          <th>Amount Before Tax</th>
+          <th>Tax Total</th>
+          <th>Amount After Tax</th>
+          <th>Round Off</th>
+          <th>Grand Total</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!--*ngFor="let data of inputDataArray; let i = index" -->
+        <tr>
+          <td>
+            <div class="newInput">
+              <input type="text" style="border: none" [(ngModel)]="noOfItems" name="noOfItems"
+                class="input-field form-control" />
+              <div *ngIf="mandatoryinvno" class="mandatory">
+                Please fill this field
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="newInput">
+              <input type="text" style="border: none" [(ngModel)]="amount_before_tax" name="amount_before_tax"
+                class="input-field form-control" />
+              <div *ngIf="mandatoryinvno" class="mandatory">
+                Please fill this field
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="newInput">
+              <input type="text" style="border: none" [(ngModel)]="tax_total" name="tax_total"
+                class="input-field form-control" />
+              <div *ngIf="mandatoryinvno" class="mandatory">
+                Please fill this field
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="newInput">
+              <input type="text" style="border: none" [(ngModel)]="amount_after_tax" name="amount_after_tax"
+                class="input-field form-control" />
+              <div *ngIf="mandatoryinvno" class="mandatory">
+                Please fill this field
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="newInput">
+              <input type="text" style="border: none" [(ngModel)]="round_off" name="round_off"
+                class="input-field form-control" />
+              <div *ngIf="mandatoryinvno" class="mandatory">
+                Please fill this field
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="newInput">
+              <input type="text" style="border: none" [(ngModel)]="grand_total" name="grand_total"
+                class="input-field form-control" />
+              <div *ngIf="mandatoryinvno" class="mandatory">
+                Please fill this field
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <span (click)="resetInput()" class="material-icons" style="cursor: pointer; color: #663399">refresh</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row justify-content-end _forpadding1">
+    <button type="button" class="btn btn-primary btn-md update-spare-button" style="background-color: #5864ff"
+      (click)="supplier_receipt()">
+      Save
+    </button>
+  </div>
+</div>
+
+
+
+
+
+
+<!-- //now uncommented for test  start -->
+
+
+
+<div *ngIf="isspareclicked && inventorycustomer">
+
+  <div class="forpadding"></div>
+  <div class="row">
+    <div>
+      <div class="input-container">
+        <p *ngIf="inputDataArray.length === 0" style="color: blue; cursor: pointer;" (click)="addInputField()"> <u>Add
+            +</u></p>
+        <table class="item-table">
+          <thead style="position: sticky;">
+            <tr>
+              <th class="thClass">Brand</th>
+              <th class="thClass">Category</th>
+              <th class="thClass">prod id</th>
+              <th class="thClass">prod Name</th>
+              <th class="thClass">HSN</th>
+              <th class="thClass">unit</th>
+              <th class="thClass">qty</th>
+              <th class="thClass">MRP</th>
+              <th class="thClass">rate</th>
+              <th class="thClass">GST%</th>
+              <th class="thClass" colspan="3">Tax</th>
+              <th class="thClass">Total</th>
+              <th class="thClass" style="width: 10%;">Actions</th>
+            </tr>
+            <tr>
+              <th colspan="10"></th>
+              <th class="thClass" style="background-color: #ffff;">CGST</th>
+              <th class="thClass" style="background-color: #ffff;">SGST</th>
+              <th class="thClass" style="background-color: #ffff;">IGST</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of inputDataArray; let i = index">
+              <td>
+                <div class="inputs">
+                  <select class="form-control" [(ngModel)]="data.brand"
+                    style="width: 80px; margin-left: 2px; margin-right: 2px; text-align: center;">
+                    <option *ngFor="let brand of invetory_brands" [ngValue]="brand">{{brand.brand}}</option>
+                  </select>
+                </div>
+                <div *ngIf="mandatoryfields && !data.spare" class="mandatory">***</div>
+              </td>
+              <td>
+                <div class="inputs">
+                  <select [(ngModel)]="data.category" class="form-control"
+                    style="width: 80px; margin-left: 2px; margin-right: 2px; text-align: center;">
+                    <option *ngFor="let category of invetory_category" [ngValue]="category">{{category.category}}
+                    </option>
+                  </select>
+                </div>
+                <div *ngIf="mandatoryfields && !data.spare" class="mandatory">***</div>
+              </td>
+              <td>
+                <div class="inputs">
+                  <input type="text" class="spare form-control" style="width: 200px; left: 1px;"
+                    [(ngModel)]="data.prodid" name="spare">
+                </div>
+                <div *ngIf="mandatoryfields && !data.spare" class="mandatory">***</div>
+              </td>
+              <td>
+                <div class="inputs">
+                  <input type="text" class="spare form-control" style="width: 200px; left: 1px;"
+                    [(ngModel)]="data.prodName" name="spare">
+                </div>
+                <div *ngIf="mandatoryfields && !data.spare" class="mandatory">***</div>
+              </td>
+              <td>
+                <div class="inputs">
+                  <input type="text" class="spare form-control" style="width: 200px; left: 1px;" [(ngModel)]="data.HSN"
+                    name="spare">
+                </div>
+                <div *ngIf="mandatoryfields && !data.spare" class="mandatory">***</div>
+              </td>
+              <td>
+                <div class="inputs">
+                  <select [(ngModel)]="data.unitmeasurement" class="form-control"
+                    style="width: 80px; margin-left: 2px; margin-right: 2px; text-align: center;"
+                    (change)="onUoMChange($event, data)">
+                    <option value="pairs">pairs</option>
+                    <option value="pcs">pcs</option>
+                    <option value="ltrs">ltrs</option>
+                    <option value="boxes">boxes</option>
+                  </select>
+                </div>
+                <div *ngIf="mandatoryfields && !data.spare" class="mandatory">***</div>
+              </td>
+
+              <td>
+                <div class="inputs">
+                  <input type="text" class="qty form-control" (focus)="handleFocus($event)" (blur)="handleBlur($event)"
+                    (input)="handleInput($event)" [(ngModel)]="data.qty"
+                    style="width: 75px; text-align: right;margin-left: 2px;margin-right: 2px; " name="Qty">
+                </div>
+                <div *ngIf="mandatoryfields && !data.spare" class="mandatory">***</div>
+              </td>
+
+              <td>
+                <div class="inputs">
+                  <input type="text" class="amt form-control" (focus)="handleFocus($event)" (blur)="handleBlur($event)"
+                    (input)="handleInput($event); calculateTotals()" [(ngModel)]="data.MRP"
+                    style="width: 100px; text-align: right;margin-left: 2px; margin-right: 2px;" name="amount">
+                </div>
+                <div *ngIf="mandatoryfields && !data.amount" class="mandatory">***</div>
+              </td>
+
+              <td>
+                <div class="inputs">
+                  <input type="text" class="rate form-control" (focus)="handleFocus($event)" (blur)="handleBlur($event)"
+                    (input)="handleInput($event)" [(ngModel)]="data.rate"
+                    style="width: 100px;text-align: right;margin-left: 2px; margin-right: 2px;" name="rate">
+                </div>
+                <div *ngIf="mandatoryfields && !data.rate" class="mandatory">***</div>
+              </td>
+              <td>
+                <div class="inputs">
+                  <select [(ngModel)]="data.gst" style="width: 58px;margin-left: 2px; margin-right: 2px;"
+                    class="form-control" (change)="handleCheckboxChange($event, data)">
+                    <option value="18">18%</option>
+                    <option value="28">28%</option>
+                  </select>
+                </div>
+                <div *ngIf="mandatoryfields && !data.spare" class="mandatory">***</div>
+              </td>
+              <td>
+                <div class="inputs">
+                  <input type="text" class="cgst form-control" (focus)="handleFocus($event)" (blur)="handleBlur($event)"
+                    (input)="handleInput($event); calculateTotals()"
+                    style="width: 74px; text-align: right;margin-left: 2px; margin-right: 2px;" [(ngModel)]="data.cgst"
+                    name="cgst">
+                </div>
+              </td>
+              <td>
+                <div class="inputs">
+                  <input type="text" class="sgst form-control" (focus)="handleFocus($event)" (blur)="handleBlur($event)"
+                    (input)="handleInput; calculateTotals()"
+                    style="width: 74px; text-align: right;margin-left: 2px; margin-right: 2px;" [(ngModel)]="data.sgst"
+                    name="sgst">
+                </div>
+              </td>
+              <td>
+                <div class="inputs">
+                  <input type="text" class="igst form-control" (focus)="handleFocus($event)" (blur)="handleBlur($event)"
+                    (input)="handleInput($event); calculateTotals()"
+                    style="width: 74px; text-align: right;margin-left: 2px; margin-right: 2px;" [(ngModel)]="data.igst"
+                    name="igst">
+                </div>
+              </td>
+              <td>
+                <div class="inputs">
+                  <input type="text" class="rate form-control" (focus)="handleFocus($event)" (blur)="handleBlur($event)"
+                    (input)="handleInput($event); calculateTotals()"
+                    style="width: 74px; text-align: right;margin-left: 2px; margin-right: 2px;" [(ngModel)]="data.total"
+                    name="igst">
+                </div>
+              </td>
+              <td class="buttonrow">
+                <span (click)="deleteInputField(i)" id="delBtn" class="material-icons">delete</span>
+                <p class="btn" style="color: #663399;"
+                  *ngIf="inputDataArray.length > 0 && i === inputDataArray.length - 1"
+                  (click)="addInputField(i,conform_mrp_popup)"> <u>Add
+                    +</u></p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="overall_total_table">
+    <div class="row firstTable">
+      <div>
+        <table class="totals-table totalTable1">
+          <tbody>
+            <tr class="tablerow">
+              <th class="tableHead1">Total Amount</th>
+              <td class="tabledata1">{{total_amount_receipt}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row secondTable">
+      <div>
+        <table class="totals-table taxtable">
+          <tbody>
+            <tr>
+              <th class="taxHead">Tax</th>
+              <td class="taxdata1">{{total_cgst_receipt}}</td>
+              <td class="taxdata2">{{total_sgst_receipt}}</td>
+              <td class="taxdata3">{{total_igst_receipt}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div> -->
+
+
+
+  <div class="col-md-12">
+
+
+
+
+    <div id="card2" class="total-table-wrapper" *ngIf="isspareclicked">
+      <table class="total-table">
+        <tr>
+          <td><strong>Amount Before Tax:</strong></td>
+          <td>
+            <input type="text" style="border: none;" [(ngModel)]="amount_before_tax" name="sup_invno"
+              (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)"
+              class="input-field form-control">
+            <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Tax Total:</strong></td>
+          <td>
+            <input type="text" style="border: none;" [(ngModel)]="tax_total" name="sup_invno"
+              (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)"
+              class="input-field form-control">
+            <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Amount After Tax:</strong></td>
+          <td>
+            <input type="text" style="border: none;" [(ngModel)]="amount_after_tax" name="sup_invno"
+              (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)"
+              class="input-field form-control">
+            <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+          </td>
+        </tr>
+        <tr>
+          <td><label><strong>Round Off Total:</strong></label></td>
+          <td>
+            <input type="text" style="border: none;" [(ngModel)]="round_off" name="sup_invno"
+              (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)"
+              class="input-field form-control">
+            <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+          </td>
+        </tr>
+        <tr>
+          <td><label><strong>Grand Total :</strong></label></td>
+          <td>
+            <input type="text" style="border: none;" [(ngModel)]="grand_total" name="sup_invno"
+              (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)"
+              class="input-field form-control">
+            <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+
+
+    <div id="card2" class="total-table-wrapper" *ngIf="isspareclicked">
+      <table class="total-table">
+        <tr>
+          <td><strong>Toatl CGST:</strong></td>
+          <td>
+            {{total_cgst_receipt}}
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Total SGST:</strong></td>
+          <td>
+            {{total_sgst_receipt}}
+          </td>
+        </tr>
+        <tr>
+          <td><strong>TOTAL IGST:</strong></td>
+          <td>
+            {{total_igst_receipt}}
+          </td>
+        </tr>
+      </table>
+    </div>
+
+
+
+  </div>
+  <div class="row justify-content-end _forpadding1">
+    <button type="button" class="btn btn-primary btn-md update-spare-button"
+      (click)="supplier_receipt_inventory(conform_mrp_popup)">Save</button>
+  </div>
+</div>
+
+
+
+
+<!-- //now uncommented for test end -->
+
+
+
+
+
+<div *ngIf="suppliercontainercard && sup_paymentdata?.transaction?.length">
+  <table class="trans-table">
+    <thead>
+      <tr>
+        <th style="width: 1px; text-align: center">Sl.No</th>
+        <th style="width: 15%; text-align: center">Trans Date</th>
+        <th style="width: 57%">Particulars</th>
+        <th style="width: 11%; text-align: center">Receipt</th>
+        <th style="width: 11%; text-align: center">Payment</th>
+        <th style="width: 11%; text-align: center">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of sup_paymentdata.transaction; let i = index">
+        <td style="text-align: center">{{ i + 1 }}</td>
+        <td style="text-align: center">
+          {{ data.receiptpayment.date | date : "dd-MM-yyyy" }}
+        </td>
+        <td class="particulars-column" (click)="
+            openparticularpopup(
+              particularpage,
+              data,
+              sup_paymentdata.transaction,
+              i,
+              sup_paymentdata
+            )
+          " [attr.data-content]="
+            getTruncatedText(
+              data.receiptpayment.joinedparticulars ||
+                data.receiptpayment.particulars
+            )
+          ">
+          {{
+          getTruncatedText(
+          data.receiptpayment.joinedparticulars ||
+          data.receiptpayment.particulars
+          )
+          }}
+        </td>
+        <!-- Display the grand_total value in the receipt column -->
+        <td style="text-align: right">
+          {{ data.receiptpayment.grand_total | number : "1.2-2" }}
+        </td>
+        <td style="text-align: right">
+          {{ data.receiptpayment.payment | number : "1.2-2" }}
+        </td>
+        <td><i class="i-File-Edit" style="cursor: pointer;"  *ngIf="data.receiptpayment.type==='Receipt'"  (click)="editreceipt_popup(sup_paymentdata,i)"></i></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #particularpage>
+  <div class="particularpage">
+    <h3 style="text-align: center">Particulars</h3>
+    <h4><b>Type:</b> &nbsp;&nbsp;{{ particularpopupdata_for }}</h4>
+    <h4><b>Date:</b>&nbsp;&nbsp;{{ particularpopupdata_transdate | date : "dd-MM-yyyy" }}</h4>
+    <h4><b>Supplier:</b>&nbsp;&nbsp;{{ supname }}</h4>
+    <h4><b>Amount:</b>&nbsp;&nbsp;{{ particularpopupdata_amount }}.00</h4>
+    <h4><b>Trans Ref:</b>&nbsp;&nbsp;{{ particularpopupdata_transref }}</h4>
+    <h4><b>Particulars:</b>&nbsp;&nbsp;{{ particularpopupdata }}</h4>
+    <div class="buttons">
+      <button (click)="previousparticular()" type="button" class="btn  btn-sm mt-2 see-more-button">
+        Previous
+      </button>
+      <button (click)="nextparticular()" type="button" class="btn  btn-sm mt-2 see-more-button"
+        style="margin-left: 68%; width: 14%;">
+        Next
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #conform_mrp_popup>
+  <div style="padding: 10px;">
+
+    <h3>Already There Is a Product With The Amount of {{checkedproductmrp}}</h3>
+    <h3>Do You Want to Update the MRP?</h3>
+    <div class="button-container">
+      <button class="btn btn-primary btn-rounded" (click)="conform_mrp_popup_process('no')">No</button>
+      <button class="btn btn-primary btn-rounded" (click)="conform_mrp_popup_process('yes')">Yes</button>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<div style="padding: 10px;"></div>
+<div *ngIf="edittable_receipt" class="table-container-edit">
+  <table class="item-edit-table">
+    <thead style="position: sticky;">
+      <tr>
+        <th style="text-align: center;" class="thClassedit">Brand</th>
+        <th style="text-align: center;" class="thClassedit">Category</th>
+        <th style="text-align: center;" class="thClassedit">Prod ID</th>
+        <th style="text-align: center;" class="thClassedit">Prod Name</th>
+        <th style="text-align: center;" class="thClassedit">HSN</th>
+        <th style="text-align: center;" class="thClassedit">Unit</th>
+        <th style="text-align: center;" class="thClassedit">Qty</th>
+        <th style="text-align: center;" class="thClassedit">MRP</th>
+        <th style="text-align: center;" class="thClassedit">Rate</th>
+        <th style="text-align: center;" class="thClassedit">GST%</th>
+        <th style="text-align: center;" class="thClassedit" colspan="3">Tax</th>
+        <th style="text-align: center;" class="thClassedit">Total</th>
+        <!-- <th class="thClassedit" style="width: 10%;">Actions</th> -->
+      </tr>
+      <tr>
+        <th colspan="10"></th>
+        <th class="thClassedit" style="background-color: #ffff;">CGST</th>
+        <th class="thClassedit" style="background-color: #ffff;">SGST</th>
+        <th class="thClassedit" style="background-color: #ffff;">IGST</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of receiptdata_foredit.receiptdata; let i = index">
+        <td class="inputFieldClass">
+          <select class="inputFieldClass" [(ngModel)]="data.brand" (ngModelChange)="updateBrand(data, $event)">
+            <option value="" disabled>Select Brand</option>
+            <option *ngFor="let brand of invetory_brands" [ngValue]="brand.brand">{{ brand.brand }}</option>
+          </select>
+        </td>
+        <td>
+          <select class="inputFieldClass" [(ngModel)]="data.category" (ngModelChange)="updateCategory(data, $event)">
+            <option value="" disabled>Select category</option>
+            <option *ngFor="let category of invetory_category" [ngValue]="category.category">{{category.category}}</option>
+          </select>
+        </td>
+        <td><input class="inputFieldClass" [(ngModel)]="data.prodid"></td>
+        <td><input class="inputFieldClass" [(ngModel)]="data.prodName"></td>
+        <td><input class="inputFieldClass" [(ngModel)]="data.HSN"></td>
+        <td><input class="inputFieldClass" [(ngModel)]="data.unitmeasurement"></td>
+        <td><input class="inputFieldClass" style="text-align: right;" [(ngModel)]="data.qty" type="number"></td>
+        <td><input class="inputFieldClass" style="text-align: right;" [(ngModel)]="data.MRP" [ngModel]="data.MRP | number:'1.2-2'" type="number"></td>
+        <!-- <td><input class="inputFieldClass" style="text-align: right;" [(ngModel)]="data.rate" [ngModel]="data.rate | number:'1.2-2'"   type="number"></td> -->
+        <!-- <td><input class="inputFieldClass" style="text-align: right;" [(ngModel)]="data.gst" type="number"></td> -->
+        <td>
+          <input class="inputFieldClass" style="text-align: right;" 
+                 [(ngModel)]="data.rate" 
+                 [value]="data.rate | number:'1.2-2'" 
+                 (input)="data.rate = $event.target.value" 
+                 type="number">
+        </td>
+        
+
+       
+
+        <td>
+          <select class="inputFieldClass" [(ngModel)]="data.gst" (ngModelChange)="updateCategory(data, $event)">
+            <option value="5" >5</option>
+            <option value="18" >18</option>
+            <option value="28" >28</option>
+          </select>
+        </td>
+        
+        <td><input class="inputFieldClass" style="text-align: right;" [(ngModel)]="data.cgst"  type="number"></td>
+        <td><input class="inputFieldClass" style="text-align: right;" [(ngModel)]="data.sgst" type="number"></td>
+        <td><input class="inputFieldClass" style="text-align: right;" [(ngModel)]="data.igst" type="number"></td>
+        <td><input class="inputFieldClass" style="text-align: right;" [(ngModel)]="data.total" type="number"></td>
+
+        <!-- <td><button (click)="deleteRow(i)">Delete</button></td> -->
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+<div id="card2" class="total-table-wrapper" *ngIf="edittable_receipt" >
+  <table class="total-table" style="margin-left: 21%;">
+    <div>
+
+      <tr>
+        <td><strong>Amount Before Tax:</strong></td>
+        <td>
+          <input type="text" style="border: none;" [(ngModel)]="receiptdata_foredit.receiptpayment.amount_before_tax"
+            name="sup_invno" (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)"
+            class="input-field form-control">
+          <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Tax Total:</strong></td>
+        <td>
+          <input type="text" style="border: none;" [(ngModel)]="receiptdata_foredit.receiptpayment.total_tax"
+            name="sup_invno" (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)"
+            class="input-field form-control">
+          <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Amount After Tax:</strong></td>
+        <td>
+          <input type="text" style="border: none;" [(ngModel)]="receiptdata_foredit.receiptpayment.amount_after_tax"
+            name="sup_invno" (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)"
+            class="input-field form-control">
+          <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+        </td>
+      </tr>
+      <tr>
+        <td><label><strong>Round Off Total:</strong></label></td>
+        <td>
+          <input type="text" style="border: none;" [(ngModel)]="receiptdata_foredit.receiptpayment.round_off_total"
+            name="sup_invno" (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)"
+            class="input-field form-control">
+          <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+        </td>
+      </tr>
+      <tr>
+        <td><label><strong>Grand Total :</strong></label></td>
+        <td>
+          <input type="text" style="border: none;" [(ngModel)]="receiptdata_foredit.receiptpayment.grand_total"
+            name="sup_invno" (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)"
+            class="input-field form-control">
+          <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+        </td>
+      </tr>
+    </div>
+  </table>
+  <div>
+    <button class="btn btn-primary" style="float: right;width: 23%;"  *ngIf="edittable_receipt" (click)="update_receiptdata()">
+      Update
+    </button>
+  </div>
+</div>
+
+<!-- <div>
+  <button class="btn btn-primary" style="float: right;" *ngIf="edittable_receipt" (click)="update_receiptdata()">
+    Update
+  </button>
+</div> -->
+
+
+
+
+<!-- <div id="card2" class="total-table-wrapper" *ngIf="edittable_receipt">
+  <table class="total-table">
+    <tr>
+      <td><strong>Toatl CGST:</strong></td>
+      <td>
+        {{total_cgst_receipt}}
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Total SGST:</strong></td>
+      <td>
+        {{total_sgst_receipt}}
+      </td>
+    </tr>
+    <tr>
+      <td><strong>TOTAL IGST:</strong></td>
+      <td>
+        {{total_igst_receipt}}
+      </td>
+    </tr>
+  </table>
+</div> -->

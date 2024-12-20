@@ -1,0 +1,180 @@
+mat-form-field {
+    width: 250px; /* Adjust the width as needed */
+    height: 30px; 
+  }
+  
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    height: 30px; /* Adjust the height as needed */
+  }
+
+
+  .forpadding {
+
+  padding: 27px;
+
+
+  }
+
+  .header-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background color */
+  }
+
+  .header-container h1 {
+    margin-bottom: 10px;
+    color: #007bff; /* Blue color for the heading */
+    font-size: 28px;
+  }
+
+  .header-details {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Spacing between details */
+    margin-bottom: 10px; /* Bottom margin for spacing */
+  }
+
+  .header-details strong {
+    font-size: 18px;
+  }
+
+  .custom-height {
+    height: 60px !important;
+    line-height: 60px; /* Adjusts vertical alignment */
+}
+
+.mat-form-field-wrapper {
+    align-items: center; /* Centers the content vertically */
+}
+
+select.placeholder {
+  color: grey;
+}
+
+select:not(.placeholder) {
+  color: black; /* Or any other color you want for selected options */
+}
+
+
+
+
+.trans-table {
+  width: 88%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.trans-table th,
+.trans-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.trans-table th {
+  background-color: #f2f2f2;
+}
+
+select.placeholder {
+  color: grey; /* Placeholder text color */
+}
+
+select:not(.placeholder) {
+  color: black; /* Selected option text color */
+}
+
+
+
+
+
+
+
+
+
+
+//for description popup
+
+
+.particulars-container {
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.see-more-button {
+  font-size: 14px;
+  text-decoration: none;
+  padding: 10px 20px;
+  border: 1px solid transparent; 
+  border-radius: 4px;
+  background-color: #663399;
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .particulars-container {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .see-more-button {
+    margin-bottom: 10px;
+  }
+}
+#savebtn:hover {background-color: #82539f}
+
+#savebtn:active {
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+
+
+//for description popup
+
+
+
+
+
+
+  
+
+  /* Remove background color */
+ 
+  
+
+
+
+  
+
+
+  

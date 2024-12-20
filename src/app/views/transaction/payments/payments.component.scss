@@ -1,0 +1,480 @@
+// .manditory_global {
+//     color: red;
+//     text-align: center;
+//   }
+//   .mandatory {
+//     color: red;
+//   }
+//   .trans-table {
+//     width: 76%;
+//     border-collapse: collapse;
+//     margin-top: 10px;
+//   }
+//   .trans-table th,
+//   .trans-table td {
+//     border: 1px solid #ddd;
+//     padding: 8px;
+//     text-align: left;
+//   }
+//   .trans-table th {
+//     background-color: #f2f2f2;
+//   }
+//   .forpadding_total {
+//     padding: 8px;
+//   }
+//   .forpadding_total_date {
+//     padding: 3px;
+//   }
+//   .container_pay {
+//     background-color: aliceblue
+//   }
+//   .matfield_size {
+//     width: 70%;
+//   }
+//   .forpadding {
+//     padding: 10px
+//   }
+//   .container_pay {
+//     background-color: aliceblue
+//   }
+//   .card1 {
+//     padding: 10px;
+//   }
+//   .matinputsize {
+//     width: 10%;
+//   }
+//   .textareasize {
+//     width: 70%;
+//   }
+//   .total-header {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     margin-bottom: 10px;
+//   }
+//   .total-row {
+//     display: flex;
+//     align-items: center;
+//     gap: 10px;
+//   }
+//   .total-row label {
+//     width: 80px;
+//     margin-right: 10px;
+//   }
+//   .error-message {
+//     color: red;
+//     margin-top: 10px;
+//   }
+//   ::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle,
+//   ::ng-deep .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple),
+//   ::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple,
+//   ::ng-deep .mat-radio-button.mat-accent:active .mat-radio-persistent-ripple {
+//     background-color: #0d6efd !important;
+//   }
+//   ::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+//     border-color: #0d6efd !important;
+//   }
+//   .no-spinners::-webkit-outer-spin-button,
+//   .no-spinners::-webkit-inner-spin-button {
+//     -webkit-appearance: none;
+//     margin: 0;
+//   }
+//   .centered-div {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     height: 100vh;
+//     width: 100%;
+//     text-align: center;
+//   }
+//   .particulars-column {
+//     overflow: hidden;
+//     white-space: nowrap;
+//     text-overflow: ellipsis;
+//     position: relative;
+//   }
+// .newHeadInput {
+//   width: 70%;
+//   padding: 8px;
+//   margin-right: 10px;
+//   border: 1px solid #ccc;
+//   border-radius: 5px;
+// }
+// .newHeadButton {
+//   padding: 8px 15px;
+//   background-color: #007bff;
+//   color: white;
+//   border: none;
+//   border-radius: 5px;
+//   cursor: pointer;
+// }
+
+
+// code added for aravind ui
+
+
+.manditory_global {
+  color: red;
+  text-align: center;
+}
+
+.mandatory {
+  color: red;
+
+}
+
+
+.trans-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.trans-table th,
+.trans-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.trans-table th {
+  background-color: #f2f2f2;
+}
+
+.forpadding_total {
+
+  padding: 8px;
+
+
+}
+
+.forpadding_total_date {
+
+  padding: 3px;
+
+
+}
+
+
+.container_pay {
+  background-color: aliceblue
+}
+
+
+.matfield_size {
+  width: 70%;
+}
+
+.forpadding {
+
+  padding: 10px
+}
+
+
+.container_pay {
+  background-color: aliceblue
+}
+
+
+// .card2{
+//   background-color: white;
+//   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+//   padding:  10px;
+//   width: 80%;
+// }
+
+.card1 {
+  padding: 10px;
+}
+
+.matinputsize {
+  width: 10%;
+  // height:10px
+}
+
+.textareasize {
+  width: 70%;
+}
+
+.total-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.total-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.total-row label {
+  width: 80px;
+  // text-align: right;
+  margin-right: 10px;
+}
+
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+
+/* Use ::ng-deep to ensure the styles are applied deeply */
+::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle,
+::ng-deep .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple),
+::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple,
+::ng-deep .mat-radio-button.mat-accent:active .mat-radio-persistent-ripple {
+  background-color: #0d6efd !important;
+}
+
+::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #0d6efd !important;
+}
+
+.no-spinners::-webkit-outer-spin-button,
+.no-spinners::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.centered-div {
+  display: flex;
+  justify-content: center;
+  
+  align-items: center;
+  
+  height: 100vh;
+  
+  width: 100%;
+  
+  text-align: center;
+  
+}
+
+.particulars-column {
+  // width: 57%; 
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  position: relative;
+}
+
+// .particulars-column::after {
+//   content: attr(data-content);
+//   position: absolute;
+//   right: 0;
+//   background-color: white; /* Adjust this if needed */
+//   padding-left: 5px;
+//   white-space: nowrap;
+//   text-overflow: ellipsis;
+// }
+
+.aligned-row {
+  display: flex;
+  align-items: flex-start; 
+  gap: 20px; 
+}
+
+.supplier-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  max-width: 230px; 
+  margin-top: -24px;
+}
+
+#supplierselect {
+  width: 100%; 
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 5px; 
+}
+
+.info {
+  margin-top: 5px; 
+  font-size: 14px; 
+  line-height: 1.2; 
+}
+
+.newHeadInput {
+  width: 200px; 
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#dateInput {
+  width: 150px; 
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.newHeadButton {
+  padding: 8px 15px;
+  background-color: #663399;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.payment-method-label {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+#bank-select{
+  width: 236px; 
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+
+.container {
+  margin-left: 10px;
+}
+
+
+.content-area {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 50%;
+  margin-top: 10px;
+}
+
+
+.flex-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+
+.small-field {
+  flex: 0.48;  
+  min-width: 150px;
+}
+
+
+.full-width-field {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+
+.field select,
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 8px;
+  height: 39px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.field textarea {
+  height: 80px;
+  resize: none;
+}
+
+
+.button-area {
+  text-align: center;
+}
+
+.button-area button {
+  padding: 08px 24px;
+  background-color: #663399;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+
+.bank-card {
+  padding: 8px;
+  border: none;
+  background-color: #fff;
+  font-size: 12px;
+  margin-top: -10px;
+  width: 50%;
+}
+
+
+.particulars-container {
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.see-more-button {
+  font-size: 14px;
+  text-decoration: none;
+  padding: 10px 20px;
+  border: 1px solid transparent; 
+  border-radius: 4px;
+  background-color: #5864ff;;
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .particulars-container {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .see-more-button {
+    margin-bottom: 10px;
+  }
+}
+#savebtn:hover {background-color: #82539f}
+
+#savebtn:active {
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.radiobtn{
+  margin-top: 8px;
+}

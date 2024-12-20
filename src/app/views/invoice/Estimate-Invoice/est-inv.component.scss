@@ -1,0 +1,593 @@
+
+
+
+.modal-body {
+  max-height: 400px;
+  overflow-y: auto;
+  align-items: center;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: bold;
+}
+
+input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+.forpadding {
+  padding: 5px;
+}
+
+
+._forpadding1 {
+  padding: 5px;
+  margin-top: 8px;
+
+
+}
+
+#button_for_right_align {
+  float: right;
+}
+
+#update_spares_body {
+
+  margin-left: 3%;
+  // margin-right: 5%
+}
+
+
+
+.qtyrate {
+  width: 46px;
+  text-align: center;
+
+}
+
+.rate {
+
+  width: 10%;
+  text-align: right;
+
+}
+
+.mat-form-field {
+  // height: 45px;
+  margin-right: 10px;
+}
+
+::ng-deep .mat-form-field-underline {
+  display: none;
+}
+
+::ng-deep .mat-form-field .mat-form-field-placeholder::before {
+  font-weight: bold;
+}
+
+.sparelabour {
+  width: 40%;
+
+}
+
+.mat-checkbox-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.btncontainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.update-spare-button {
+  width: 95px;
+  // background-color: #663399;
+  // border-color:#663399;
+
+
+}
+
+
+#modal-body-changestatus {
+  max-height: 600px;
+  overflow-y: initial;
+
+}
+
+
+
+.statusdiv {
+  align-items: center;
+  margin-left: 40%;
+}
+
+
+
+.form-check-input {
+
+  height: 13px;
+
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+}
+
+
+.suggestions-container {
+
+  // background-color: burlywood;
+  background-color: #f0f0f0;
+
+
+}
+
+.suggestion-card {
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.suggestions-container:hover {
+  background-color: #f0f0f0;
+}
+
+
+
+
+
+// for vehiclehistory
+
+.vehicle-history-container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  max-height: 600px;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+
+}
+
+.vehicle-entry-count {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.scrollable-container {
+  max-height: 500px;
+  /* Limit the height of the scrollable container */
+  overflow-y: auto;
+  /* Add vertical scroll */
+}
+
+.jobcard-container {
+  background-color: #fff;
+  // border: 1px solid #ddd;
+  border: 3px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.jobcard-header {
+  margin-bottom: 10px;
+}
+
+.complaints-section h3 {
+  margin-top: 0;
+}
+
+.complaints-section ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.service-section,
+.financial-section {
+  margin-top: 10px;
+}
+
+.financial-section p {
+  margin: 5px 0;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
+}
+
+.spacepadding {
+  padding: 10px;
+}
+
+.sparebutton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.sparebutton:hover {
+  background-color: #0056b3;
+}
+
+.spare-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.spare-table th,
+.spare-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.spare-table th {
+  background-color: #f2f2f2;
+}
+
+.historyheading {
+
+  text-align: center;
+  background-color: #d7dee8;
+  padding: 10px;
+  border-radius: 10px;
+
+}
+
+.input-row:first-child {
+  margin-top: 16px;
+}
+
+.spare,
+.qty,
+.rate {
+  width: 10px;
+}
+
+
+.gstContainer {
+  display: flex;
+  align-items: center;
+  padding-top: 13px;
+  margin-right: 10px;
+}
+
+.gst-container mat-checkbox {
+  margin-right: 10px;
+}
+
+
+.input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  // flex-grow: 1;
+}
+
+.input-container.spare {
+  width: 25%;
+  /* Reduced width for the 'spare' input */
+}
+
+.input-container.qty {
+  width: 5%;
+  /* Narrower width for the 'qty' input */
+}
+.input-container.invenqty {
+  width: 3%;
+  /* Narrower width for the 'qty' input */
+}
+
+.input-container.rate {
+  width: 12%;
+  /* Narrower width for the 'rate' input */
+}
+
+.input-container.amount {
+  width: 15%;
+  /* Narrower width for the 'amount' input */
+}
+
+.input-container.partcode {
+  width: 15%;
+  /* Narrower width for the 'amount' input */
+}
+.input-container.discount {
+  width: 5%;
+  /* Narrower width for the 'amount' input */
+}
+
+.input-container label {
+  font-size: 12px;
+  color: #333;
+  font-weight: 450;
+  margin-bottom: 4px;
+}
+
+.input-container input {
+  padding: 6px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.input-container input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.simple-dropdown {
+  width: 200px;
+  padding: 8px 12px; 
+  font-size: 16px; 
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  background-color: #fff;
+  color: #333; 
+  cursor: pointer;
+}
+
+.simple-dropdown:focus {
+  outline: none; 
+  border-color: #007BFF; 
+}
+
+.simple-dropdown option {
+  padding: 8px; 
+  font-size: 16px;
+}
+
+
+#closeUpdateInvoice { //close button
+  width: 4%;
+  float: right;
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  // margin: 10px 4px;
+  border: 2px;
+}
+#closeJob{
+  width: 30px;
+  float: right;
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  margin: 2px 4px;
+  border: 2px;
+}
+
+.buttonContainer{ // button alignment
+  display: flex;
+  padding: 20px;
+  margin-left: 65%;
+  gap: 10px;
+}
+#button_for_right_align{
+  padding: 10px 20px;
+}
+.modal-header{
+  align-items: center;
+}
+
+.estinvbutton {
+  margin-right: 10px;
+  // background-color: #007bff;
+  color: #fff;
+  border-radius: 4px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color .3s ease;
+}
+
+.estinvbutton:hover {
+  background-color: #0056b3;
+  /* Darker shade on hover */
+}
+
+.suggestions-container {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+  width: 20%;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 5%;
+}
+
+.suggestion-card {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestion-card:hover {
+  background-color: #f0f0f0;
+}
+
+.forpaddingspare {
+  padding: 12px;
+
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  background: #f8f9fa;
+  border: 1px solid #eee;
+  border-radius: 20px;
+  position: relative;
+  width: 300px;
+  height: 40px;
+}
+
+.search-icon {
+  font-size: 18px;
+  width: 24px;
+  display: inline-block;
+}
+.search-bar input{
+  background: transparent;
+  border: 0;
+  color: #212121;
+  font-size: 1rem;
+  line-height: 2;
+  height: 100%;
+  outline: initial !important;
+  padding: 0.5rem 1rem;
+  width: calc(100% - 32px);
+}
+
+
+custom-modal-size .modal-dialog {
+  max-width: 100%; 
+  width: 100%; 
+}
+.custom-modal-size .modal-content {
+  max-height: 80vh; 
+  overflow-y: auto; 
+}
+
+
+.container_finaldata {
+  display: flex;
+  justify-content: space-between; /* Space items to the left and right */
+  align-items: center; /* Align items vertically */
+  width: 100%; /* Ensure container takes full width */
+  margin-left: 58%;
+}
+
+.itemfinal {
+  display: flex;
+  flex-direction: column; /* Ensure the label and input are stacked */
+  text-align: right; /* Align text to the right */
+}
+
+.colfinal {
+  display: flex;
+  flex: 1; /* Allow items to take up equal space */
+  gap: 10px; /* Add spacing between items */
+}
+
+.table-payment {
+  max-height: 200px;
+  overflow-y: scroll; 
+  scrollbar-width: none;
+}
+
+.paymenttable {
+  width: 100%; 
+  border-collapse: collapse;
+}
+
+.paymenttable th,
+.paymenttable td {
+  padding: 8px;
+  text-align: left;
+  border: 1px solid #ddd; /* Add borders to table cells */
+}
+
+
+.forpadding_paymentpage {
+  padding: 15px;
+}
+
+.paymentcard{
+  height: 43px;
+  justify-content: center;
+  text-align: center;
+}
+
+.selected-card {
+  background-color: blue;
+  color: white; /* Optional: To make text more readable */
+}
+
+
+
+
+
+.custom-dropdown {
+  list-style-type: none;
+  margin-top :35px;
+  padding: 0;
+  border: 1px solid #ccc;
+  background: white;
+  max-height: 200px;
+  overflow-y: auto;
+  position: absolute;
+  z-index: 1000;
+}
+
+.custom-dropdown li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.custom-dropdown li.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.custom-dropdown li:hover {
+  background-color: #0056b3;
+  color: white;
+}
+
+input[type="checkbox"]:focus {  
+  outline: 1px solid #0056b3; /* Add a visible outline */
+  // outline-offset: 2px; /* Slightly offset the outline for clarity */
+}
+
+
+// body {
+//   overflow: hidden;
+// }
+
+
+
+
+
+
+
+
+
+    
+
+ 
+ 
+ 

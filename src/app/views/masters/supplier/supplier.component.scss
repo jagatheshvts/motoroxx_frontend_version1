@@ -1,0 +1,568 @@
+#titlecard {
+
+  width: 20%;
+  text-align: center;
+  height: 68px;
+  box-shadow: 10px 4px 6px rgba(0, 0, 0, 0.1);
+  // align-items: center;
+  padding: 10px;
+}
+
+.search-container {
+  position: relative;
+  width: 100%;
+}
+
+#searchbar {
+  border-radius: 14px;
+  height: 36px;
+  width: 100%;
+  padding-right: 40px;
+  /* Adjust the padding to make room for the icon */
+}
+
+#searchbutton {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.forpadding {
+  padding: 15px;
+
+}
+
+
+.forpadding1 {
+  padding: 27px;
+}
+
+
+#supplierbtn {
+  padding: 1px;
+  height: 30px;
+  width: 100% !important
+}
+
+
+.mat-form-field {
+  margin-right: 10px;
+}
+
+
+::ng-deep .mat-form-field .mat-form-field-placeholder::before {
+  font-weight: bold;
+}
+
+.qty {
+  width: 46px;
+  text-align: center;
+
+}
+
+.rate {
+  width: 60px;
+  text-align: center;
+
+}
+
+._forpadding1 {
+  padding: 5px;
+  margin-top: 8px;
+
+
+}
+
+.update-spare-button {
+  width: 191px;
+  margin-top: 60px;
+
+}
+
+.manditory_global {
+  color: red;
+  text-align: center;
+}
+
+.mandatory {
+  color: red;
+
+}
+
+
+.trans-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.trans-table th,
+.trans-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.trans-table th {
+  background-color: #f2f2f2;
+}
+
+.forpadding_total {
+  padding: 5px;
+}
+
+
+.container_pay {
+  background-color: aliceblue
+}
+
+
+.matfield_size {
+  width: 70%;
+}
+
+.dropdown-menu {
+  display: block !important;
+  /* Force display for testing purposes */
+}
+
+//   .left-label .mat-form-field-label {
+//     position: absolute;
+//     left: 0;
+//     transform: translateY(-50%);
+//     top: 50%;
+//   }
+
+//   .left-label .mat-form-field-infix {
+//     padding-left: 100px; /* Adjust based on your label width */
+//   }
+
+// edit popup and create vendor css
+
+.register {
+  width: 95%;
+  margin: 0 auto;
+  // background-color: #f0f0f0;
+  // padding: 20px;
+  border-radius: 8px;
+}
+
+.details,
+.contact,
+.tax {
+  margin-bottom: 20px;
+}
+
+.detailsContainer {
+  position: relative;
+  border: 1px solid grey;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.contactContainer {
+  position: relative;
+  border: 1px solid grey;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 46px;
+}
+
+.taxContainer {
+  position: relative;
+  border-radius: 10px;
+  border: 1px solid grey;
+  padding: 20px;
+  margin-top: 52px;
+}
+
+.detailsContainer,
+.contactContainer,
+.taxContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px; //Aravind changes
+}
+
+.detailsItem,
+.contactItem,
+.taxItem {
+  display: flex;
+  align-items: center;
+  gap: 0px; //aravind changes
+}
+
+
+label {
+  margin-bottom: 0;
+  width: 96px; //aravind changes
+  // text-align: right;
+  display: inline-flex
+}
+
+input[type="text"],
+select,
+textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 60%;
+  box-sizing: border-box;
+}
+
+input[type="date"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 60%;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 40px;
+  font-size: 16px;
+}
+
+.radio {
+  align-items: center;
+}
+
+.radio label {
+  margin-bottom: 0;
+  width: 85px //aravind changes
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px; //aravind changes
+}
+
+.allbutton {
+  flex: 1;
+  text-align: center;
+}
+
+#vendorcreationbutton {
+  width: 100%;
+  max-width: 150px; //aravind changes
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  // background-color: #663399;;
+  color: white;
+  font-size: 19px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+#closebtn {
+  //aravind changes
+  width: 4%;
+  float: right;
+  border: 2px;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.reset {
+  width: 100%;
+  max-width: 120px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: red;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+// button:hover {
+//   background-color: #0056b3;
+// }
+
+button:focus {
+  outline: none;
+}
+
+.icon {
+  padding: 5px;
+  color: rgb(30, 29, 29);
+  min-width: 20px;
+  text-align: center;
+  border-radius: 2px;
+}
+
+.statePinContainer {
+  display: flex;
+  gap: 10px;
+  vertical-align: middle;
+}
+
+.statePinContainer label {
+  vertical-align: middle;
+}
+
+// .closebtn{
+//   width: 4%;
+//   float: right;
+//   border: 2px;
+// }
+
+.statePinContainer select,
+.statePinContainer input {
+  width: 42%; //aravind changes
+}
+
+.right-align {
+  display: flex;
+  justify-content: flex-end;
+  /* Aligns the content to the right */
+  align-items: center;
+  /* Aligns the label and select vertically */
+}
+
+
+
+.newHeadInput {
+  width: 70%;
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#newHeadButton {
+  padding: 8px 15px;
+  // background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#button_for_right_align {
+  float: right;
+  width: 35px;
+  height: 25px;
+  background-color: #ffffff;
+  color: grey;
+}
+
+.radioDiv {
+  justify-content: space-between;
+}
+
+#addbutton {
+  width: 100%;
+  padding: 8px;
+  font-size: small;
+  font-weight: 600;
+}
+
+.closebutton {
+  font-size: 29px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.suppliertitlePlaceholder {
+  position: absolute;
+  top: 71px;
+  left: 40px;
+  background-color: white;
+  padding: 0 10px;
+  font-size: 18px;
+  z-index: 1;
+}
+
+.suppliertitlePlaceholder::before {
+  content: "";
+  position: absolute;
+  height: 10px;
+  background-color: white;
+  z-index: -1;
+}
+
+.contactTitlePlaceholder {
+  position: absolute;
+  // top: 320px;
+  left: 19px;
+  margin-top: -10px; //changes
+  background-color: white;
+  padding: 0 10px;
+  font-size: 18px;
+  z-index: 1;
+}
+
+.contactTitlePlaceholder::before {
+  content: "";
+  position: absolute;
+  height: 10px;
+  background-color: white;
+  z-index: -1;
+}
+
+.taxTitlePlaceholder {
+  position: absolute;
+  // top: 75%;
+  margin-top: -13px;
+  left: 23px;
+  background-color: white;
+  padding: 0 10px;
+  font-size: 18px;
+  z-index: 1;
+}
+
+.taxTitlePlaceholder::before {
+  content: "";
+  position: absolute;
+  height: 10px;
+  background-color: white;
+  z-index: -1;
+}
+
+.suppliereditTitlePlaceholder {
+  position: absolute;
+  top: 71px;
+  margin: top -10px; ;
+  left: 40px;
+  background-color: white;
+  padding: 0 10px;
+  font-size: 18px;
+  z-index: 1;
+}
+
+.supplieredittitlePlaceholder::before {
+  content: "";
+  position: absolute;
+  height: 10px;
+  background-color: white;
+  z-index: -1;
+}
+
+.contacteditTitlePlaceholder {
+  position: absolute;
+  top: 197px;
+  left: 40px;
+  background-color: white;
+  padding: 0 10px;
+  font-size: 18px;
+  z-index: 1;
+}
+
+.contacteditTitlePlaceholder::before {
+  content: "";
+  position: absolute;
+  height: 10px;
+  background-color: white;
+  z-index: -1;
+}
+
+.taxeditTitlePlaceholder {
+  position: absolute;
+  // top: 69%;
+  margin-top: -13px;
+  left: 40px;
+  background-color: white;
+  padding: 0 10px;
+  font-size: 18px;
+  z-index: 1;
+}
+
+.taxeditTitlePlaceholder::before {
+  content: "";
+  position: absolute;
+  height: 10px;
+  background-color: white;
+  z-index: -1;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  background: #f8f9fa;
+  border: 1px solid #eee;
+  border-radius: 20px;
+  position: relative;
+  width: 300px;
+  height: 40px;
+}
+
+.search-icon {
+  font-size: 18px;
+  width: 24px;
+  display: inline-block;
+}
+.search-bar input {
+  background: transparent;
+  border: 0;
+  color: #212121;
+  font-size: 1rem;
+  line-height: 2;
+  height: 100%;
+  outline: initial !important;
+  padding: 0.5rem 1rem;
+  width: calc(100% - 32px);
+}
+.multi-select {
+  position: relative;
+  z-index: 2; //changes
+  width: 100%;
+  // height: 59px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.selected-items {
+  color: #333;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  z-index: 1;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.dropdown label {
+  display: block;
+  margin: 4px 0;
+}
+
+

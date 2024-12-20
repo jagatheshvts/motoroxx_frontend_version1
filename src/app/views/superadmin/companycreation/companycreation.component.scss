@@ -1,0 +1,39 @@
+#cards {
+    margin-bottom: 20px;
+    flex-grow: 1;
+    // text-align: center;
+    overflow-y: auto;
+    box-shadow: 0 1px 15px rgba(0, 0, 0, 0.04), 0 1px 6px rgba(0, 0, 0, 0.04);
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+
+  .card-content {
+    display: flex;
+    width: 100%;
+  }
+  
+  .card-left, .card-right {
+    flex: 1;
+  }
+  
+  .card-left {
+    border-right: 1px solid #e0e0e0;
+  }
+  
+  .card-right {
+    padding-left: 20px;
+  }
+  
+  
+  .company-mobile, .company-date {
+    color: #777;
+  }
+  
+  .card-right p {
+    border-right: 1px solid #e0e0e0;
+  }
+
+

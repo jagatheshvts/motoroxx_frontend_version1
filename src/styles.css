@@ -1,0 +1,36 @@
+/* You can add global styles to this file, and also import other style files */
+/* @import 'bootstrap/scss/bootstrap'; */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+/* @import '~material-icons/iconfont/material-icons.css'; */
+
+
+/* html, body { height: 100%; } */
+/* body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: 'Nunito', 'Roboto', sans-serif;
+}
+
+.mat-typography,
+.mat-h1,
+.mat-h2,
+.mat-h3,
+.mat-h4,
+.mat-h5,
+.mat-h6,
+.mat-subhead,
+.mat-body-1,
+.mat-body-2,
+.mat-button,
+.mat-caption,
+.mat-small {
+    font-family: 'Nunito', 'Roboto', sans-serif;
+    /* Apply to Material components */
+}

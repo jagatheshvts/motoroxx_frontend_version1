@@ -1,0 +1,867 @@
+<!-- jagathesh commented this for to put aravind ui -->
+<!--     
+    <h1 style="text-align: center;"><strong>Supplier Payment</strong></h1>
+
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="container">
+            <mat-form-field >
+              <mat-label>Select Supplier</mat-label>
+              <mat-select (selectionChange)="onSelectionChange_payment($event)"  [(value)]="selectedSupplier">
+                <mat-option *ngFor="let item of allmasterdata" [value]="item">
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <div *ngIf="suppliercontainercard" class="card2" style="width:80%" >
+              <div >
+                <span>{{ supaddress }}</span>
+              </div>
+              <div >
+                <span>Ph : {{ supmobile }}</span>
+              </div>
+              <div >
+                <span >GSTIN : {{ supgstno }}</span>
+              </div>
+            
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+            <input type="text"  class="newHeadInput"/>
+            <button  class="newHeadButton">Save</button>
+        </div>
+     
+        <div class="col-lg-4">
+          <mat-form-field >
+            <mat-label>Date</mat-label>
+            <input matInput [(ngModel)]="todaysdate" >
+          </mat-form-field>
+          <div></div>
+         
+          <mat-radio-group aria-label="Select an option" [(ngModel)]="radioselectedValue" [disabled]="!selectedSupplier">
+            <mat-radio-button style="margin-right: 4px;" (click)="selectPaymentMethod('Bank')" value="1" [disabled]="!selectedSupplier" >Bank</mat-radio-button>
+            <mat-radio-button style="margin-right: 4px;" (click)="selectPaymentMethod('UPI')" value="2" [disabled]="!selectedSupplier" >UPI</mat-radio-button>
+            <mat-radio-button style="margin-right: 4px;" (click)="selectPaymentMethod('Cash')" value="3" [disabled]="!selectedSupplier" >Cash</mat-radio-button>
+          </mat-radio-group>
+          <div *ngIf="showError" class="error-message">First choose the supplier</div>
+        </div>
+      </div>
+
+      <div>
+      </div>
+      <div  *ngIf="bankpage || upipage || handcashpage" style="width: 76%;">
+        <div style="padding: 10px;">
+            <div class="row" >
+              <div class="col-lg-7" *ngIf="bankpage" >
+                <mat-form-field  class="matfield_size">
+                  <mat-label>Select Bank</mat-label>
+                  <mat-select [(value)]="selectedBank" (selectionChange)="onBankChange(selectedBank)">
+                    <mat-option *ngFor="let bank of banks" [value]="bank">
+                      {{bank.bankname}} -{{bank.accountnumber.slice(-4)}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div *ngIf="selectedBank && bankpage" class="card2">
+                    <div>
+                        {{bankcontainercard}}
+                    </div>
+                  </div>
+              </div>
+            
+              <div *ngIf="selectedBank && bankpage">
+                
+              <div class="total-row">
+                <label><b>Trans Date:</b></label>
+                 <mat-form-field  style="width: 15%;margin-left: -26px;" (click)="picker.open()" >
+                  <input matInput [(ngModel)]="paymentDate" [matDatepicker]="picker" (focus)="picker.open()" readonly >
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+
+              <div class="total-row" >
+                <label ><b>Trans Ref:</b></label>
+                <input  [(ngModel)]="utrNumber" style="width: 28%;height:39px;border-radius:4px;border:1px solid#ccc;padding:3px;margin-left: -26px;">
+
+                <label><b>Amount:</b></label>
+                <input  type="text" [(ngModel)]="paymentCash" style="width: 10%;height:39px;border-radius:4px;border:1px solid#ccc;padding:3px;text-align:right;" (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)"  class="no-spinners">
+              </div>
+              <div class="forpadding_total"></div>
+              <div class="total-row">
+                
+
+                <label><b>particulars:</b></label>
+                <textarea  [(ngModel)]="particular" style="width: 52%;border-radius: 5px;margin-left: -26px;"></textarea>
+              </div>
+              <div class="forpadding_total"></div>
+              <div class="total-row">
+               
+              </div>
+                <div style="float:right">
+                <button class="btn btn-primary" [disabled]="!utrNumber || !paymentCash || !particular" (click) ="proceedpayment(bankpage,paymentDate,utrNumber,paymentCash,particular)">Save</button>
+                </div>
+              </div>
+      
+              <div *ngIf="upipage">
+                <div class="total-row">
+                    <label><b>Trans Date:</b></label>
+                     <mat-form-field  style="width: 15%;margin-left: -26px;" (click)="picker.open()"  >
+                      <input matInput [(ngModel)]="paymentDate" [matDatepicker]="picker" (focus)="picker.open()" readonly >
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+
+
+                  <div class="total-row">
+                    <label><b>Trans Id:</b></label>
+                    <input  [(ngModel)]="upiNumber" style="width: 28%;height:39px;border-radius:4px;border:1px solid#ccc;padding:3px;margin-left: -26px;">
+    
+                    <label><b>Amount:</b></label>
+                    <input type="text"  [(ngModel)]="paymentCash" style="width: 10%;height:39px;border-radius:4px;border:1px solid#ccc;padding:3px;text-align:right;" (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)" class="no-spinners">
+                  </div>
+
+                  <div class="forpadding_total"></div>
+                  <div class="total-row">
+                    <label><b>particulars:</b></label>
+                    <textarea  [(ngModel)]="particular" style="width: 52%;border-radius: 5px;margin-left: -26px;"></textarea>
+                  </div>
+               
+                <div style="float: right;">
+                <button class="btn btn-primary" [disabled]="!upiNumber || !paymentCash || !particular" (click) ="proceedpayment(upipage,paymentDate,upiNumber,paymentCash,particular)">Save</button>
+                </div>
+              </div>
+              <div *ngIf="handcashpage">
+                <div class="total-row">
+                    <label><b>Trans Date:</b></label>
+                     <mat-form-field  style="width: 19%" >
+                      <input matInput [(ngModel)]="paymentDate" [matDatepicker]="picker" (click)="picker.open()" >
+                      <mat-datepicker-toggle matSuffix [for]="picker" (focus)="picker.open()" readonly></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="total-row">
+                    <label><b>Amount:</b></label>
+                    <input type="text"  [(ngModel)]="paymentCash" style="width: 10%;height:39px;border-radius:4px;border:1px solid#ccc;padding:3px;text-align:right;" (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)" class="no-spinners">
+                  </div>
+
+                  <div class="forpadding_total"></div>
+                  <div class="total-row">
+                    <label><b>particulars:</b></label>
+                    <textarea  [(ngModel)]="particular" style="width: 47%;border-radius: 5px;"></textarea>
+                  </div>
+                <div style="float: right;">
+                <button class="btn btn-primary" [disabled]="!paymentCash || !particular || !paymentDate" (click) ="proceedpayment(upipage,paymentDate,upiNumber,paymentCash,particular)">Save</button>
+                </div>
+              </div>
+      
+            </div>
+          </div>
+      </div>
+      <table class="trans-table" *ngIf="suppliercontainercard">
+        <thead >
+          <tr>
+            <th style="width: 1px;text-align: center;">Sl.No</th>
+            <th style="width: 15%;text-align: center;">Trans Date</th>
+            <th style="width: 15%;text-align: center;">Heads</th>
+            <th style="width: 57%;" >Particulars</th>
+            <th style="width: 11%;text-align: center;">Recipt</th>
+            <th style="width: 11%;text-align: center;">Payment</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr *ngFor="let data of sup_paymentdata.transaction ; let i = index">
+            <td style="text-align: center;">{{i+1}}</td>
+            <td style="text-align: center;">{{ data.receiptpayment.date | date:'dd-MM-yyyy' }}</td>
+            <td style="text-align: center;">{{ data.receiptpayment.expense_head }}</td>
+            <td class="particulars-column" (click)="openparticularpopup(particularpage,data,sup_paymentdata.transaction,i,sup_paymentdata)" [attr.data-content]="getTruncatedText(data.receiptpayment.joinedparticulars || data.receiptpayment.particulars)">
+              {{ getTruncatedText(data.receiptpayment.joinedparticulars || data.receiptpayment.particulars) }}
+            </td>
+            <td style="text-align: right;">{{ data.receiptpayment.totalreceipt_amount| number: '1.2-2' }}</td>
+            <td style="text-align: right;">{{ data.receiptpayment.payment| number: '1.2-2'  }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="forpadding"></div>
+      <div *ngIf="selectedSupplier"  style="float: right;margin-right: 24%;"><b>Balance =</b>{{balancepay| number: '1.2-2' }}</div>
+  
+
+      <ng-template #particularpage>
+        <h3 style="text-align:center;">Particulars</h3>
+        <h4><b>Type:</b>{{particularpopupdata_for}}</h4>
+        <h4><b>Date:</b>{{particularpopupdata_transdate | date:'dd-MM-yyyy' }}</h4>
+        <h4><b>Supplier:</b>{{supname}}</h4>
+        <h4><b>Amount:</b>{{particularpopupdata_amount }}.00</h4>
+        <h4><b>Trans Ref:</b>{{particularpopupdata_transref }}</h4>
+        <h4><b>Particulars:</b>{{particularpopupdata }}</h4>
+        <button (click)="previousparticular()" type="button" class="btn btn-link btn-sm mt-2 see-more-button" style="float: left;">
+          previous
+        </button>
+        <button (click)="nextparticular()" type="button" class="btn btn-link btn-sm mt-2 see-more-button" style="float: right;">
+          Next
+        </button>
+
+      </ng-template> -->
+
+<!-- ui of aravind      -->
+
+<!-- <div class="main-header"></div> -->
+<h1 style="text-align: center"><strong>Supplier Payment</strong></h1>
+<div class="row">
+  <!-- <div class="col-md-6">
+    <div class="card mb-5">
+      <div class="card-body">
+        <form>
+          <div class="form-group row">
+            <label for="supplier-select" class="col-sm-2 col-form-label">Select Supplier:</label>
+            <div class="col-sm-10">
+              <select id="supplierselect" (change)="onSelectionChange_payment($event)" [(ngModel)]="selectedSupplier"
+                class="form-control">
+                <option *ngFor="let item of allmasterdata" [value]="item">
+                  {{ item.name }} ({{ item.type }} - {{ item.head }})
+                </option>
+              </select>
+              <div *ngIf="suppliercontainercard" style="width:90%">
+                <div style="font-size: smaller;">Address:&nbsp;{{ supaddress }}</div>
+                <div style="font-size: smaller;">Ph:&nbsp;{{ supmobile }}</div>
+                <div style="font-size: smaller;">GSTIN:&nbsp;{{ supgstno }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="dateInput" class="col-sm-2 col-form-label">Date</label>
+            <div class="col-sm-10">
+              <input type="date" id="dateInput" (click)="openCalendar($event)" [(ngModel)]="todaysdate"
+                class="form-control">
+            </div>
+          </div> -->
+  <!-- Payment Method Selection -->
+  <!-- <fieldset class="form-group">
+            <div class="row">
+              <label class="col-form-label col-sm-2 pt-0">Payment Type</label>
+              <div class="col-sm-10 d-flex justify-content-start">
+                <div class="form-check form-check-inline">
+                  <label class="radio radio-primary">
+                    <input type="radio" id="bankOption" name="paymentMethod" (change)="selectPaymentMethod('Bank')"
+                    value="bank" [disabled]="!selectedSupplier">
+                    <span>Bank</span>
+                    <span class="checkmark"></span>
+                </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <label class="radio radio-primary">
+                    <input type="radio" id="upiOption" name="paymentMethod" (change)="selectPaymentMethod('UPI')"
+                    value="UPI" [disabled]="!selectedSupplier">
+                    <span>UPI</span>
+                    <span class="checkmark"></span>
+                </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <label class="radio radio-primary">
+                    <input type="radio" id="cashOption" name="paymentMethod" (change)="selectPaymentMethod('Cash')"
+                    value="cash" [disabled]="!selectedSupplier">
+                    <span>Cash</span>
+                    <span class="checkmark"></span>
+                </label>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div> -->
+  <div class="container-fluid">
+    <div class="row h-100">
+      <!-- Left Side: Supplier Info and Selection -->
+      <div class="col-lg-5 col-md-12 d-flex flex-column">
+        <div class="card mb-5 flex-fill" style="margin-bottom: 48px">
+          <div class="card-body">
+            <h4>Supplier Selection</h4>
+            <div class="d-flex flex-column">
+              <!-- Supplier Select Field -->
+              <div class="form-group">
+                <label for="supplier-select" style="font-weight: bolder"
+                  >Select Supplier:</label
+                >
+                <select
+                  id="supplierselect"
+                  (change)="onSelectionChange_payment($event)"
+                  [(ngModel)]="selectedSupplier"
+                  class="form-control"
+                >
+                  <option *ngFor="let item of allmasterdata" [value]="item">
+                    {{ item.name }} ({{ item.type }} - {{ item.head }})
+                  </option>
+                </select>
+              </div>
+
+              <!-- Supplier Info Card Next to Supplier Select Field -->
+              <div class="add" *ngIf="suppliercontainercard">
+                <div style="font-size: smaller">
+                  Address:&nbsp;{{ supaddress }}
+                </div>
+                <div style="font-size: smaller">Ph:&nbsp;{{ supmobile }}</div>
+                <div style="font-size: smaller">GSTIN:&nbsp;{{ supgstno }}</div>
+              </div>
+
+              <!-- Date Input Field -->
+              <div class="form-group mt-3">
+                <label
+                  for="dateInput"
+                  class="col-form-label"
+                  style="font-weight: bolder"
+                  >Date</label
+                >
+                <input
+                  type="date"
+                  id="dateInput"
+                  (click)="openCalendar($event)"
+                  [(ngModel)]="todaysdate"
+                  class="form-control"
+                />
+              </div>
+
+              <!-- Radio Button Field for Payment Methods -->
+              <label style="font-weight: bolder" class="mt-3"
+                >Payment Method:</label
+              >
+              <div class="d-flex flex-column">
+                <label class="radio radio-primary mb-2">
+                  <input
+                    type="radio"
+                    id="bankOption"
+                    name="paymentMethod"
+                    (change)="selectPaymentMethod('Bank')"
+                    value="bank"
+                    [disabled]="!selectedSupplier"
+                  />
+                  <span>Bank</span>
+                  <span class="checkmark"></span>
+                </label>
+
+                <label class="radio radio-primary mb-2">
+                  <input
+                    type="radio"
+                    id="upiOption"
+                    name="paymentMethod"
+                    (change)="selectPaymentMethod('UPI')"
+                    value="UPI"
+                    [disabled]="!selectedSupplier"
+                  />
+                  <span>UPI</span>
+                  <span class="checkmark"></span>
+                </label>
+
+                <label class="radio radio-primary mb-2">
+                  <input
+                    type="radio"
+                    id="cashOption"
+                    name="paymentMethod"
+                    (change)="selectPaymentMethod('Cash')"
+                    value="cash"
+                    [disabled]="!selectedSupplier"
+                  />
+                  <span>Cash</span>
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side: Payment Sections -->
+      <div class="col-lg-7 col-md-12 d-flex flex-column">
+        <!-- Bank Payment Section -->
+        <div
+          class="card flex-fill"
+          style="margin-bottom: 48px"
+          *ngIf="bankpage"
+        >
+          <div class="card-body">
+            <h4>Bank Payment</h4>
+            <form class="d-flex flex-column">
+              <div class="form-group row">
+                <div class="col-md-6">
+                  <label for="bank-select"><strong>Select Bank</strong></label>
+                  <select
+                    id="bank-select"
+                    [(ngModel)]="selectedBank"
+                    (change)="onBankChange(selectedBank)"
+                    class="form-control"
+                  >
+                    <option *ngFor="let bank of banks" [ngValue]="bank">
+                      {{ bank.bankname }} - {{ bank.accountnumber.slice(-4) }}
+                    </option>
+                  </select>
+                </div>
+                <!-- <div *ngIf="selectedBank" class="bank-card mt-3">
+                  {{ bankcontainercard }}
+                </div> -->
+
+                <div class="col-md-6">
+                  <label for="trans-date"><strong>Trans Date:</strong></label>
+                  <input
+                    type="date"
+                    id="trans-date"
+                    [(ngModel)]="paymentDate"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+
+              <!-- Other form groups -->
+              <div class="form-group">
+                <label for="amount"><strong>Amount:</strong></label>
+                <input
+                  type="text"
+                  id="amount"
+                  [(ngModel)]="paymentCash"
+                  class="form-control"
+                  style="text-align: right"
+                />
+              </div>
+              <div class="form-group">
+                <label for="trans-ref"><strong>Trans Ref:</strong></label>
+                <input
+                  type="text"
+                  id="trans-ref"
+                  [(ngModel)]="utrNumber"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="particulars"><strong>Particulars: </strong></label>
+                <textarea
+                  id="particulars"
+                  [(ngModel)]="particular"
+                  class="form-control"
+                ></textarea>
+              </div>
+              <button style="background-color: #5864ff;border:#5864ff;"
+                class="btn btn-primary"
+                id="savebtn"
+                [disabled]="!utrNumber || !paymentCash || !particular"
+                (click)="
+                  proceedpayment(
+                    bankpage,
+                    paymentDate,
+                    utrNumber,
+                    paymentCash,
+                    particular
+                  )
+                "
+              >
+                Save
+              </button>
+              <button style="margin-top: 5px; background-color: #5864ff;border:#5864ff;"
+                class="btn btn-primary"
+                id="savebtn"
+                [disabled]="!utrNumber || !paymentCash || !particular"
+                (click)="resetBank()"
+              >
+                Reset
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- UPI Payment Section -->
+        <div class="card flex-fill" style="margin-bottom: 48px" *ngIf="upipage">
+          <div class="card-body">
+            <h4>UPI Payment</h4>
+            <form class="d-flex flex-column">
+              <div class="form-group">
+                <label for="trans-date-upi"><strong>Trans Date:</strong></label>
+                <input
+                  type="date"
+                  id="trans-date-upi"
+                  [(ngModel)]="paymentDate"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="amount-upi"><strong>Amount:</strong></label>
+                <input
+                  type="text"
+                  id="amount-upi"
+                  [(ngModel)]="paymentCash"
+                  class="form-control"
+                  style="text-align: right"
+                />
+              </div>
+              <div class="form-group">
+                <label for="trans-id"><strong>Trans Id:</strong></label>
+                <input
+                  type="text"
+                  id="trans-id"
+                  [(ngModel)]="upiNumber"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="particulars-upi"
+                  ><strong>Particulars: </strong></label
+                >
+                <textarea
+                  id="particulars-upi"
+                  [(ngModel)]="particular"
+                  class="form-control"
+                ></textarea>
+              </div>
+              <button style="background-color: #5864ff;border:#5864ff;"
+                class="btn btn-primary"
+                id="savebtn"
+                [disabled]="!upiNumber || !paymentCash || !particular"
+                (click)="
+                  proceedpayment(
+                    upipage,
+                    paymentDate,
+                    upiNumber,
+                    paymentCash,
+                    particular
+                  )
+                "
+              >
+                Save
+              </button>
+              <button
+                class="btn btn-primary" style="margin-top: 5px;background-color: #5864ff;border: #5864ff;"
+                id="savebtn"
+                [disabled]="!upiNumber || !paymentCash || !particular"
+                (click)="resetUpi()"
+              >
+                Reset
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Cash Payment Section -->
+        <div
+          class="card flex-fill"
+          style="margin-bottom: 48px"
+          *ngIf="handcashpage"
+        >
+          <div class="card-body">
+            <h4>Cash Payment</h4>
+            <form class="d-flex flex-column">
+              <div class="form-group">
+                <label for="trans-date-cash"
+                  ><strong>Trans Date:</strong></label
+                >
+                <input
+                  type="date"
+                  id="trans-date-cash"
+                  [(ngModel)]="paymentDate"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label for="amount-cash"><strong>Amount:</strong></label>
+                <input
+                  type="text"
+                  id="amount-cash"
+                  [(ngModel)]="paymentCash"
+                  class="form-control"
+                  style="text-align: right"
+                />
+              </div>
+              <div class="form-group">
+                <label for="particulars-cash"
+                  ><strong>Particulars: </strong></label
+                >
+                <textarea
+                  id="particulars-cash"
+                  [(ngModel)]="particular"
+                  class="form-control"
+                ></textarea>
+              </div>
+              <button
+                class="btn btn-primary"
+                style="margin-top: 50px; background-color: #5864ff;border:#5864ff;"
+                id="savebtn"
+                [disabled]="!paymentCash || !particular || !paymentDate"
+                (click)="
+                  proceedpayment(
+                    handcashpage,
+                    paymentDate,
+                    upiNumber,
+                    paymentCash,
+                    particular
+                  )
+                "
+              >
+                Save
+              </button>
+              <button
+                class="btn btn-primary" style="margin-top: 5px; background-color: #5864ff;border:#5864ff;"
+                id="savebtn"
+                [disabled]="!paymentCash || !particular || !paymentDate"
+                (click)="resetCash()"
+              >
+                Reset
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <h1 style="text-align: center;"><strong>Supplier Payment</strong></h1> -->
+  <!-- <div class="row">
+
+
+    <div *ngIf="bankpage">
+      <div class="col-md-6">
+        <div class="content-area">
+          <div class="flex-group row">
+            <div class="col-sm-6">
+              <label for="bank-select"><strong>Select Bank</strong></label>
+              <select id="bank-select" [(ngModel)]="selectedBank" (change)="onBankChange(selectedBank)"
+                class="form-control">
+                <option *ngFor="let bank of banks" [ngValue]="bank">{{ bank.bankname }} - {{
+                  bank.accountnumber.slice(-4) }}</option>
+              </select>
+            </div>
+            <div class="col-sm-6">
+              <label for="trans-date"><strong>Trans Date:</strong></label>
+              <input type="date" id="trans-date" (click)="openCalendar($event)" [(ngModel)]="paymentDate"
+                class="form-control">
+            </div>
+          </div>
+
+          <div *ngIf="selectedBank" class="bank-card mt-3">{{ bankcontainercard }}</div>
+
+          <div class="flex-group row mt-3">
+            <div class="col-sm-6">
+              <label for="trans-ref"><strong>Trans Ref:</strong></label>
+              <input type="text" id="trans-ref" [(ngModel)]="utrNumber" class="form-control">
+            </div>
+            <div class="col-sm-6">
+              <label for="amount"><strong>Amount:</strong></label>
+              <input type="text" id="amount" [(ngModel)]="paymentCash" (focus)="handleFocus($event)"
+                (blur)="handleBlur($event)" (input)="handleInput($event)" class="form-control"
+                style="text-align: right;">
+            </div>
+          </div>
+
+          <div class="full-width-field mt-3">
+            <label for="particulars"><strong>Particulars: </strong></label>
+            <textarea id="particulars" [(ngModel)]="particulars" class="form-control"></textarea>
+          </div>
+
+          <div class="button-area mt-3">
+            <button class="btn btn-primary" id="savebtn" [disabled]="!utrNumber || !paymentCash || !particulars"
+              (click)="proceedpayment(bankpage,paymentDate,utrNumber,paymentCash,particulars)">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <!--this is example code-->
+
+  <!-- <div class="col-lg-12">
+    <div class="aligned-row">
+      <div class="supplier-section">
+        <label for="supplier-select"><strong>Select Supplier: </strong>
+        </label>
+        <select id="supplierselect" (change)="onSelectionChange_payment($event)" [(ngModel)]="selectedSupplier">
+          <option *ngFor="let item of allmasterdata" [value]="item">
+            {{ item.name }} ({{ item.type }} - {{ item.head }})
+          </option>
+        </select>
+
+        <div *ngIf="suppliercontainercard" class="card2" style="width:90%">
+          <div>
+            <span><strong>Address:</strong> &nbsp;{{ supaddress }}</span>
+          </div>
+          <div>
+            <span><strong>Ph:</strong>&nbsp; {{ supmobile }}</span>
+          </div>
+          <div>
+            <span><strong>GSTIN:</strong>&nbsp; {{ supgstno }}</span>
+          </div>
+        </div>
+      </div>
+       <input type="text" class="newHeadInput" />
+      <button class="newHeadButton">Save</button> -->
+  <!-- <label for="dateInput" style="margin-top: 8px;"><strong>Date: </strong> </label>
+      <input type="date" id="dateInput" (click)="openCalendar($event)" [(ngModel)]="todaysdate">
+      <div class="radiobtn">
+        <label><input type="radio" name="paymentMethod" (change)="selectPaymentMethod('Bank')" value="1"
+            [disabled]="!selectedSupplier" style="margin-right:10px;"><strong>Bank</strong></label>
+        <label style="margin-left:10px;"><input type="radio" name="paymentMethod" (change)="selectPaymentMethod('UPI')"
+            value="2" [disabled]="!selectedSupplier" style="margin-right:10px;"><strong>UPI</strong></label>
+        <label style="margin-left:10px;"><input type="radio" name="paymentMethod" (change)="selectPaymentMethod('Cash')"
+            value="3" [disabled]="!selectedSupplier" style="margin-right:10px;"><strong>Cash</strong></label>
+      </div>
+      <div *ngIf="showError" class="error-message">First choose the supplier</div>
+    </div>
+  </div> -->
+
+  <!-- UPI Payment Section -->
+  <!--<div *ngIf="upipage" class="container">
+    <div class="content-area">
+       First section for Transaction Date and Trans Id/Amount  <div class="flex-group">
+        <div class="field small-field">
+          <label for="trans-date-upi"><strong>Trans Date:</strong> </label>
+          <input type="date" id="trans-date-upi" [(ngModel)]="paymentDate">
+        </div>
+        <div class="field small-field">
+          <label for="trans-id"><strong>Trans Id:</strong></label>
+          <input type="text" id="trans-id" [(ngModel)]="upiNumber">
+        </div>
+        <div class="field small-field">
+          <label for="amount-upi"><strong>Amount:</strong></label>
+          <input style="text-align: right;" type="text" id="amount-upi" [(ngModel)]="paymentCash"
+            (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)" class="no-spinners">
+        </div>
+      </div> 
+
+       Padding or additional space if needed -->
+  <!-- <div class="forpadding_total"></div> -->
+
+  <!-- Second section for Particulars -->
+  <!-- <div class="full-width-field">
+        <label for="particulars-upi"> <strong>Particulars:</strong></label>
+        <textarea id="particulars-upi" [(ngModel)]="particular"></textarea>
+      </div> -->
+
+  <!-- Save button -->
+  <!-- <div class="button-area">
+        <button class="btn btn-primary" id="savebtn" [disabled]="!upiNumber || !paymentCash || !particular"
+          (click)="proceedpayment(upipage, paymentDate, upiNumber, paymentCash, particular)">Save</button>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Cash Payment Section -->
+  <!-- <div *ngIf="handcashpage">
+    <div class="content-area"> -->
+
+  <!-- First section for Transaction Date and Amount -->
+  <!-- <div class="flex-group">
+        <div class="field small-field">
+          <label for="trans-date-cash"><strong>Trans Date:</strong></label>
+          <input type="date" id="trans-date-cash" [(ngModel)]="paymentDate">
+        </div>
+        <div class="field small-field">
+          <label for="amount-cash"><strong>Amount:</strong></label>
+          <input style="text-align: right;" type="text" id="amount-cash" [(ngModel)]="paymentCash"
+            (focus)="handleFocus($event)" (blur)="handleBlur($event)" (input)="handleInput($event)" class="no-spinners">
+        </div>
+      </div> -->
+
+  <!-- Padding or additional space if needed -->
+  <!-- <div class="forpadding_total"></div> -->
+
+  <!-- Second section for Particulars -->
+  <!-- <div class="full-width-field">
+        <label for="particulars-cash"><strong>Particulars:</strong></label>
+        <textarea id="particulars-cash" [(ngModel)]="particular"></textarea>
+      </div> -->
+
+  <!-- Save button -->
+  <!-- <div class="button-area">
+        <button class="btn btn-primary" id="savebtn" [disabled]="!paymentCash || !particular || !paymentDate"
+          (click)="proceedpayment(handcashpage, paymentDate, upiNumber, paymentCash, particular)">Save</button>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Supplier Transactions Table -->
+  <div *ngIf="suppliercontainercard">
+    <table class="trans-table">
+      <thead>
+        <tr>
+          <th style="width: 1px; text-align: center">Sl.No</th>
+          <th style="width: 15%; text-align: center">Trans Date</th>
+          <th style="width: 15%; text-align: center">Heads</th>
+          <th style="width: 57%">Particulars</th>
+          <th style="width: 11%; text-align: center">Receipt</th>
+          <th style="width: 11%; text-align: center">Payment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of sup_paymentdata.transaction; let i = index">
+          <td style="text-align: center">{{ i + 1 }}</td>
+          <td style="text-align: center">
+            {{ data.receiptpayment.date | date : "dd-MM-yyyy" }}
+          </td>
+          <td style="text-align: center">
+            {{ data.receiptpayment.expense_head }}
+          </td>
+          <td
+            class="particulars-column"
+            (click)="
+              openparticularpopup(
+                particularpage,
+                data,
+                sup_paymentdata.transaction,
+                i,
+                sup_paymentdata
+              )
+            "
+            [attr.data-content]="
+              getTruncatedText(
+                data.receiptpayment.joinedparticulars ||
+                  data.receiptpayment.particulars
+              )
+            "
+          >
+            {{
+              getTruncatedText(
+                data.receiptpayment.joinedparticulars ||
+                  data.receiptpayment.particulars
+              )
+            }}
+          </td>
+          <td style="text-align: right">
+            {{ data.receiptpayment.grand_total | number : "1.2-2" }}
+          </td>
+          <td style="text-align: right">
+            {{ data.receiptpayment.payment | number : "1.2-2" }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #particularpage>
+    <div class="particulars-container">
+      <h2 class="title"><strong>Particulars</strong></h2>
+      <div class="details">
+        <h4><b>Type:</b> {{ particularpopupdata_for }}</h4>
+        <h4>
+          <b>Date:</b> {{ particularpopupdata_transdate | date : "dd-MM-yyyy" }}
+        </h4>
+        <h4><b>Supplier:</b> {{ supname }}</h4>
+        <h4><b>Amount:</b> {{ particularpopupdata_amount }}.00</h4>
+        <h4><b>Trans Ref:</b> {{ particularpopupdata_transref }}</h4>
+        <h4><b>Particulars:</b> {{ particularpopupdata }}</h4>
+      </div>
+      <div class="buttons">
+        <button
+          (click)="previousparticular()"
+          type="button"
+          class="btn btn-link btn-sm see-more-button"
+        >
+          Previous
+        </button>
+        <button
+          (click)="nextparticular()"
+          type="button"
+          class="btn btn-link btn-sm see-more-button"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,120 @@
+.vehicle-history-container {
+    padding: 1rem;
+  }
+  
+  .card.clickable-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .card.clickable-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+  }
+
+
+
+
+  CSS
+
+
+
+.form-label {
+  margin-bottom: 0;
+  margin-right: 10px;
+}
+
+.small-checkbox {
+  transform: scale(1.2);
+//   / Increases the size of the checkbox /
+}
+
+.form-check-label {
+  font-size: 1.2rem;
+//   Adjusts the font size for the label /
+  margin-left: 10px;
+//   / Adds space between the checkbox and label /
+}
+
+
+
+.veh1 {
+
+  width: 50px;
+}
+
+.l-v1 {
+  width: 80px;
+}
+
+.v1-cnt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between !important;
+  width: 100%;
+}
+
+.sec-column {
+  display: flex;
+  align-items: 'center';
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+}
+
+
+.final-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding-right: 50%;
+  width: 500px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+
+}
+
+.custom-dropdown {
+    max-height: 200px; 
+    overflow-y: auto; 
+    border: 1px solid #ddd; 
+    background-color: white;
+    padding: 0;
+  }
+  
+  .custom-dropdown::-webkit-scrollbar {
+    width: 8px; 
+  }
+
+  .custom-dropdown-location{
+    max-height: 200px; 
+    overflow-y: auto; 
+    border: 1px solid #ddd; 
+    background-color: white;
+    padding: 0;
+    margin-top: 17%;
+
+  }
+
+  .custom-dropdown-location::-webkit-scrollbar {
+    width: 8px; 
+  }
+  

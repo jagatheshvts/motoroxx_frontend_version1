@@ -1,0 +1,962 @@
+// .forpadding {
+//   padding: 1px;
+// }
+
+// .forpadding1 {
+//   padding: 27px;
+
+// }
+
+// #supplierbtn {
+//   padding: 1px;
+//   height: 30px;
+//   width: 100% !important
+// }
+
+// .mat-form-field {
+//   margin-right: 10px;
+// }
+
+// ::ng-deep .mat-form-field .mat-form-field-placeholder::before {
+//   font-weight: bold;
+// }
+
+// .qty {
+//   width: 46px;
+//   text-align: center;
+
+// }
+
+// .rate {
+//   width: 60px;
+//   text-align: center;
+
+// }
+
+// ._forpadding1 {
+//   padding: 86px;
+//   margin-top: 60px;
+//   position: relative;
+//   left: 0%;
+
+// }
+
+// .update-spare-button {
+//   width: 101px;
+// }
+
+// .manditory_global {
+//   color: red;
+//   text-align: center;
+// }
+
+// .mandatory {
+//   color: red;
+
+// }
+
+// #delBtn {
+//   cursor: pointer;
+// }
+
+// #sup_invno {
+//   border-radius: 6px;
+//   width: 303%;
+//   height: 140%;
+//   position: relative;
+// }
+
+// #addinput {
+//   width: 100px;
+// }
+
+// #card1 {
+//   background-color: white;
+//   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+//   width: 90%;
+
+// }
+
+// #card2 {
+//   padding: 1px;
+//   width: 19%;
+//   float: right;
+
+// }
+
+// .card2 {
+//   background-color: white;
+//   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+//   padding: 10px;
+//   width: 80%;
+// }
+
+// .total-container {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 11px;
+//   margin-right: 18%;
+// }
+
+// .total-header {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   margin-bottom: 10px;
+// }
+
+// .total-row {
+//   display: flex;
+//   align-items: center;
+//   gap: 10px;
+// }
+
+// .total-row label {
+//   width: 80px;
+//   text-align: right;
+//   margin-right: 10px;
+// }
+
+// .mandatory {
+//   color: red;
+//   font-size: small;
+// }
+
+// .line-input {
+//   border: none;
+//   border-bottom: 1px solid #ccc;
+//   padding: 5px 0;
+//   outline: none;
+//   width: 40%;
+//   margin-bottom: 10px;
+//   text-align: right;
+// }
+
+// .line-input:focus {
+//   border-bottom: 1px solid #000;
+// }
+
+// .labelcon {
+//   display: flex;
+// }
+
+// .no-spinners::-webkit-outer-spin-button,
+// .no-spinners::-webkit-inner-spin-button {
+//   -webkit-appearance: none;
+//   margin: 0;
+// }
+
+// .modal-body {
+//   padding: 2px;
+// }
+
+// .no-spinners[type="number"] {
+//   -moz-appearance: textfield;
+// }
+
+// .items-container {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 0px;
+//   align-items: flex-start;
+//   max-height: 250px;
+//   overflow-y: auto;
+//   scroll-behavior: smooth;
+// }
+
+// .item-row {
+//   display: flex;
+//   align-items: center;
+//   margin-bottom: 10px;
+//   gap: 10px;
+
+// }
+
+// .uom-dropdown {
+//   width: 90px;
+// }
+
+// .trans-table {
+//   width: 76%;
+//   border-collapse: collapse;
+//   margin-top: 10px;
+// }
+
+// .trans-table th,
+// .trans-table td {
+//   border: 1px solid #ddd;
+//   padding: 8px;
+//   text-align: left;
+// }
+
+// .trans-table th {
+//   background-color: #f2f2f2;
+// }
+
+// .items-container {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 0px;
+// }
+
+// .item-row {
+//   display: flex;
+//   align-items: center;
+//   gap: 5px;
+//   align-items: center;
+// }
+
+// .item-row mat-form-field,
+// .item-row mat-checkbox {
+//   flex: 3.5;
+//   margin: 1;
+// }
+
+// .item-row mat-form-field.qty {
+//   flex: 0 0 85px;
+//   max-width: 170px;
+// }
+
+// .item-row mat-form-field.rate,
+// .item-row mat-form-field.amount {
+//   flex: 0 0 125px;
+//   max-width: 190px;
+// }
+
+// .item-row mat-form-field.gst{
+//   flex: 0 0 92px;
+//   max-width: 100px;
+// }
+
+// .item-row mat-form-field.spare {
+//   flex: 0 0 200px;
+//   max-width: 250px;
+// }
+
+// .item-row mat-form-field.uom-dropdown {
+//   flex: 0 0 97px;
+//   max-width: 120px;
+// }
+
+// .item-row mat-checkbox {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   margin-left: 10px;
+// }
+
+// .item-row #delBtn {
+//   cursor: pointer;
+//   margin-left: 10px;
+// }
+
+// .item-row .btn {
+//   margin-left: auto;
+// }
+// .btnContainer{
+// align-items: end;
+// }
+
+// #addinside {
+//   margin-left: 22px;
+//   position: relative;
+//   width: 63px;
+// }
+
+// @media (max-width: 768px) {
+//   .item-row {
+//     flex-wrap: wrap;
+//   }
+
+//   .item-row .btn {
+//     margin-top: 10px;
+//   }
+// }
+// .gstContainer {
+//   display: flex;
+//   align-items: center;
+//   padding-top: 13px;
+//   margin-right: 10px;
+// }
+// .tableContainer{
+//   display: flex;
+//   align-items: center;
+//   margin-left: 10%;
+// }
+// .mat-mdc-text-field-wrapper {
+//   width: 90%;
+//   z-index: 0;
+// }
+// .right{
+//  text-align: right;
+// }
+
+// .input-container.spare {
+//   width: 13%;
+// }
+
+// .input-container.qty {
+//   width: 6%;
+// }
+// .input-container.uom {
+//   width: 9%;
+// }
+
+// .input-container.rate {
+//   width: 10%;
+// }
+
+// .input-container.amount {
+//   width: 10%;
+// }
+
+// .input-row {
+//   display: flex;
+//   gap: 10px;
+//   margin-bottom: 10px;
+//   align-items: center;
+// }
+
+// .input-container {
+//   display: flex;
+//   flex-direction: column;
+
+//   max-height: 200px;
+//   overflow-y: auto;
+//   scroll-behavior: smooth;
+// }
+
+//aravind newly created
+
+.forpadding {
+  // padding: 15px;
+  padding: 3px;
+}
+
+.forpadding1 {
+  padding: 27px;
+}
+
+#supplierbtn {
+  padding: 1px;
+  height: 30px;
+  width: 100% !important;
+}
+
+.mat-form-field {
+  margin-right: 10px;
+}
+
+::ng-deep .mat-form-field .mat-form-field-placeholder::before {
+  font-weight: bold;
+}
+
+.qty {
+  width: 46px;
+  text-align: center;
+}
+
+.rate {
+  width: 60px;
+  text-align: center;
+}
+
+._forpadding1 {
+  padding: 8px;
+  margin-left: 52%;
+  margin-top: 0%;
+}
+
+.update-spare-button {
+  width: 26%;
+  // margin-top: 60px;
+  // margin-left: 100px;
+}
+
+.manditory_global {
+  color: red;
+  text-align: center;
+}
+
+.mandatory {
+  color: red;
+}
+
+#delBtn {
+  cursor: pointer;
+}
+
+// #sup_invno {
+//   border-radius: 6px;
+//   width: 303%;
+//   height: 140%;
+//   position: relative;
+// }
+
+#addinput {
+  width: 044%;
+  margin-top: 17px;
+  height: 40px;
+}
+
+#card1 {
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  width: 90%;
+}
+
+#card2 {
+  padding: 1px;
+  width: 49%;
+  float: right;
+  // background-color: white;
+  // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  // left:75%;
+}
+
+.card2 {
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  padding: 10px;
+  width: 80%;
+}
+
+.total-container {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin-right: 18%; //changes
+}
+
+.total-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.total-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  // width: 10px;
+}
+
+.total-row label {
+  width: 80px;
+  text-align: right;
+  margin-right: 10px;
+}
+
+.mandatory {
+  color: red;
+  font-size: small;
+}
+
+.line-input {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 5px 0;
+  outline: none;
+  width: 40%;
+  margin-bottom: 10px;
+  text-align: right;
+}
+
+.line-input:focus {
+  border-bottom: 1px solid #000;
+}
+
+.labelcon {
+  display: flex;
+}
+
+.no-spinners::-webkit-outer-spin-button,
+.no-spinners::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.modal-body {
+  padding: 2px;
+}
+
+.no-spinners[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  align-items: flex-start;
+  max-height: 250px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.uom-dropdown {
+  width: 90px;
+}
+
+.trans-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 21px;
+  margin-left: 0px;
+}
+
+.trans-table th,
+.trans-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+// .trans-table th {
+//   // background-color: #f2f2f2;
+// }
+
+.items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  align-items: center;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 230px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  margin-top: 15px;
+}
+
+.item-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.item-table th,
+.item-table td {
+  border: 1px solid #dddddd;
+  // padding: 8px;
+  // text-align: left;
+}
+
+// .item-table th {
+//   // background-color: #ffffff;
+// }
+
+// .item-table tr:nth-child(even) {
+//   background-color: #f9f9f9;
+// }
+
+.item-table td {
+  align-items: center;
+  // display: flex;
+  justify-content: center;
+  height: 48px;
+  width: 120px;
+}
+
+.item-table input,
+.item-table select {
+  width: 150%;
+  height: 28px;
+  border-radius: 4px;
+  border: none;
+  box-sizing: border-box;
+}
+
+.mandatory {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+#delBtn {
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: -5px;
+}
+
+.btn {
+  margin-left: 6px;
+  margin-top: 7px;
+}
+
+.add-btn-top {
+  margin-bottom: 10px;
+}
+
+.buttonrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.spare {
+  width: 200px;
+}
+
+.cgst {
+  width: 10px;
+}
+
+.sgst {
+  width: 10px;
+}
+
+.amt {
+  width: 10px;
+}
+
+// .selectClass {
+//   width: 50%;
+//   padding: 7px;
+//   border-radius: 4px;
+//   border: 1px solid#ccc;
+// }
+
+// .dateClass {
+//   width: 50%;
+//   padding: 7px;
+//   border-radius: 4px;
+//   border: 1px solid#ccc;
+// }
+.hr {
+  border-top: 1px solid black;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* Adjust the gap between rows */
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* Align items in the center */
+}
+
+.group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-width: 0;
+  /* Ensure the elements can shrink if needed */
+}
+
+.selectClass,
+.dateClass,
+.invClass {
+  width: 75%;
+  /* Take full width of the group */
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.total-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
+
+.total-table td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  vertical-align: middle;
+}
+
+.total-table td:first-child {
+  width: 30%;
+  /* Adjust the width for the label column */
+}
+
+.total-table td:nth-child(2) {
+  width: 70%;
+  /* Adjust the width for the input field column */
+}
+
+.input-field {
+  width: 100%;
+  height: 28px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  padding: 0 8px;
+  text-align: right;
+}
+
+.mandatory {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Style for the table container */
+.total-table-wrapper {
+  margin: 4px 0;
+  position: relative;
+  right: 0%;
+}
+
+/* Style for the table */
+.total-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.total-table thead {
+  background-color: #f5f5f5;
+}
+
+.total-table th {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 2px solid #ddd;
+}
+
+.total-table tbody td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Style for the input fields within the table */
+.input-field {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Style for the mandatory field message */
+.mandatory {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* Style for the save button */
+.update-spare-button {
+  margin-top: 1px;
+  padding: 8px 6px;
+}
+
+.overall_total_table {
+  display: flex;
+}
+
+.firstTable {
+  position: relative;
+  display: flex;
+  width: 57%;
+}
+
+.totalTable1 {
+  margin-top: 5px;
+  border: 1px solid #ede9e9;
+  width: 97%;
+}
+
+// .tablerow {
+//   background-color: #f5f5f5;
+// }
+
+.tableHead1 {
+  text-align: right;
+  padding: 10px;
+  width: 16%;
+  // background-color: #F5F5F5;
+}
+
+.tabledata1 {
+  text-align: right;
+  padding: 10px;
+  // background-color: #ffffff;
+  width: 10%;
+}
+
+.secondTable {
+  position: relative;
+  display: flex;
+  margin-left: 5px;
+  /* Adjust this if needed */
+  width: 28%;
+}
+
+.taxtable {
+  margin-top: 5px;
+  border: 1px solid #ede9e9;
+  width: 168%;
+}
+
+.taxHead {
+  text-align: center;
+  padding: 10px;
+  width: 0%;
+  // background-color: #F5F5F5;
+}
+
+.taxdata1 {
+  width: 6%;
+  text-indent: 28px;
+  direction: rtl;
+}
+
+.taxdata2 {
+  width: 3%;
+  text-indent: 30px;
+  direction: rtl;
+}
+
+.taxdata3 {
+  width: 4%;
+  text-indent: 197px;
+  direction: rtl;
+}
+
+.taxdata1,
+.taxdata2,
+.taxdata3 {
+  text-align: right;
+}
+
+input[type="date"] {
+  cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+.inputs {
+  width: 100%;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+.thClass {
+  padding: 6px;
+  text-align: center;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  max-height: 230px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+.full-width-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.full-width-table th,
+.full-width-table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.full-width-table thead th {
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.newInput {
+  position: relative;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mandatory {
+  color: red;
+  font-size: 12px;
+}
+.buttons {
+  display: inline-flex;
+  width: 100%;
+}
+.particularpage {
+  padding: 20px;
+  width: 100%;
+  border-radius: 5px;
+}
+.see-more-button {
+  color: white;
+  background-color: #5864ff;
+  padding: 8px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem; /* Optional: Adds spacing above buttons */
+}
+
+
+
+//items edit table
+
+.table-container-edit {
+  overflow-x: auto; /* Enables horizontal scroll */
+    border: 1px solid #ddd;
+}
+
+.item-edit-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.item-edit-table th, .item-edit-table td {
+  padding: 8px;
+  text-align: left;
+  border: 1px solid #ddd;
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+
+.item-edit-table[type="text"] {
+  width: 100%; /* Makes input take full cell width */
+  box-sizing: border-box; /* Ensures padding and border are included in the width */
+}
+
+.item-edit-table {
+  width: 100%; /* Makes input take full cell width */
+  box-sizing: border-box;
+
+}
+.thClassedit {
+  width: 80px; /* Example fixed width for each header cell */
+}
+
+

@@ -1,0 +1,277 @@
+<div class="container my-3 p-4 rounded shadow" style="background-color: #f8f9fa; color: #000;">
+
+    <div>
+        <h2 class="text-center text-primary mb-4">Job Card</h2>
+
+        <div class="row mb-4 d-flex justify-content-between align-items-center ">
+            <div class="col-md-3 d-flex">
+                <label for="vehicle-details" class="form-label">Phone</label>
+                <input type="text" id="vehicle-details" class="form-control" placeholder="Enter the phone number"
+                    [(ngModel)]="jobcardobj.mobile" (input)="checkvehicles(vehiclehistorypage)" name="phone"
+                    maxlength="10" />
+                <button class="btn btn-primary" (click)="clearall()" style="height: 30px;width: 100px;">Clear
+                    all</button>
+            </div>
+            <div class="col-md-3 d-flex">
+                <label for="vehicle-details" class="form-label" style="padding-right: 20px;">Name</label>
+                <input type="text" id="vehicle-details" class="form-control  " placeholder="Enter the name"
+                    [(ngModel)]="jobcardobj.name" />
+            </div>
+
+            <!-- <div class="col-md-3 d-flex">
+                <label style="padding-right: 20px;">location</label>
+
+                <input type="text" class="form-control" placeholder="Search Location" [(ngModel)]="location" />
+                <button class="btn btn-primary dropdown-toggle" (click)="toggleLocationDropdown()"
+                    style="height: 30px;width:20px;"></button>
+                <ul *ngIf="showlocationdropdown" class="dropdown-menu show "
+                    style="margin-left: 86px;margin-top: 35px;">
+                    <li *ngFor="let option of locationOptions" class="dropdown-item" (click)="selectLocation(option)">
+                        {{ option }}
+                    </li>
+                </ul>
+            </div> -->
+
+
+            <div class="col-md-3 d-flex">
+                <label style="padding-right: 20px;">Location</label>
+
+                <input type="text" class="form-control" placeholder="Search Location" [(ngModel)]="location"
+                    (blur)="hidlocationDropdown()" />
+                <button class="btn btn-primary dropdown-toggle" (click)="toggleLocationDropdown()"
+                    (keydown)="handleDropdownKeydown($event)" style="height: 30px; width: 20px;"></button>
+                <ul *ngIf="showlocationdropdown" class="dropdown-menu show"
+                    style="margin-left: 86px; margin-top: 35px;">
+                    <li *ngFor="let option of locationOptions; let i = index" class="dropdown-item"
+                        [class.active]="i === activeIndex" (click)="selectLocation(option)">
+                        {{ option }}
+                    </li>
+                </ul>
+            </div>
+
+
+
+
+            <div class="col-md-3 d-flex">
+                <!-- <label style="padding-right: 20px;">location</label> -->
+
+                <select id="color" style="background-color: #f8f9fa; " placeholder="Choose Colour"
+                    class="form-select text-center" [(ngModel)]="advisor">
+                    <option value="" disabled selected>Select Advisor</option>
+                    <option *ngFor="let tech of technician" [value]="tech.superadmin_username">
+                        {{ tech.superadmin_username }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-4 d-flex justify-content-center align-items-center">
+            <div class="col-md-4 d-flex justify-content-center align-items-center">
+                <div class="v1-cnt">
+                    <label>Veh-No</label>
+                    <input type="text" class="form-control text-center veh1" placeholder="TN" maxlength="2"
+                        [(ngModel)]="vehiclenumber.vehicleState" />
+                    <input type="text" class="form-control text-center veh1" placeholder="0 0"
+                        [(ngModel)]="vehiclenumber.vehicleDistrict" name="phone" maxlength="2" />
+                    <input type="text" class="form-control text-center veh1" placeholder="XY" maxlength="3"
+                        [(ngModel)]="vehiclenumber.vehicleCity" />
+                    <input type="text" class="form-control text-center l-v1" placeholder="0 0 0 0" name="phone"
+                        maxlength="4" [(ngModel)]="vehiclenumber.vehicleNumber" />
+                </div>
+            </div>
+
+            <!-- <div class="col-md-2   gap-2 ">
+                <input type="text" class="form-control" placeholder="Search Brand" [(ngModel)]="selectedBrandName"
+                    (focus)="showDropdown = true" (blur)="hidebrandDropdown()" />
+                <ul *ngIf="showDropdown" class="dropdown-menu show ">
+                    <li *ngFor="let brand of branddata" class="dropdown-item" (click)="selectBrand(brand)">
+                        {{brand}}
+                    </li>
+                </ul>
+            </div> -->
+
+
+            <div class="col-md-2 gap-2">
+                <input type="text" class="form-control" placeholder="Search Brand" [(ngModel)]="selectedBrandName"
+                    (focus)="showDropdown = true" (blur)="hidebrandDropdown()" (keydown)="onKeyDown($event)" />
+                <ul *ngIf="showDropdown" class="dropdown-menu show custom-dropdown">
+                    <li *ngFor="let brand of branddata; let i = index" #brandItem [ngClass]="{'active': i === selectedIndex}"
+                        class="dropdown-item" (click)="selectBrand(brand)">
+                        {{ brand }}
+                    </li>
+                </ul>
+            </div>
+
+
+
+
+
+            <!-- <div class="col-md-2 gap-2">
+                <input type="text" class="form-control" placeholder="Search Model" [(ngModel)]="selectedmodelname"
+                    (focus)="showmodelDropdown = true" (blur)="hidemodelDropdown()" />
+                <ul *ngIf="showmodelDropdown" class="dropdown-menu show custom-dropdown">
+                    <li *ngFor="let model of seletedbrand_model" class="dropdown-item" (click)="selectmodel(model)">
+                        {{ model.bikename }}
+                    </li>
+                    <button class="btn btn-primary" (click)="openmodelpopup(modelpage)">add New</button>
+                </ul>
+            </div> -->
+
+            <div class="col-md-2 gap-2">
+                <input type="text" class="form-control" placeholder="Search Model" [(ngModel)]="selectedmodelname"
+                    (focus)="showmodelDropdown = true" (blur)="hidemodelDropdown()"
+                    (keydown)="onModelKeyDown($event)" />
+                <ul *ngIf="showmodelDropdown" class="dropdown-menu show custom-dropdown">
+                    <li *ngFor="let model of seletedbrand_model; let i = index" #modelItem
+                        [ngClass]="{'active': i === selectedModelIndex}" class="dropdown-item"
+                        (click)="selectmodel(model)">
+                        {{ model.bikename }}
+                    </li>
+                    <button class="btn btn-primary" (click)="openmodelpopup(modelpage)">Add New</button>
+                </ul>
+            </div>
+
+
+
+
+            <div class="col-md-2 gap-2">
+                <select id="color" placeholder="Choose Colour" class="form-select  text-center"
+                    [(ngModel)]="modelcolor">
+                    <option value="" disabled selected>Select Colour</option>
+                    <option *ngFor="let color of listColors">{{color}}</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+            </div>
+        </div>
+
+
+        <div class="row mb-4 d-flex  ">
+            <div class="col-md-3 d-flex flex-column gap-3">
+                <label>
+                    <input class="form-check-input small-checkbox shadow-sm mr-4 " type="checkbox"
+                        [(ngModel)]="odoMeter" (keydown.enter)="toggleOdoMeter()" /> Odometer not working
+                </label>
+                <input type="text" placeholder="Enter the Odometer " [disabled]="odoMeter"
+                    class="form-control  text-center" [(ngModel)]="odometerreading" />
+            </div>
+
+            <div class="col-md-3 d-flex flex-column gap-2" style="padding-bottom: 25px;">
+                <label for="fuelSlider">Fuel level: {{ fuelAmount.toFixed(2) }}</label>
+                <input type="range" id="volume" name="volume" min="0" max="100" (input)="updateFuelAmount($event)" />
+                <label class="d-flex justify-content-between w-100 position-relative">
+                    <span class="position-absolute text-dark" style="left: 0;">E</span>
+                    <span class="position-absolute text-dark" style="left: 25%;">1/4</span>
+                    <span class="position-absolute text-dark" style="left: 50%;">1/2</span>
+                    <span class="position-absolute text-dark" style="left: 75%;">3/4</span>
+                    <span class="position-absolute text-dark" style="right: 0;">F</span>
+                </label>
+            </div>
+
+            <div *ngIf="genralservice_boolean" class="col-md-3 d-flex align-items-center justify-content-center gap-3">
+                <input class="form-check-input small-checkbox shadow-sm mr-4" type="checkbox" value="" id="vehicleCheck"
+                    [(ngModel)]="generalService" (keydown.enter)="toggleGeneralService()">
+                <label>General service</label>
+            </div>
+            <div class="col-md-3">
+            </div>
+        </div>
+
+        <div class="row mb-3 d-flex align-items-center ">
+            <div class="col-md-1">
+                <label>
+                    Complaints
+                </label>
+            </div>
+            <div class="col-md-6 d-flex align-items-center gap-2">
+                <input type="text" [(ngModel)]="newComplaint" class="form-control" placeholder="Enter Complaints" />
+                <button class="btn border border-2 border-primary rounded-circle" (click)="addComplaint()"
+                    style="width: 50px; height: 50px; border-width: 2px; font-weight: bold; display: flex; justify-content: center; align-items: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="blue" class="bi bi-plus"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                    </svg>
+                </button>
+            </div>
+            <div class="col-md-5">
+            </div>
+        </div>
+
+        <div class="row mb-4 d-flex">
+
+            <div class="col-md-4 ">
+                <label>Added Complaints</label>
+
+                <ul class="list-group" style="max-height: 200px; overflow-y: auto;">
+                    <li *ngFor="let complaint of adddedComplaints; let i = index"
+                        class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ complaint }}
+                        <button class="btn btn-primary" (click)="removeComplaint(i)"
+                            style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-5  align-items-center">
+                <label>Remarks</label>
+                <textarea id="remarks" class="form-control " [(ngModel)]="remarks"
+                    placeholder="Enter your remarks here..."
+                    style="flex: 1; text-align: left; height: 50px; resize: none;"></textarea>
+            </div>
+            <div class="col-md-3 d-flex align-items-center" style="padding-left: 100px;">
+                <button type="button" class="btn btn-primary  btn-lg" (click)="savejobcard()">Proceed</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #vehiclehistorypage>
+    <div class="modal-header">
+        <h5 class="modal-title">Vehicle History</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="vehiclehistorypopup_close()"></button>
+    </div>
+
+    <div class="modal-body">
+        <div class="vehicle-history-container">
+            <div *ngIf="!vehcilehistorydata?.length" class="alert alert-warning">
+                No vehicles available. Please add a new vehicle.
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-4" *ngFor="let data of vehcilehistorydata">
+                    <div class="card clickable-card" (click)="onSelectVehicle(data.customer_vehicles._id)">
+                        <div class="card-body">
+                            <h6 class="card-title">{{ data.customer_vehicles.vh_number }}</h6>
+                            <p class="card-text">
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" (click)="addanother_vehicle()">Add Another Vehicle</button>
+    </div>
+</ng-template>
+
+<ng-template #modelpage>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title" style="color: grey;font-size: x-large ">Add Model</h4>
+        <i (click)="addmodelpopup_close()" class="i-Close-Window" style="width: 25px;font-size:24px"></i>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group">
+                <label for="picker1">Add Model</label>
+                <input class="form-control" [(ngModel)]="addmodel">
+                <span *ngIf="inventory_things" class="error-message"> already exists</span>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-rounded" (click)="savemodel()">Save</button>
+    </div>
+</ng-template>

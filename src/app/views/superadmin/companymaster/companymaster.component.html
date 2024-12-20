@@ -1,0 +1,1000 @@
+<div class="separator-breadcrumb border-top"></div>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form-wizard>
+            <wizard-step [title]="'Company Details'" [isValid]="basicForm.form.valid" (onNext)="onStep1Next($event)">
+                <form #basicForm="ngForm">
+                    <div class="row" *ngFor="let data of companydataforid">
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="firstName">Company</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="Company"
+                                [(ngModel)]="data.company_name" name="company_name">
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                            <label for="lastName">Company Short Name</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="Company Short Name"
+                                [(ngModel)]="data.company_short_name" name="company_short_name">
+                        </div>
+                        <!-- <div class="form-group col-md-6">
+                            <label for="exampleInputEmail1">GST</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" placeholder="Enter GST" [(ngModel)]="data.gst" name="gst">
+                        </div> -->
+                        <div class="form-group col-md-6">
+                            <label for="phone">Pan</label>
+                            <input type="text" class="form-control" id="phone" placeholder="Pan number"
+                                [(ngModel)]="data.pan" name="pan">
+                        </div>
+                        <!-- <div class="form-group col-md-6">
+                            <label for="phone">Type</label>
+                            <input type="text" class="form-control" id="phone" placeholder="Type"
+                                [(ngModel)]="data.type" name="type">
+                        </div> -->
+                        <div class="form-group col-md-6">
+                            <label for="phone">Mobile</label>
+                            <input type="text" class="form-control" id="phone" placeholder="Mobile"
+                                [(ngModel)]="data.mobile" name="mobile" maxlength="10">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="phone">Company Logo</label>
+                            <input type="file" (change)="onLogoSelected($event, data)">
+                            <div *ngIf="data.logo">
+                                <img class="company-logo" style="width: 40%;" [src]="data.logo" alt="Company Logo">
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end;">
+                            <button class="btn btn-primary" (click)="savecompany(data._id)">save</button>
+                        </div>
+                    </div>
+                </form>
+            </wizard-step>
+
+            <wizard-step [title]="'Branch Details'" (onNext)="onStep2Next($event)">
+                <div style="float: right;" >
+                    <button class="btn btn-primary" (click)="addbranchpopup(branchcreatingpage)">Add Branch</button>
+                </div>
+                <div style="padding: 20px;">
+
+                </div>
+                <mat-accordion>
+                    <mat-expansion-panel *ngFor="let data of branchdata">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <p>{{ data.branch }}</p>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div>
+                            <div class="model-item">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="service">Branch</label>
+                                            <input class="form-control" [(ngModel)]="data.branch" name="branch">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="shop_area">Area</label>
+                                            <input class="form-control" [(ngModel)]="data.shop_area" name="shop_area">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="shop_area">Street</label>
+                                            <input class="form-control" [(ngModel)]="data.shop_street" name="street">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="gst">GST</label>
+                                            <input class="form-control" [(ngModel)]="data.GST" name="gst">
+                                        </div>
+
+                                        <!-- <div class="form-group">
+                                            <label for="shoptype">Type</label>
+                                            <input class="form-control" [(ngModel)]="data.shop_type" name="shoptype">
+                                        </div> -->
+                                        <div class="form-group">
+                                            <label for="mobile">Mobile</label>
+                                            <input class="form-control" [(ngModel)]="data.mobile" name="mobile"
+                                                maxlength="10">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="service">Service</label>
+                                            <select id="service" class="form-control" [(ngModel)]="data.service"
+                                                name="service">
+                                                <option value="car">Car</option>
+                                                <option value="bike">Bike</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="service">Customer Type</label>
+                                            <select id="service" class="form-control" [(ngModel)]="data.customertype"
+                                                name="service">
+                                                <option value="standard">standard</option>
+                                                <option value="premium">premium</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" style="margin-top: -77px;">
+                                        <table class="table table-hover table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th style="color:grey;font-size:smaller">+GST</th>
+                                                    <th style="color:grey;font-size:smaller">Inclusive GST</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Spare</td>
+                                                    <td><input type="checkbox"
+                                                            [(ngModel)]="data.gstcalulation.spareplusgst"
+                                                            (ngModelChange)="branchdetailspareCheckbox('inclusive', data)">
+                                                    </td>
+                                                    <td><input type="checkbox"
+                                                            [(ngModel)]="data.gstcalulation.spareinclusive"
+                                                            (ngModelChange)="branchdetailspareCheckbox('exclusive', data)">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Labour</td>
+                                                    <td><input type="checkbox"
+                                                            [(ngModel)]="data.gstcalulation.labourplusgst"
+                                                            (ngModelChange)="branchdetaillabourCheckbox('inclusive', data)">
+                                                    </td>
+                                                    <td><input type="checkbox"
+                                                            [(ngModel)]="data.gstcalulation.labourinclusive"
+                                                            (ngModelChange)="branchdetaillabourCheckbox('exclusive', data)">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Package</td>
+                                                    <td><input type="checkbox"
+                                                            [(ngModel)]="data.gstcalulation.packageplusgst"
+                                                            (ngModelChange)="branchdetailpackageCheckbox('inclusive', data)">
+                                                    </td>
+                                                    <td><input type="checkbox"
+                                                            [(ngModel)]="data.gstcalulation.packageinclusive"
+                                                            (ngModelChange)="branchdetailpackageCheckbox('exclusive', data)">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div style="display: flex; justify-content: flex-end;">
+                                    <button (click)="updatebranch(data._id, data)" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </wizard-step>
+            <wizard-step [title]="'Running Number'" (onNext)="onStep3Next($event)">
+
+                <mat-accordion>
+                    <mat-expansion-panel *ngFor="let data of branchdata" hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <p>{{data.branch}}</p>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div>
+                            <div class="model-item">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="thead-dark fixed-header">
+                                        <tr>
+                                            <th>
+                                                <div class="text-center">
+                                                    Type
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <div class="text-center">
+                                                    Prefix
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <div class="text-center">
+                                                    Year
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <div class="text-center">
+                                                    Suffix
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <div class="text-center">
+                                                    Example
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                Invoice
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="data.invoice_prefix"
+                                                    [ngModelOptions]="{standalone: true}" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="data.financial_year.invoice_year"
+                                                    [ngModelOptions]="{standalone: true}" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="data.invoice_runningnumber.value"
+                                                    [ngModelOptions]="{standalone: true}" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    placeholder="{{ data.invoice_prefix }}{{ data.financial_year.invoice_year }}{{ data.invoice_runningnumber.value }}" />
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Proforma
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="data.proforma_invoice_prefix"
+                                                    [ngModelOptions]="{standalone: true}" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="data.financial_year.invoice_year"
+                                                    [ngModelOptions]="{standalone: true}" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="data.proforma_invoice_runningnumber.value"
+                                                    [ngModelOptions]="{standalone: true}" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    placeholder="{{ data.proforma_invoice_prefix }}{{ data.financial_year.invoice_year }}{{ data.proforma_invoice_runningnumber.value }}" />
+                                            </td>
+                                        </tr>
+
+
+
+
+                                        <tr>
+                                            <td>
+                                                Estimate
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="data.estimate_prefix"
+                                                    [ngModelOptions]="{standalone: true}" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="data.estimate_year.estimateyear"
+                                                    [ngModelOptions]="{standalone: true}" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="data.estimate_runningnumber.value" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    placeholder="{{ data.estimate_prefix }}{{ data.estimate_year.estimateyear }}{{ data.estimate_runningnumber.value }}" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Jobcard
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="data.jobcard_prefix"
+                                                    [ngModelOptions]="{standalone: true}" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="data.jobcard_year.jobcardyear"
+                                                    [ngModelOptions]="{standalone: true}" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="data.BookingReferenceId.value"
+                                                    [ngModelOptions]="{standalone: true}" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control"
+                                                    placeholder="{{ data.jobcard_prefix }}{{ data.jobcard_year.jobcardyear }}{{ data.BookingReferenceId.value }}" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div style="display: flex; justify-content: flex-end;">
+                                <button (click)="updaterunningnoinbranch(data._id)"
+                                    class="btn btn-primary">save</button>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </wizard-step>
+
+            <wizard-step [title]="'Bank Details'" (onNext)="onStep4Next($event)">
+                <mat-accordion>
+                    <mat-expansion-panel *ngFor="let data of branchdata" hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <p>{{data.branch}}</p>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div>
+                            <div class="model-item">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="bankList">Bank List:</label>
+                                            <select class="form-control" style="width: 100%;height:33px" id="bankList"
+                                                (change)="selectedbank($event)"
+                                                [(ngModel)]="selectedBankName.selectedBank" name="bankList">
+                                                <option *ngFor="let item of selectedBankName?.AllBanks"
+                                                    [value]="item.bankName">
+                                                    {{ item.bankName }}
+                                                </option>
+                                            </select>
+                                            <p *ngIf="isSubmitted && !selectedBankName.selectedBank"
+                                                class="errorMessage">***Bank Name required
+                                            </p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="branch">Branch</label>
+                                            <input class="form-control" placeholder="branch_name"
+                                                [(ngModel)]="branch_name" name="branch_name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="acc_no">Acc No</label>
+                                            <input class="form-control" placeholder="acc_no" [(ngModel)]="acc_no"
+                                                name="acc_no">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="acc_name">Holder Name</label>
+                                            <input class="form-control" placeholder="acc_name" [(ngModel)]="acc_name"
+                                                name="acc_name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="address">Address</label>
+                                            <input class="form-control" placeholder="address" [(ngModel)]="address"
+                                                name="address">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="IFSC_code">IFSC</label>
+                                            <input class="form-control" placeholder="IFSC_code" [(ngModel)]="IFSC_code"
+                                                name="IFSC_code">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: flex-end;">
+                                <button
+                                    (click)="updatebankdetails(data._id,bank_name,branch_name,acc_no,acc_name,IFSC_code,address)"
+                                    class="btn btn-primary">save</button>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </wizard-step>
+
+
+            <wizard-step [title]="'Users'" (onNext)="onStep5Next($event)">
+
+                <mat-accordion>
+                    <mat-expansion-panel *ngFor="let data of branchdata" hideToggle>
+                        <mat-expansion-panel-header (click)="onBranchClick(data._id)">
+                            <mat-panel-title>
+                                <p>{{data.branch}}</p>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <!-- <button class="btn btn-primary" >Add User</button> -->
+                        <mat-accordion>
+                            <!-- Shop Users Section -->
+                            <mat-expansion-panel hideToggle>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <h3>Shop Users</h3>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+
+                                <div class="model-item">
+                                    <button style="float: right;" class="btn btn-primary"
+                                        (click)="adduserpopup(data, adduserpagepopup)"  >Add User</button>
+                                    <div style="padding: 20px;">
+
+                                    </div>
+                                    <div class="table-container">
+                                        <table class="table table-bordered table-striped">
+                                            <thead class="thead-dark fixed-header">
+                                                <tr>
+                                                    <th>
+                                                        <div class="text-center">Sl No</div>
+                                                    </th>
+                                                    <th>
+                                                        <div class="text-center">User</div>
+                                                    </th>
+                                                    <th>
+                                                        <div class="text-center">Password</div>
+                                                    </th>
+                                                    <th>
+                                                        <div class="text-center">Auth Pin</div>
+                                                    </th>
+                                                    <th>
+                                                        <div class="text-center">Role</div>
+                                                    </th>
+                                                    <th>
+                                                        <div class="text-center">Status</div>
+                                                    </th>
+                                                    <th>
+                                                        <div class="text-center" >Edit</div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let users of branchusers; let i = index">
+                                                    <td style="text-align: center;">{{i + 1}}</td>
+                                                    <td style="text-align: center;">
+                                                        {{users.superadmin_username}}
+                                                    </td>
+                                                    <td style="text-align: center;">{{users.password}}</td>
+                                                    <td style="text-align: center;">{{users.authpin}}</td>
+                                                    <td style="text-align: center;">{{users.role}}</td>
+                                                    <td style="text-align: center;">{{ users.present ? 'Active' : 'Inactive' }}</td>
+                                                    <td style="text-align: center;"><i class="i-Edit"  (click)="adminuseruser_popup(users._id, updateuserpage)"></i> </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </mat-expansion-panel>
+
+                            <!-- Technician Section -->
+                            <!-- <mat-expansion-panel hideToggle>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <h3>Technician</h3>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="model-item">
+                                    <button style="float: right;" class="btn btn-primary"
+                                        (click)="addtechpopup(data, addtechpagepopup)">Add Tech</button>
+                                    <div style="padding: 20px;">
+
+                                    </div>
+                                    <div class="table-container">
+                                        <table class="table table-bordered table-striped">
+                                            <thead class="thead-dark fixed-header">
+                                                <tr>
+                                                    <th>
+                                                        <div class="text-center">Sl No</div>
+                                                    </th>
+                                                    <th>
+                                                        <div class="text-center">Tech</div>
+                                                    </th>
+                                                    <th>
+                                                        <div class="text-center">Status</div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let tech of branchtech; let i = index">
+                                                    <td style="text-align: center;">{{i + 1}}</td>
+                                                    <td style="text-align: center;"
+                                                        (click)="tech_popup(tech._id, updatetechpage)">
+                                                        {{tech.shortname}}
+                                                    </td>
+                                                   
+                                                    <td style="text-align: center;">{{tech.present}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </mat-expansion-panel> -->
+                        </mat-accordion>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </wizard-step>
+        </form-wizard>
+
+    </div>
+</div>
+
+
+<ng-template #branchcreatingpage>
+    <div class="modal-header">
+        <h3>Create Branch</h3>
+        <i class="i-Close-Window" style="float:right; font-size:24px;" aria-hidden="true" (click)="closedialog()"></i>
+    </div>
+    <div class="modal-body">
+        <mat-card>
+            <form [formGroup]="registrationForm" (ngSubmit)="createbranch()">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="branchname">Branch Name</label>
+                            <input class="form-control" formControlName="branchname">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="shopstreet">Street</label>
+                            <input class="form-control" formControlName="shopstreet">
+                        </div>
+
+                        <!-- <div class="form-group">
+                            <label for="shoptype">Type</label>
+                            <input class="form-control" formControlName="shoptype">
+                        </div> -->
+
+                        <div class="form-group">
+                            <label for="mobile">Mobile</label>
+                            <input class="form-control" formControlName="Mobile" maxlength="10">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="service">Customer Type</label>
+                            <select id="service" class="form-control" formControlName="customertype">
+                                <option value="standard">standard</option>
+                                <option value="premium">premium</option>
+                            </select>
+                        </div>
+
+                        <mat-label>GST</mat-label>
+                        <mat-slide-toggle formControlName="gstincluded" (click)="checkgst()"></mat-slide-toggle>
+
+                        <div *ngIf="addgst" class="form-group">
+                            <input class="form-control" placeholder="Enter GST" formControlName="GST">
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="branch">Branch At</label>
+                            <input class="form-control" formControlName="branch">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="shoparea">Area</label>
+                            <input class="form-control" formControlName="shoparea">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="service">Service</label>
+                            <select id="service" class="form-control" formControlName="Service">
+                                <option value="car">car</option>
+                                <option value="bike">bike</option>
+                            </select>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label for="buying">Buying</label>
+                            <input type="checkbox" id="buying" [(ngModel)]="buyingboolean">
+                          </div> -->
+                          <!-- <div>
+                           <button (click)="showCheckboxes = !showCheckboxes"> Permissions</button> 
+                          </div>
+                          <div *ngIf="showCheckboxes; let showCheckboxes = true">
+                              <mat-checkbox  [formControl]="buyingControl" >
+                                Buying
+                              </mat-checkbox>
+                              <mat-checkbox [formControl]="assignStaffControl">
+                                Assign Staff
+                              </mat-checkbox>
+                              <mat-checkbox [formControl]="inventorycustomer">
+                               Inventory
+                              </mat-checkbox>
+                              <mat-checkbox [formControl]="genralservice">
+                                Genral Service
+                               </mat-checkbox>
+                          </div> -->
+
+                          <mat-accordion>
+                            <mat-expansion-panel>
+                              <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                  Permissions
+                                </mat-panel-title>
+                              </mat-expansion-panel-header>
+                              <div>
+                                <mat-checkbox [formControl]="buyingControl">
+                                  Buying
+                                </mat-checkbox>
+                                <mat-checkbox [formControl]="assignStaffControl">
+                                  Assign Staff
+                                </mat-checkbox>
+                                <mat-checkbox [formControl]="inventorycustomer">
+                                  Inventory
+                                </mat-checkbox>
+                                <mat-checkbox [formControl]="genralservice">
+                                  General Service
+                                </mat-checkbox>
+                              </div>
+                            </mat-expansion-panel>
+                          </mat-accordion>
+                          
+
+
+                        <div *ngIf="addgst">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th style="color:grey;font-size:smaller">+GST</th>
+                                        <th style="color:grey;font-size:smaller">Inclusive GST</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Spare</td>
+                                        <td><input type="checkbox" formControlName="spareplusgst"
+                                                (change)="updatespareCheckbox('inclusive')"></td>
+                                        <td><input type="checkbox" formControlName="spareinclusive"
+                                                (change)="updatespareCheckbox('exclusive')"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Labour</td>
+                                        <td><input type="checkbox" formControlName="labourplusgst"
+                                                (change)="updatelabourCheckbox('inclusive')"></td>
+                                        <td><input type="checkbox" formControlName="labourinclusive"
+                                                (change)="updatelabourCheckbox('exclusive')"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Package</td>
+                                        <td><input type="checkbox" formControlName="packageplusgst"
+                                                (change)="updatepackageCheckbox('inclusive')"></td>
+                                        <td><input type="checkbox" formControlName="packageinclusive"
+                                                (change)="updatepackageCheckbox('exclusive')"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="button-container">
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </div>
+                </div>
+            </form>
+        </mat-card>
+    </div>
+</ng-template>
+
+
+
+<ng-template #adduserpagepopup>
+    <div class="container-fluid" style="padding: 3%;">
+        <i class="i-Close-Window"  style="float:right; font-size:24px;" aria-hidden="true" (click)="closedialog()"></i>
+        <div class="row">
+          <!-- Users Section -->
+          <div class="col-md-6">
+            <h3>Add User</h3>
+            <div class="form-group">
+              <label for="role">Role</label>
+              <select id="role" class="form-control" [(ngModel)]="Role" name="role">
+                <option value="admin">Admin</option>
+                <option value="service advisor">Service Adviser</option>
+                <option value="accounts">Accounts</option>
+                <option value="technician">Technician</option>
+              </select>
+            </div>
+            <form [formGroup]="registrationForm">
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input class="form-control" formControlName="username">
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" formControlName="password" maxlength="4">
+              </div>
+              <div class="form-group">
+                <label for="authpin">Authpin</label>
+                <input class="form-control" type="number" formControlName="authpin" maxlength="4">
+              </div>
+              <div class="form-group">
+                <label for="authpin">Mobile</label>
+                <input class="form-control"  formControlName="mobile" maxlength="10">
+              </div>
+            </form>
+          </div>
+      
+          <!-- Share Project Section -->
+          <div class="col-md-6">
+            <h3>Permission</h3>
+            <form [formGroup]="inviteForm"  autocomplete="off">
+              <div class="form-group">
+                <mat-checkbox (change)="toggleAllPermissions($event)">All Permissions</mat-checkbox>
+              </div>
+      
+              <mat-accordion>
+                <!-- Dashboard Section -->
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <mat-checkbox formControlName="master" (change)="toggleSubMenus('master', $event)">
+                        master
+                      </mat-checkbox>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+      
+                  <!-- Dashboard Submenus -->
+                  <div class="row">
+                    <div class="col-md-6">
+                      <mat-checkbox formControlName="company">Company</mat-checkbox>
+                    </div>
+                    <div class="col-md-6">
+                      <mat-checkbox formControlName="brandmodel">Vehicle Models</mat-checkbox>
+                    </div>
+                    <div class="col-md-6">
+                      <mat-checkbox formControlName="supplier">Supplier</mat-checkbox>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+      
+                <!-- Business Section -->
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <mat-checkbox formControlName="businessMenu" (change)="toggleSubMenus('business', $event)">
+                        Business
+                      </mat-checkbox>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+      
+                  <!-- Business Submenus -->
+                  <div class="row">
+                    <div class="col-md-6">
+                      <mat-checkbox formControlName="jobcardpage">Jobcard</mat-checkbox>
+                    </div>
+                    <div class="col-md-6">
+                      <mat-checkbox formControlName="reports">Reports</mat-checkbox>
+                    </div>
+                    <!-- <div class="col-md-6">
+                      <mat-checkbox formControlName="calculation">Calculation</mat-checkbox>
+                    </div> -->
+                  </div>
+                </mat-expansion-panel>
+      
+                <!-- Insights Section -->
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <mat-checkbox formControlName="Transactionmenu" (change)="toggleSubMenus('transaction', $event)">
+                        Transaction
+                      </mat-checkbox>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+      
+                  <!-- Insights Submenus -->
+                  <div class="row">
+                    <div class="col-md-6">
+                      <mat-checkbox formControlName="payment">Payment</mat-checkbox>
+                    </div>
+                    <div class="col-md-6">
+                      <mat-checkbox formControlName="receipt">Receipt</mat-checkbox>
+                    </div>
+                    <div class="col-md-6">
+                      <mat-checkbox formControlName="expense">Expense</mat-checkbox>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+      
+                <div class="button-container" style="float: right;margin-top: 31px;"  >
+                    <span *ngIf="passwordExists" class="error-message">authpin or password already exists</span>
+                  <button class="btn btn-primary" type="submit"  (click)="createuser()">Save</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      
+      
+      
+      
+
+    <!-- <div class="container">
+        <div class="registration">
+            <div style="padding: 20px;">
+            </div>
+            <div>
+                <form [formGroup]="registrationForm" (ngSubmit)="createuser()">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input class="form-control" formControlName="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input class="form-control" formControlName="password" >
+                    </div>
+                    <div class="form-group">
+                        <label for="authpin">Authpin</label>
+                        <input class="form-control" type="number" formControlName="authpin" >
+                    </div>
+                    <div class="button-container" style="float: right;">
+                        <span *ngIf="passwordExists" class="error-message">authpin or password already exists</span>
+                        <button class="btn btn-primary" type="submit">Register</button>
+                    </div>
+                </form>
+            </div>
+            <div style="padding: 20px;">
+
+            </div>
+        </div>
+    </div> -->
+</ng-template>
+
+<ng-template #addtechpagepopup>
+    
+    <div class="container" style="padding: 20px;">
+        <i class="i-Close-Window" style="float:right; font-size:24px;"  aria-hidden="true" (click)="closedialog()"></i>
+        <div style="padding: 8px;"></div>
+        <div class="registration">
+            <form [formGroup]="registrationForm" (ngSubmit)="create_tech()">
+                <div class="form-group">
+                    <label for="firstname">First Name</label>
+                    <input class="form-control" formControlName="firstname">
+                </div>
+
+                <!-- <div class="form-group">
+              <label for="fathersname">Fathers Name</label>
+              <input class="form-control" formControlName="fathersname">
+          </div> -->
+                <div class="form-group">
+                    <label for="shortname">Short Name</label>
+                    <input class="form-control" formControlName="shortname" (blur)="checkShortnameExists()">
+                    <span *ngIf="shortnameExists" class="error-message">Shortname already exists</span>
+                </div>
+                <div class="form-group">
+                    <label for="mobile">Mobile</label>
+                    <input class="form-control" formControlName="mobile" maxlength="10">
+                </div>
+                <div class="button-container" style="float: right;">
+                    <button class="btn btn-primary" type="submit">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</ng-template>
+
+
+
+
+<ng-template #updateuserpage>
+    <div class="modal-content" style="padding: 25px; display: flex; flex-direction: column;  margin: auto;">
+        
+        <!-- Header and Close Icon -->
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="modal-title">User</h2>
+            <i class="i-Close-Window" style="font-size:24px; cursor: pointer;" aria-hidden="true" (click)="closeadminModal()"></i>
+        </div>
+
+        <!-- Main Content Wrapper -->
+        <div style="display: flex; margin-top: 20px;">
+            
+            <!-- Left Side: User Information -->
+            <div class="left-section" style="flex: 1; padding-right: 20px; ">
+                <form class="modal-form">
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select id="role" class="form-control" [(ngModel)]="Role" name="role">
+                            <option value="admin">Admin</option>
+                            <option value="service advisor">Service Adviser</option>
+                            <option value="accounts">Accounts</option>
+                            <option value="technician">Technician</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="shortname">Name</label>
+                        <input class="form-control" type="text" [(ngModel)]="superadminname" name="superadminname" placeholder="Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input class="form-control" type="password" [(ngModel)]="superadmin_password" name="superadmin_password" placeholder="Password" maxlength="4">
+                    </div>
+                    <div class="form-group">
+                        <label for="superadmin_authpin">Authpin</label>
+                        <input class="form-control" type="text" [(ngModel)]="superadmin_authpin" name="superadmin_authpin" placeholder="PIN">
+                    </div>
+                    <div class="form-group">
+                        <label for="superadmin_authpin">Mobile</label>
+                        <input class="form-control" type="text" [(ngModel)]="superadmin_Mobile" name="superadmin_Mobile" placeholder="Mobile">
+                    </div>
+                    <div class="form-group">
+                        <mat-checkbox [(ngModel)]="adminpresent" name="adminpresent">Active</mat-checkbox>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Side: Permissions -->
+            <div class="right-section" style="flex: 1; padding-left: 20px;">
+                <h3>Permission</h3>
+                <div class="form-group">
+                    <mat-checkbox (change)="toggleupdateAllPermissions($event)">All Permissions</mat-checkbox>
+                </div>
+                <mat-accordion>
+                    <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-checkbox [(ngModel)]="updateinviteform.master" (change)="toggleupdateSubMenus('master', $event)">
+                                    Master
+                                </mat-checkbox>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-checkbox [(ngModel)]="updateinviteform.company">Company</mat-checkbox>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-checkbox [(ngModel)]="updateinviteform.brandmodel">Vehicle Models</mat-checkbox>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-checkbox [(ngModel)]="updateinviteform.supplier">Supplier</mat-checkbox>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-checkbox [(ngModel)]="updateinviteform.businessMenu" (change)="toggleupdateSubMenus('business', $event)">
+                                    Business
+                                </mat-checkbox>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-checkbox [(ngModel)]="updateinviteform.jobcardpage">Jobcard</mat-checkbox>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-checkbox [(ngModel)]="updateinviteform.reports">Reports</mat-checkbox>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <mat-checkbox [(ngModel)]="updateinviteform.Transactionmenu" (change)="toggleupdateSubMenus('transaction', $event)">
+                                    Transaction
+                                </mat-checkbox>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-checkbox [(ngModel)]="updateinviteform.payment">Payment</mat-checkbox>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-checkbox [(ngModel)]="updateinviteform.receipt">Receipt</mat-checkbox>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-checkbox [(ngModel)]="updateinviteform.expense">Expense</mat-checkbox>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="modal-actions" style="width: 100%; text-align: right; margin-top: 20px;">
+            <button mat-button color="primary" (click)="updateadmindata()">Submit</button>
+        </div>
+    </div>
+</ng-template>
+
+  

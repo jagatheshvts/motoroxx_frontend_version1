@@ -1,0 +1,23 @@
+.rotated-img {
+    width: 400px; /* Adjust the width */
+    height: auto; /* Maintain aspect ratio */
+    transform: rotate(-11deg); /* Rotate the image by 15 degrees */
+    transition: transform 0.5s ease; /* Optional: Add smooth rotation animation */
+}
+
+
+.container {
+    height: 80vh; 
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+  }
+  
+  .auth-logo img {
+    max-width: 100%; /* Ensure the logo resizes appropriately */
+  }
+  
+  .p-4 {
+    padding: 2rem;
+  }
+  

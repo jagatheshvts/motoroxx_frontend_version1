@@ -1,0 +1,110 @@
+<div  class="header-container">
+  <h1>GST Report</h1>
+  <div class="header-details">
+   <div><strong>Vehicle = {{total_vehicle ? total_vehicle : 0 }}</strong></div>
+   <div><strong>Estimate = {{estimatetotal ? estimatetotal : 0 }}</strong></div>
+   <!-- <div><strong>Invoice = {{invoicetotal ? invoicetotal : 0}}</strong></div> -->
+   <div><strong>Invoice = {{ invoicetotal ? (invoicetotal | number:'1.2-2') : 0 }}</strong></div>
+   <!-- <div><strong>Taxable Amount = {{taxableamount ? taxableamount : 0}}</strong></div> -->
+</div>
+</div>
+<div class="forpadding"></div>
+<div>
+   <mat-form-field>
+       <mat-label>Year and Month:</mat-label>
+       <mat-select [(ngModel)]="selectedYearMonth" (selectionChange)="onYearMonthChange()">
+           <mat-option *ngFor="let yearMonth of yearMonths" [value]="yearMonth">
+               {{ yearMonth }}
+           </mat-option>
+       </mat-select>
+
+   </mat-form-field>
+   
+  <div><button class="btn btn-primary"  (click)="mothlydataexcel()">Excel Report</button></div> 
+<div class="forpadding"></div>
+
+
+  <!-- it may be uncomment when needed this is for getting excel data with spares estimate -->
+  <!-- <div><button class="btn btn-primary"  (click)="fortest_estimatespareexcel()">monthly estimate Report</button></div>  -->
+   
+  
+
+   <div class="table-responsive ">
+       <table class="table table-hover table-striped">
+           <thead class="thead-dark fixed-header">
+               <tr>
+                   <th>Sl No</th>
+                   <!-- <th>Booking Id</th>
+                   <th>Invoice No</th> -->
+                   <th>Inv Date</th>
+                   <th>Customer</th>
+                   <th>Mobile</th>
+                   <th>Veh No</th>
+                   <th>Brand-Model</th>
+                   <th>Estimate</th>
+                   <th>Invoice</th>
+                   <th>Spares & Labours</th>
+               </tr>
+           </thead>
+           <tbody>
+               <tr *ngFor="let data of dailyreportdata ; let i = index">
+                   <td>{{i +1}}</td>
+                   <!-- <td >
+                       {{data.booking_reference_id}}</td>
+                       <td>{{data.invoice.invoice_reference_number}}</td> -->
+                       <td>{{data.invoice.date | date:'dd-MM-yyyy'}}</td>
+                   <ng-container *ngFor="let customers of data.customers">
+                       <td>{{customers.name}}</td>
+                       <td>{{customers.mobile}}</td>
+                   </ng-container>
+                   <ng-container *ngFor="let vehicle of data.vehicledetails">
+                       <td>{{vehicle.vh_number}}</td>
+                       <td>{{vehicle.brand}} -{{vehicle.model}}</td>
+                   </ng-container>
+                   <!-- <td>{{data.estimate ? data.estimate.estimate_amount : 'not estimated'}}</td> -->
+                   <td style="text-align: right;">{{formatEstimateAmount(data.estimate ? data.estimate.estimate_amount : null)}}</td>
+                   <td style="text-align: right;">{{formatInvoiceAmount(data.invoice ? data.invoice.invoice_amount : null)}}</td>
+                   <!-- <td style="text-align: right;">
+                       {{ data.invoice 
+                         ? (
+                             (
+                               +(data.invoice.fullspares_totalwithoutgst || 0) + 
+                               +(data.invoice.fulllabours_totalwithoutgst || 0) + 
+                               +(data.invoice.package_totalwithoutgst || 0) 
+                             ).toFixed(2)
+                           ) 
+                         : 'not invoiced' 
+                       }}
+                     </td> -->
+                       
+                   
+                   <!-- <ng-container *ngFor="let spares of data.invoice.all_spares; let i = index"> -->
+                       <td style="text-align: left;">
+                           <div class="scrollable-content">
+                               <ul>
+                                   <li *ngFor="let spares of data.invoice.all_spares">{{spares.spare}} </li>
+                                   <li *ngFor="let labours of data.invoice.all_labours">{{labours.name}}</li>
+                               </ul>
+                           </div>
+                       </td>
+                       <!-- <td style="text-align: left;">
+                           <div class="scrollable-content">
+                               <ul>
+                                   <li *ngFor="let spares of data.invoice.all_spares">{{spares.rate}} </li>
+                                   <li *ngFor="let labours of data.invoice.all_labours">{{labours.rate}}</li>
+                               </ul>
+                           </div>
+                       </td> -->
+                     <!-- </ng-container> -->
+               </tr>
+           </tbody>
+       </table>
+   </div>
+</div>
+<ng-template #bookingideditpage>
+
+   <input [(ngModel)]="updatedbookingid">
+
+   <button (click)="editbook()">update</button>
+
+</ng-template>

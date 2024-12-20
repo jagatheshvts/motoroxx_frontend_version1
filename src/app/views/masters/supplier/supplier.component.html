@@ -1,0 +1,600 @@
+<div class="row">
+  <div class="col-sm-5">
+    <h1 style="color: grey;">Suppliers : {{ totalRecords }}</h1>
+    <div class="search-bar">
+      <input type="text" placeholder="Search" [(ngModel)]="searchTerm" (input)="filterData()">
+      <i class="search-icon text-muted i-Magnifi-Glass1"></i>
+    </div>
+  </div>
+  <div class="col-sm-5"></div>
+  <div class="col-sm-2">
+    <div class="forpadding1"></div>
+    <button type="button" class="btn btn-primary" id="addbutton" (click)="createvendorpopup(vendorcreatepage)">Add
+      Suppliers</button>
+  </div>
+</div>
+<div class="forpadding"></div>
+<div>
+  <table class="table table-hover table-striped">
+    <thead class="thead-light">
+      <tr>
+        <th>Sl.No</th>
+        <th>Supplier Id</th>
+        <th>Business</th>
+        <th>Relation-Since</th>
+        <th>Type</th>
+        <th>Mobile</th>
+        <th>Email</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of pagedData; let i = index">
+        <td>{{i + startIndex + 1}}</td>
+        <td>{{data.supplier_id}}</td>
+        <td>{{data.name}}</td>
+        <td>{{data.Relationship_since | date:'dd-MM-yyyy'}}</td>
+        <td>{{data.type}}</td>
+        <td>{{data.mobile}}</td>
+        <td>{{data.email}}</td>
+        <td><i class="i-File-Edit" style="cursor: pointer;" (click)="editvendorpopup(vendoreditpage,data._id)"></i></td>
+      </tr>
+    </tbody>
+  </table>
+  <mat-paginator [length]="totalRecords" [pageSize]="rowsPerPage" [pageSizeOptions]="[2, 5, 10, 20]"
+    (page)="onPageChange($event)">
+  </mat-paginator>
+</div>
+
+<ng-template #vendoreditpage>
+  <!-- <div class="closebtn"><button id="button_for_right_align" style="border:none" type="button"
+      (click)="closeeditvendor()">
+      <span aria-hidden="true" class="closebutton"><b>×</b></span>
+    </button></div> -->
+    <div style="float: right;padding: 5px;">
+      <i (click)="closecreatevendor()" class="i-Close-Window" style="width: 25px;font-size:24px;float: right;"></i>
+  
+    </div>
+  <div class="register">
+    <h2 style="text-align: left; color: grey;"><strong>Edit Supplier</strong></h2>
+    <div *ngFor="let data of editvendorsdata">
+      <div class="details">
+        <h4 style="color: grey;" class="suppliereditTitlePlaceholder"><strong>Supplier</strong></h4>
+        <div class="detailsContainer">
+          <div class="detailsItem">
+            <label class="type">Type:</label>
+            <div class="radioDiv">
+              <label class="radio radio-outline-primary">
+                <input type="radio" id="individual" name="type" value="Individual" [(ngModel)]="data.type">
+                <label for="individual">Individual</label>
+                <span class="checkmark"></span>
+              </label>
+              <label class="radio radio-outline-primary">
+                <input type="radio" id="business" name="type" value="Business" [(ngModel)]="data.type">
+                <label for="Business">Business</label>
+                <span class="checkmark"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="detailsItem">
+            <label for="name">Name:</label>
+            <input type="text" style="width: 100%;" class="form-control" [(ngModel)]="data.name">
+          </div>
+        </div>
+      </div>
+      <div class="contact">
+        <h4 style="color: grey;" class="contacteditTitlePlaceholder"><strong>Contact</strong></h4>
+        <div class="contactContainer">
+          <div class="contactItem">
+            <label for="mobile">Mobile:</label>
+            <input type="text" style="width: 100%;" class="form-control" [(ngModel)]="data.mobile">
+          </div>
+          <div class="contactItem">
+            <label for="email">Email:</label>
+            <input type="text" style="width: 100%;" class="form-control" [(ngModel)]="data.email">
+          </div>
+          <div class="contactItem">
+            <label for="address1">Address:</label>
+            <textarea name="address1" id="address1" class="form-control" style="width: 100%;"
+              [(ngModel)]="data.address1"></textarea>
+          </div>
+          <div class="contactItem statePinContainer">
+            <label for="state">State:</label>
+            <select id="state" style="width: 74%;margin-left: 20px; " class="form-control">
+              <option value={{data.state}}>{{data.state}}</option>
+
+            </select>
+            <label for="pincode">PinCode:</label>
+            <input type="text" id="pincode" class="form-control" [(ngModel)]="data.pincode">
+          </div>
+        </div>
+      </div>
+      <div class="tax">
+        <h4 style="color: grey;" class="taxeditTitlePlaceholder"><strong>Tax</strong></h4>
+        <div class="taxContainer">
+          <div class="taxItem">
+            <label for="pan">Pan:</label>
+            <input type="text " class="form-control" style="width: 100%;" [(ngModel)]="data.pan">
+          </div>
+          <div class="taxItem">
+            <label for="gst">GST No:</label>
+            <input type="text" style="width: 100%;" class="form-control" [(ngModel)]="data.gstno">
+          </div>
+        </div>
+      </div>
+      <!-- <div class="button">
+        <div class="buttonContainer">
+          <div class="allbutton">
+            <button id="vendorcreationbutton" class="btn btn-primary"
+              (click)="editvendorsdatas(data._id,editvendorsdata)"> Save</button>
+          </div>
+        </div>
+      </div> -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-rounded" (click)="editvendorsdatas(data._id,editvendorsdata)">Save</button>
+    </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #vendorcreatepage>
+  <div style="float: right;padding: 5px;">
+    <i (click)="closecreatevendor()" class="i-Close-Window" style="width: 25px;font-size:24px;float: right;"></i>
+
+  </div>
+  <!-- <div class="closebtn"><button id="button_for_right_align" style="border:none" type="button"
+      (click)="closecreatevendor()">
+      <span aria-hidden="true" class="closebutton"><b>×</b></span>
+    </button></div> -->
+  <div class="register">
+    <h2 style="text-align: left; color: grey; font-size: x-large;"><strong>Supplier Registration</strong></h2>
+    <form (ngSubmit)="createVendor()">
+      <div class="details">
+        <h4 style="color: grey; " class="suppliertitlePlaceholder"><strong>Supplier</strong></h4>
+        <div class="detailsContainer">
+          <div class="detailsItem">
+            <label class="type">Type:</label>
+            <div class="radioDiv">
+              <label class="radio radio-outline-primary">
+                <input type="radio" id="individual" name="type" value="Individual" [(ngModel)]="vendorDetails.type">
+                <label for="individual">Individual</label>
+                <span class="checkmark"></span>
+              </label>
+              <label class="radio radio-outline-primary">
+                <input type="radio" id="business" name="type" value="Business" [(ngModel)]="vendorDetails.type">
+                <label for="Business">Business</label>
+                <span class="checkmark"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- <div class="detailsItem">
+            <label for="name">Name:</label>
+            <input id="name" type="text" class="form-control" [(ngModel)]="vendorDetails.name" name="name"
+              style="width: 100%;">
+            <div style="color:red" *ngIf="!vendorDetails.name && formrequired">******</div>
+          </div> -->
+          <div class="detailsItem" style="gap: 10px;">
+            <label for="expense">Expense Heads:</label>
+            <select 
+              style="width: 100%;" 
+              id="expense" 
+              class="form-control" 
+              [(ngModel)]="selectedHead" 
+              (change)="onExpenseChange($event,addnew_expencepage)" 
+              name="expense"
+            >
+              <option *ngFor="let head of expenseheads.allheads" [value]="head.head">
+                {{ head.head }}
+              </option>
+              <option value="addNew">+ Add New</option>
+            </select>
+          </div>
+
+          <div class="detailsItem">
+            <label for="name">Name:</label>
+            <input id="name" type="text" class="form-control" [(ngModel)]="vendorDetails.name" name="name"
+              style="width: 100%;">
+            <div style="color:red" *ngIf="!vendorDetails.name && formrequired">******</div>
+          </div>
+
+          <!-- <div class="detailsItem">
+            <div *ngIf="showAddheads">
+              <div class="row">
+                <div class="div col-md-11">
+                  <input class="select form-control" style="width: 100%;" type="text" [(ngModel)]="newHead"
+                    placeholder="Enter new head" class="newHeadInput" (keyup)="checkHeadExistence()" />
+                </div>
+                <div class="div col-md-1">
+                  <button (click)="saveNewHead()" id="newHeadButton" class="btn btn-primary">Save</button>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="detailsItem">
+            <label for="brand">Brand:</label>
+            <div class="multi-select" (click)="toggleBrandDropdown($event)">
+              <div class="selected-items">
+                {{ selectedBrands.length ? selectedBrands.join(', ') : 'Select Brand' }}
+              </div>
+              <div *ngIf="showBrandDropdown" class="dropdown">
+                <div *ngFor="let brand of branddata">
+                  <label>
+                    <input type="checkbox" (click)="onBrandCheckboxChange($event, brand)"
+                      [checked]="selectedBrands.includes(brand.brand)" />
+                    {{ brand.brand }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="detailsItem">
+            <label for="category">Category:</label>
+            <div class="multi-select" (click)="toggleCategoryDropdown($event)">
+              <div class="selected-items">
+                {{ selectedCategories.length ? selectedCategories.join(', ') : 'Select Category' }}
+              </div>
+              <div *ngIf="showCategoryDropdown" class="dropdown">
+                <div *ngFor="let category of categorydata">
+                  <label>
+                    <input type="checkbox" (click)="onCategoryCheckboxChange($event, category)"
+                      [checked]="selectedCategories.includes(category.category)" />
+                    {{ category.category }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="contact">
+        <div class="contactContainer">
+          <h4 style="color: grey;" class="contactTitlePlaceholder"><strong>Contact</strong></h4>
+          <div class="contactItem">
+            <label for="mobile">Mobile:</label>
+            <input id="mobile" class="form-control" type="text" [(ngModel)]="contactDetails.mobile" maxlength="10"
+              minlength="10" required name="mobile" style="width: 100%;">
+            <div style="color:red" *ngIf="!contactDetails.mobile && formrequired">******</div>
+
+
+          </div>
+          <div class="contactItem">
+            <label for="email">Email:</label>
+            <input id="email" class="form-control" type="text" [(ngModel)]="contactDetails.email" name="email" required
+              style="width: 100%;">
+          </div>
+          <div class="contactItem">
+            <label for="address1">Address:</label>
+            <textarea id="address1" class="form-control" [(ngModel)]="contactDetails.address" name="address1"
+              style="width: 100%;"></textarea>
+          </div>
+          <div class="contactItem statePinContainer">
+            <label for="state">State:</label>
+            <select id="state" class="form-control" style="width: 74%;margin-left: 20px;"
+              [(ngModel)]="contactDetails.state" name="state">
+              <option value="TamilNadu">TamilNadu</option>
+              <option value="Kerala">Kerala</option>
+              <option value="Karnataka">Karnataka</option>
+            </select>
+            <label for="pincode">PinCode:</label>
+            <input id="pincode" class="form-control" type="text" [(ngModel)]="contactDetails.pincode" name="pincode">
+          </div>
+        </div>
+      </div>
+      <div class="tax">
+        <div class="taxContainer">
+          <h4 style="color: grey;" class="taxTitlePlaceholder"><strong>Tax</strong></h4>
+          <div class="taxItem">
+            <label for="pan">Pan:</label>
+            <input id="pan" class="form-control" type="text" [(ngModel)]="taxDetails.pan" maxlength="10" minlength="10"
+              required name="pan" style="width: 100%;">
+          </div>
+          <!-- <div class="taxItem" *ngIf="vendorDetails.type =='Business'"> -->
+          <div class="taxItem" >
+            <label for="gst">GST No:</label>
+            <input id="gst" type="text" class="form-control" [(ngModel)]="taxDetails.gst" maxlength="15" minlength="15"
+              required name="gst">
+          </div>
+        </div>
+      </div>
+      <div class="button">
+        <div class="buttonContainer">
+          <div class="allbutton">
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary btn-rounded" (click)="createVendor()">Save</button>
+          </div>
+            <!-- <center><button type="button" id="vendorcreationbutton" class="btn btn-primary"
+                (click)="createVendor()">Save</button></center> -->
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+
+
+<ng-template #supplierreceipt_page>
+  <h1 style="text-align: center;"><strong>Supplier Inward</strong></h1>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="container">
+        <mat-form-field appearance="fill">
+          <mat-label>Select Supplier</mat-label>
+          <mat-select [(ngModel)]="selectedSupplier" (selectionChange)="onSelectionChange($event)">
+            <mat-option *ngFor="let item of allmasterdata" [value]="item">
+              {{ item.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div *ngIf="mandatoryfields && !selectedSupplier" class="mandatory">Please select a supplier</div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+    </div>
+    <div class="col-lg-4">
+      <mat-form-field appearance="fill">
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" (dateChange)="formatDate($event)">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <div *ngIf="mondatorydate" class="mandatory">Please fill this field</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-7">
+      <label for="sup_invno">Inv No:</label>
+      <input id="sup_invno" type="text" [(ngModel)]="sup_invno" name="sup_invno">
+      <div *ngIf="mandatoryinvno" class="mandatory">Please fill this field</div>
+    </div>
+  </div>
+  <div class="forpadding"></div>
+
+  <div *ngIf="isspareclicked"><b>Spares</b></div>
+  <div class="modal-body" *ngFor="let data of inputDataArray; let i = index">
+    <mat-form-field class="spare">
+      <input matInput [(ngModel)]="data.spare" name="spare">
+      <div *ngIf="mandatoryfields && !data.spare" class="mandatory">***</div>
+    </mat-form-field>
+    <mat-form-field class="qty">
+      <input type="number" matInput placeholder="qty" [(ngModel)]="data.qty" name="qty">
+      <div *ngIf="mandatoryfields && !data.qty" class="mandatory">***</div>
+    </mat-form-field>
+    <mat-form-field class="rate">
+      <input type="number" matInput placeholder="rate" [(ngModel)]="data.rate" name="rate">
+      <div *ngIf="mandatoryfields && !data.rate" class="mandatory">***</div>
+    </mat-form-field>
+    <mat-form-field class="rate">
+      <input type="number" matInput placeholder="amount" [(ngModel)]="data.amount" name="amount">
+      <div *ngIf="mandatoryfields && !data.amount" class="mandatory">***</div>
+    </mat-form-field>
+    <mat-checkbox>
+      <input type="checkbox" [(ngModel)]="data.gst18" id="gst18" (change)="handleCheckboxChange(data, 'gst18')"
+        name="gst18{{i}}">
+      18%
+    </mat-checkbox>
+    <mat-checkbox>
+      <input type="checkbox" [(ngModel)]="data.gst28" id="gst28" (change)="handleCheckboxChange(data, 'gst28')"
+        name="gst28{{i}}">
+      28%
+    </mat-checkbox>
+    <mat-form-field class="rate">
+      <input type="number" matInput placeholder="cgst" [(ngModel)]="data.cgst" name="cgst">
+      <div *ngIf="mandatoryfields && !data.cgst" class="mandatory">***</div>
+    </mat-form-field>
+    <mat-form-field class="rate">
+      <input type="number" matInput placeholder="sgst" [(ngModel)]="data.sgst" name="sgst">
+      <div *ngIf="mandatoryfields && !data.sgst" class="mandatory">***</div>
+    </mat-form-field>
+    <mat-form-field class="rate">
+      <input type="number" matInput placeholder="igst" [(ngModel)]="data.igst" name="igst">
+      <div *ngIf="mandatoryfields && !data.igst" class="mandatory">***</div>
+    </mat-form-field>
+  </div>
+  <button class="btn btn-icon btn-primary" (click)="addInputField()" style="margin-right: 10px;">
+    <i class="fas fa-wrench"></i>
+  </button>
+  <div class="forpadding"></div>
+  <div class="row" *ngIf="isspareclicked">
+    <b>Total</b>
+    <div class="col-lg-3">
+      <mat-form-field appearance="standard" style="width: 70%;">
+        <mat-label><b>Amount</b></mat-label>
+        <input matInput type="number" placeholder="amount" [(ngModel)]="total_amount_receipt"
+          name="total_amount_receipt">
+        <div *ngIf="mandatoryfields && !total_amount_receipt" class="mandatory">Please fill this field</div>
+      </mat-form-field>
+      <mat-form-field appearance="standard" style="width: 50%;">
+        <mat-label><b>CGST</b></mat-label>
+        <input matInput type="number" [(ngModel)]="total_cgst_receipt" name="total_cgst_receipt">
+        <div *ngIf="mandatoryfields && !total_cgst_receipt" class="mandatory">Please fill this field</div>
+      </mat-form-field>
+      <mat-form-field appearance="standard" style="width: 50%;">
+        <mat-label><b>SGST</b></mat-label>
+        <input matInput type="number" [(ngModel)]="total_sgst_receipt" name="total_sgst_receipt">
+        <div *ngIf="mandatoryfields && !total_sgst_receipt" class="mandatory">Please fill this field</div>
+      </mat-form-field>
+    </div>
+    <div class="col-lg-3">
+      <div>
+        <mat-form-field appearance="standard" style="width: 50%;">
+          <mat-label><b>IGST</b></mat-label>
+          <input matInput type="number" [(ngModel)]="total_igst_receipt" name="total_igst_receipt">
+          <div *ngIf="mandatoryfields && !total_igst_receipt" class="mandatory">Please fill this field</div>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-lg-7">
+    </div>
+  </div>
+
+  <div class="row justify-content-end _forpadding1">
+    <button type="button" class="btn btn-primary btn-md update-spare-button" (click)="supplier_receipt()">Save</button>
+  </div>
+
+</ng-template>
+
+
+
+<ng-template #supplierpayment_page>
+  <h1 style="text-align: center;"><strong>Supplier Payment</strong></h1>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="container">
+        <mat-form-field>
+          <mat-label>Select Supplier</mat-label>
+          <mat-select (selectionChange)="onSelectionChange_payment($event)">
+            <mat-option *ngFor="let item of allmasterdata" [value]="item._id">
+              {{ item.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-lg-4">
+
+    </div>
+    <div class="col-lg-4">
+      <mat-form-field>
+        <mat-label>Date</mat-label>
+        <input matInput [(ngModel)]="todaysdate">
+      </mat-form-field>
+      <div></div>
+      <button class="btn btn-primary" [matMenuTriggerFor]="menu">Payment Method</button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="selectPaymentMethod('Bank')">Bank</button>
+        <button mat-menu-item (click)="selectPaymentMethod('UPI')">UPI</button>
+      </mat-menu>
+
+    </div>
+  </div>
+
+  <div class="container_pay">
+    <div class="row">
+      <div class="col-lg-7" *ngIf="bankpage">
+        <mat-form-field appearance="fill" class="matfield_size">
+          <mat-label>Select Bank</mat-label>
+          <mat-select [(value)]="selectedBank" (selectionChange)="onBankChange(selectedBank)">
+            <mat-option *ngFor="let bank of banks" [value]="bank">
+              {{ bank }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="selectedBank && bankpage">
+        <div>
+          <div><b>Account Details</b></div>
+          <mat-form-field>
+            <mat-label><b>Acc No</b></mat-label>
+            <input matInput [(ngModel)]="accno" placeholder="Enter UTR Number">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label><b>IFSC Code</b></mat-label>
+            <input matInput [(ngModel)]="ifsccode" placeholder="Enter Payment Cash">
+          </mat-form-field>
+        </div>
+
+        <div><b>Transaction Details</b></div>
+        <mat-form-field>
+          <mat-label><b>Payment Date</b></mat-label>
+          <input matInput [(ngModel)]="paymentDate" [matDatepicker]="picker" placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label><b>UTR Number</b></mat-label>
+          <input matInput [(ngModel)]="utrNumber" placeholder="Enter UTR Number">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label><b>Payment</b></mat-label>
+          <input matInput [(ngModel)]="paymentCash" placeholder="Enter Payment Cash" type="number">
+        </mat-form-field>
+
+        <div>
+          <button class="btn btn-primary"
+            (click)="proceedpayment(bankpage,paymentDate,utrNumber,paymentCash)">Proceed</button>
+        </div>
+      </div>
+
+      <div *ngIf="upipage">
+        <mat-form-field>
+          <mat-label><b>Payment Date</b></mat-label>
+          <input matInput [(ngModel)]="paymentDate" [matDatepicker]="picker" placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label><b>UPI Number</b></mat-label>
+          <input matInput [(ngModel)]="upiNumber" placeholder="Enter UTR Number">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label><b>Payment</b></mat-label>
+          <input matInput [(ngModel)]="paymentCash" placeholder="Enter Payment Cash" type="number">
+        </mat-form-field>
+        <div>
+          <button class="btn btn-primary"
+            (click)="proceedpayment(upipage,paymentDate,upiNumber,paymentCash)">Proceed</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <table class="trans-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Particulars</th>
+        <th>Recipt</th>
+        <th>Payment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of sup_paymentdata.transaction">
+        <td>{{ data.receiptpayment.date | date:'dd-MM-yyyy' }}</td>
+        <td>{{ data.receiptpayment.particulars }}</td>
+        <td>{{ data.receiptpayment.totalreceipt_amount }}</td>
+        <td>{{ data.receiptpayment.payment }}</td>
+
+      </tr>
+    </tbody>
+  </table>
+
+
+  <div style="align-items: center;"><b>{{this.balancepay}}</b></div>
+
+  <div class="forpadding"></div>
+</ng-template>
+
+<ng-template #addnew_expencepage>
+
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" style="color: grey;font-size: x-large ">Add new Expense</h4>
+    <i (click)="close_expenhead_popup()" class="i-Close-Window" style="width: 25px;font-size:24px"></i>
+</div>
+<div class="modal-body">
+    <form>
+        <div class="form-group">
+            <label for="picker1">New Head</label>
+            <input class="select form-control" style="width: 100%;" type="text" [(ngModel)]="newHead"
+            placeholder="Enter new head" class="newHeadInput" (keyup)="checkHeadExistence()" />
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary btn-rounded" (click)="saveNewHead()">Save</button>
+</div>
+
+
+</ng-template>

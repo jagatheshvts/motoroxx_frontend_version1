@@ -1,0 +1,136 @@
+
+<!-- <div class="modal-body">
+  <div class="mb-3">
+    <div class="row">
+      <div class="col-md-3 col-sm-6" *ngFor="let data of alltechnician" (click)="opentechniciandata(data._id, data)">
+        <div class="card mb-3" id="cards">
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ data.firstname }}</h5>
+            <h class="card-title">labour  ={{ data.cardtechprofit }}</h>
+            <h class="card-title">package ={{ data.cardtechpackagedata }}</h>
+            <h class="card-title">spare   ={{ data.cardsparestech }}</h>
+            <h class="card-title">invoice ={{ data.cardtechinvoiceamountfinal }}</h>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="modal-body">
+  <div class="mb-3">
+    <div class="row">
+      <div class="col-md-3 col-sm-6" *ngFor="let data of alltechnician" (click)="opentechniciandata(data._id, data)">
+        <div class="card mb-3" id="cards">
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ data.firstname }}</h5>
+            <p class="card-text">
+              <strong>Package :</strong> {{ data.cardtechpackagedata }}<br>
+              <strong>Labour :</strong> {{ data.cardtechprofit }}<br>
+              <strong>Spare :</strong> {{ data.cardsparestech }}<br>
+              <strong>Invoice :</strong> {{ data.cardtechinvoiceamountfinal }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="techtable">
+  <div class="row align-items-center">
+    <div class="col-md-4">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+          <input matStartDate formControlName="start" placeholder="Start date">
+          <input matEndDate formControlName="end" placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker (closed)="onDatepickerClosed()"></mat-date-range-picker>
+        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+      </mat-form-field>
+    <div><button class="btn btn-primary" (click)="techreport_excel()">Excel Report</button></div>
+
+    </div>
+    <div class="col-md-8">
+      <div class="text-center mb-3"  >
+        <h2 class="text-center">{{ techname }}</h2>
+        <p>Package: {{ techpackagedata }}</p>
+        <p>Labour: {{ techprofit }}</p>
+        <p>Spares: {{ sparestech }}</p>
+        <p>Invoice: {{techinvoiceamountfinal}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive mt-4">
+    <table class="table table-hover table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th>Sl No</th>
+          <th>Inv Date</th>
+          <th>Customer</th>
+          <th>Mobile</th>
+          <th>Veh No</th>
+          <th>Brand-Model</th>
+          <th>Package</th>
+          <th>Labours</th>
+          <th>Spare</th>
+          <th>Estimate</th>
+          <th>Invoice</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of totaltechdata ; let i = index">
+          <td>{{i + 1}}</td>
+          <td>{{data.invoice.date | date:'dd-MM-yyyy' }}</td>
+          <ng-container *ngFor="let customers of data.customers; let first = first">
+            <td [attr.rowspan]="data.customers.length" *ngIf="first">{{customers.name}}</td>
+            <td>{{customers.mobile}}</td>
+          </ng-container>
+          <ng-container *ngFor="let vehicle of data.vehicledetails; let first = first">
+            <td [attr.rowspan]="data.vehicledetails.length" *ngIf="first">{{vehicle.vh_number}}</td>
+            <td [attr.rowspan]="data.vehicledetails.length" *ngIf="first">{{vehicle.brand}} -{{vehicle.model}}</td>
+          </ng-container>
+          <td>
+            <ng-container *ngIf="data.invoice.package; else noPackage">
+              {{ data.invoice.package.length > 0 
+                ? calculatetotalWith18(data.invoice.package_total_amount, data.invoice.package_with_18_total) 
+                : 'No package' }}
+            </ng-container>
+            <ng-template #noPackage>
+              {{ data.invoice.service_spares.length > 0 ? data.invoice.service_spare_totalamount : 'No package' }}
+            </ng-template>
+          </td>
+          <td>
+            <ng-container *ngIf="data.invoice.package; else noLabourPackage">
+              {{ calculatetotalWith18(data.invoice.fulllabours_total_amount, data.invoice.fulllabours_with_18_total) }}
+            </ng-container>
+            <ng-template #noLabourPackage>
+              {{ data.invoice.fulllabours_total_amount }}
+            </ng-template>
+          </td>
+
+          <td>
+            <ng-container *ngIf="data.invoice.package; else nosparewithpackage">
+              {{data.invoice.fullspares_total_amount }}
+            </ng-container>
+            <ng-template #nosparewithpackage>
+              {{ data.invoice.extraspare_total_amount }}
+            </ng-template>
+          </td>
+          <td>{{formatEstimateAmount(data.estimate ? data.estimate.estimate_amount : null)}}</td>
+          <td>{{formatInvoiceAmount(data.invoice ? data.invoice.invoice_amount : null)}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+

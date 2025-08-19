@@ -1,0 +1,26 @@
+.modal-body {
+    max-height: 400px; 
+    // overflow-y: auto; 
+    overflow-y: scroll; 
+    -ms-overflow-style: none;  
+    scrollbar-width: none; 
+}
+
+.modal-header, .modal-footer {
+    position: sticky;
+    top: 0; 
+    z-index: 1;
+    background-color: white;
+}
+
+.modal-footer {
+    bottom: 0; 
+    z-index: 1;
+}
+
+.spacegrade_fortablehead{
+    justify-content:center
+}
+
+  
+  

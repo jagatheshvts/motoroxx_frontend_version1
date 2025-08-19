@@ -1,0 +1,27 @@
+.header-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background color */
+  }
+
+  .header-container h1 {
+    margin-bottom: 10px;
+    color: #007bff; /* Blue color for the heading */
+    font-size: 28px;
+  }
+
+  .header-details {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Spacing between details */
+    margin-bottom: 10px; /* Bottom margin for spacing */
+  }
+
+  .header-details strong {
+    font-size: 18px;
+  }
+
+  .forpadding{
+    padding: 5px;
+
+  }

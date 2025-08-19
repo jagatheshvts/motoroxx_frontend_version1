@@ -1,0 +1,64 @@
+.templatecontainer{
+    width: 100%;
+}
+.inputContainer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding-left: 30px;
+    margin-right: 0%;
+}
+
+// input[type=text] {
+//     padding: 6px;
+//     font-size: 14px;
+//     border: 1px solid #ccc;
+//     border-radius: 4px;
+//     width: 100%;
+//     box-sizing: border-box;
+//     transition: border-color .3s ease;
+//     // border: none;
+// }
+#selectValue{
+    padding: 6px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 107px;
+    box-sizing: border-box;
+    transition: border-color .3s ease;
+}
+input[type=text] :focus{
+    border: 1px solid #5151ff;
+}
+.selectdata{
+    padding: 6px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 25%;
+    float: right;
+    margin-right: 6%;
+    box-sizing: border-box;
+    transition: border-color .3s ease;
+}
+.addbtn{
+    display: flex;
+    gap: 5px;
+}
+.buttoncontainer{
+    float: right;
+    margin-right: 10%;
+    margin-top: 10%;
+    // width: 30%;
+}
+.delbtn{
+    width: 41px
+}
+.btn{
+    background-color: #5864ff
+}
+
+.qty{
+    width: 107px;
+}

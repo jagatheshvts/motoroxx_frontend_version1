@@ -1,0 +1,88 @@
+
+
+<div class="header-container">
+  <h1>HSN Search</h1>
+  <div class="header-details">
+    <div><strong>Amount: {{totalAmount ? totalAmount.toFixed(2) : 0 }}</strong></div>
+    <div><strong>TaxableValue: {{totalTaxableValue ? totalTaxableValue.toFixed(2) : 0 }}</strong></div>
+  </div>
+</div>
+
+
+<div class=" row d-flex pt-2">
+  <!-- Search Box Section -->
+  <div class="col-3 ">
+    <label pb-2><strong>Type The HSN</strong></label>
+    <div class="input-group">
+      <span class="input-group-text">
+        <i class="bi bi-search"></i>
+      </span>
+      <input id="search" type="search" class="form-control" placeholder="Serach the HSN" [(ngModel)]="HsnSearch" />
+    </div>
+  </div>
+
+  <div class=" col-4 flex-fill">
+    <mat-form-field appearance="fill">
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+        <input matStartDate formControlName="start" placeholder="Start date" readonly>
+        <input matEndDate formControlName="end" placeholder="End date" readonly>
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker (closed)="onDatepickerClosed()"></mat-date-range-picker>
+
+      <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">
+        Invalid start date
+      </mat-error>
+      <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">
+        Invalid end date
+      </mat-error>
+    </mat-form-field>
+
+  </div>
+
+  <div class=" col-5">
+  </div>
+
+</div>
+
+<div class=" col-2 pb-2">
+  <button class="btn btn-primary" (click)="exportToExcel()">Excel Report</button>
+</div>
+
+
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Sl.No</th>
+      <th>INV.Date</th>
+      <th>INV.No</th>
+      <th>Customer</th>
+      <th>HSN </th>
+      <th>QTY</th>
+      <th>GST</th>
+      <th class="text-end">Amount</th>
+      <th class="text-end">Taxable_Value</th>
+      <th class="text-end">SGST</th>
+      <th class="text-end">CGST</th>
+      <th class="text-end">IGST</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of hsnReportData ; let i = index">
+      <td>{{ i+1}}</td>
+      <td>{{item.INVDATE}}</td>
+      <td>{{item.INVOICE}}</td>
+      <td>{{item.CUSTOMER}}</td>
+      <td>{{ item.HSN }}</td>
+      <td>{{ item.QTY }}</td>
+      <td>{{ item.GST }}</td>
+      <td class="text-end">{{ item.AMOUNT.toFixed(2) }}</td>
+      <td class="text-end">{{ item.Taxable_Value.toFixed(2)}}</td>
+      <td class="text-end">{{ item.SGST.toFixed(2) }}</td>
+      <td class="text-end">{{ item.CGST.toFixed(2) }}</td>
+      <td class="text-end">{{ item.IGST.toFixed(2) }}</td>
+    </tr>
+  </tbody>
+</table>

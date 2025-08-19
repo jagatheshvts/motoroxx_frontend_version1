@@ -1,0 +1,113 @@
+<div class="container my-5">
+
+    <div class="row mb-4">
+        <div class="col-12 ">
+            <div class="row">
+                <div class="col-6">
+                    <h2><strong>ALL CLIENTS</strong></h2>
+                </div>
+                <div class="col-2">
+                </div>
+
+                <div class="col-1">
+                    <label class="switch">
+                        <input type="checkbox" id="toggleSwitch" [(ngModel)]="showTesting" >
+                        <span class="slider"></span>
+                    </label>
+                    <p id="toggleStatus">Test</p>
+
+                </div>
+                <div class="col-3 ">
+                    <input type="text" class="form-control search-bar" placeholder="Search clients" [(ngModel)]="searchTerm" 
+                    (input)="filterClients()" />
+                </div>
+
+            </div>
+
+            <div *ngIf="!showTesting" class="row">
+
+                <div class="col-md-2">
+                    <p>Total Clients:<strong>{{totalclient}}</strong></p>
+                </div>
+                <div class="col-md-2">
+                    <p>Paid Clients: <strong>{{activebranchlength}}</strong></p>
+                </div>
+
+                <div class="col-md-2">
+                    <p> Demo Clients: <strong>{{nonactivebranchlength}}</strong></p>
+                </div>
+                <div class="col-md-6">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="row">
+        <div class="row">
+            <ng-container *ngFor="let client of alldatas.data">
+                <div *ngIf="!client.testing && !showTesting" class="col-md-4 mb-4">
+                    <div class="card text-center p-3" [ngClass]="{ 
+                      'bg-paid': client.branchactive == true,
+                      'bg-demo': client.branchactive == false
+                    }">
+                        <h4 class="text-white">
+                            <strong>{{ client.companyName }}</strong>
+                        </h4>
+                        <table >
+                            <tbody>
+                                <tr>
+                                    <th >Jobs</th>
+                                    <th >Invoiced</th>
+                                    <th >Last Job</th>
+                                </tr>
+                                <tr >
+                                    <!-- <th style="border: 1px solid white;">{{ client.jobcardCount }}</th> -->
+
+                                    <th >{{ client.jobcardCount }}</th>
+                                    <th >{{ client.invoiceCount }}</th>
+                                    <th >{{ client.lastJobcardDate }}</th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div *ngIf="client.testing && showTesting" class="row d-flex">
+                    <div *ngIf="client.testing && showTesting" class="col-md-4 mb-4 ">
+                        <div class="card text-center p-3" [ngClass]="{ 
+                          'bg-paid': client.branchactive,
+                          'bg-demo': !client.branchactive
+                        }">
+                            <h4 class="text-white">
+                                <strong>{{ client.companyName }}</strong>
+                            </h4>
+                            <table >
+                                <tbody>
+                                    <tr>
+                                        <th >Jobs</th>
+                                        <th>Invoiced</th>
+                                        <th>Last Job</th>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ client.jobcardCount }}</td>
+                                        <td>{{ client.invoiceCount }}</td>
+                                        <td>{{ client.lastJobcardDate }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

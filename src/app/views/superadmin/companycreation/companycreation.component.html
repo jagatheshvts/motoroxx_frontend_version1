@@ -1,0 +1,129 @@
+<div *ngIf="showAddCompany" style="display: flex; justify-content: flex-end;">
+    <button class="btn btn-primary" (click)="createcompany(companycreatingpage)" >Add Company</button>
+</div>
+
+<!-- <div class="content">
+    <div class="card-container">
+      <div class="card" id="cards" *ngFor="let data of companydetails">
+        <div (click)="fullcompanydetails(data._id)" >
+          <h4  class="carddata" style="text-align: start;">{{data.company_name}}</h4>
+          <h4  class="carddata" style="text-align: start">{{data.createddate | date:'dd-MM-yyyy'}}</h4>
+          <h4  class="carddata" style="text-align: start">{{data.address}}</h4>
+          <h4  class="carddata" style="text-align: start">{{data.mobile}}</h4>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- <div class="content" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;"> -->
+    <!-- <div class="card" id="cards" *ngFor="let data of companydetails" (click)="fullcompanydetails(data._id)">
+        <div class="card-content">
+            <h4 class="company-name">{{data.company_name}} ---- {{data.address}}</h4>
+            <p class="company-date">{{data.createddate | date:'dd-MM-yyyy'}}</p>
+           
+            <p class="company-mobile">{{data.mobile}}</p>
+        </div>
+        <div *ngFor="let branchdata of allbranchdata">
+          <div *ngIf="data._id == branchdata.company_id ">
+            <p>{{branchdata.branch}}</p> 
+        </div>
+        </div>
+    </div> -->
+<!-- </div> -->
+
+<div *ngFor="let data of companydetails"  (click)="fullcompanydetails(data._id)" tabindex="0" (keydown.enter)="fullcompanydetails(data._id)">
+
+  <div class="card" id="cards" >
+    <div class="card-content">
+      <!-- Left Section: Company Details -->
+      <div class="card-left">
+        <h4 class="company-name">{{data.company_name}}</h4>
+        <p class="company-date">{{data.address}}</p>
+        <p class="company-date">{{data.createddate | date:'dd-MM-yyyy'}}</p>
+        <p class="company-mobile">{{data.mobile}}</p>
+      </div>
+  
+      <!-- Right Section: Branch Details -->
+      <div class="card-right">
+        <h4>Branch At</h4>
+        <div *ngFor="let branchdata of allbranchdata">
+          <div *ngIf="data._id == branchdata.company_id">
+            
+            <p class="company-mobile">{{branchdata.branch}} - {{branchdata.mobile}} (Service Type-{{branchdata.service}})</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+  <ng-template #companycreatingpage>
+
+    <div class="modal-header">
+    <h3>Create Company</h3>
+      <i  class="i-Close-Window" style="float:right; font-size:24px;"  aria-hidden="true" (click)="closedialog()"></i>
+    </div>
+    <div class="model-body" style="padding: 20px;">
+    
+      <mat-card>
+        <form [formGroup]="registrationForm" (ngSubmit)="create_company()">
+          <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="companyname">Company</label>
+                    <input class="form-control" formControlName="companyname">
+                </div>
+                <div class="form-group">
+
+                    <label for="companyshortname">Company Short Name</label>
+                    <input class="form-control"  formControlName="companyshortname">
+                </div>
+
+                <div class="form-group">
+                  <label for="mobile">Mobile</label>
+                  <input class="form-control" formControlName="mobile" maxlength="10">
+              </div>
+              
+            </div>
+            <div class="col-md-6">
+                <!-- <div class="form-group">
+                    <label for="gst">Gst</label>
+                    <input class="form-control"  formControlName="gst">
+                </div> -->
+
+                <div class="form-group">
+
+                    <label for="pan">Pan</label>
+                    <input class="form-control"  formControlName="pan">
+                </div>
+                <div class="form-group">
+                  <label for="Address">Address</label>
+                  <input class="form-control" formControlName="address">
+              </div>
+            </div>
+            <div class="col-md-6">
+                
+               
+  
+              <!-- <label for="companyLogoInput">Logo</label>
+              <input type="file" (change)="onLogoSelected($event)"> -->
+  
+            </div>
+        </div>
+          <div class="button-container" style="display: flex; justify-content: flex-end;">
+            <button  class="btn btn-primary" type="submit">Save</button>
+          </div>
+        </form>
+      </mat-card>
+  
+    </div>
+    
+    
+  </ng-template>
+  

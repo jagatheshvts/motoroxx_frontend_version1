@@ -1,0 +1,263 @@
+.button-row {
+    display: flex;
+    gap: 20px;
+    float: right;
+  }
+  
+  .btn-primary {
+    background-color: #5864ff;
+    border: #5864ff;
+  }
+  
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  .align {
+    text-align: right;
+  }
+  
+  #productsave {
+    float: right;
+  }
+  
+  .forpadding {
+    padding: 20px;
+  }
+  
+  .trans-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .trans-table th,
+  .trans-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .trans-table th {
+    background-color: #f2f2f2;
+  }
+
+
+
+
+
+
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem; /* Optional: Adds spacing above buttons */
+}
+
+
+
+.capitalize-input {
+  text-transform: capitalize;
+}
+
+.error-message{
+  color: red;
+}
+
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  background: #f8f9fa;
+  border: 1px solid #eee;
+  border-radius: 20px;
+  position: relative;
+  width: 300px;
+  height: 40px;
+}
+
+.search-icon {
+  font-size: 18px;
+  width: 24px;
+  display: inline-block;
+}
+.search-bar input {
+  background: transparent;
+  border: 0;
+  color: #212121;
+  font-size: 1rem;
+  line-height: 2;
+  height: 100%;
+  outline: initial !important;
+  padding: 0.5rem 1rem;
+  width: calc(100% - 32px);
+}
+
+
+.vertical-divider {
+  border-left: 1px solid grey;
+  height: 1.5em;
+}
+
+.btn-group .btn {
+  border-radius: 4px; 
+  padding: 10px 15px; 
+  margin-left: 5px; 
+}
+
+
+
+
+
+
+
+
+// brand prevention code
+.suggestion-list {
+  
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  list-style-type: none;
+  padding: 0;
+  margin-top: 5px;
+}
+
+.suggestion-list li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestion-list li:hover {
+  background-color: #f0f0f0;
+}
+// brand prevention code
+
+
+
+.productPlaceholder {
+  position: absolute;
+  top: 27%;
+  left: 29px;
+  background-color: white;
+  padding: 0 10px;
+  font-size: 18px;
+  z-index: 1;
+}
+
+
+.itemsPlaceholder {
+  position: absolute;
+  top: 14%;
+  left: 29px;
+  background-color: white;
+  padding: 0 10px;
+  font-size: 18px;
+  z-index: 1;
+}
+
+.measurementPlaceholder{
+  position: absolute;
+  top: 66%;
+  left: 29px;
+  background-color: white;
+  padding: 0 10px;
+  font-size: 18px;
+  z-index: 1;
+}
+
+.amountPlaceholder{
+  position: absolute;
+  top: 47%;
+  left: 29px;
+  background-color: white;
+  padding: 0 10px;
+  font-size: 18px;
+  z-index: 1;
+
+}
+
+// .productPlaceholder, .itemsPlaceholder, .measurementPlaceholder, .amountPlaceholder {
+//   position: relative;
+//   background-color: white;
+//   padding: 0 10px;
+//   font-size: 18px;
+//   z-index: 1;
+//   margin-bottom: -20px; /* Adjust this to keep the heading close to the section */
+// }
+
+.borderContainer {
+  position: relative;
+  border: 1px solid grey;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 5px;
+}
+
+// .itemdetailscontainer {
+//   position: relative;
+//   border: 1px solid grey;
+//   border-radius: 10px;
+//   padding: 20px;
+//   margin-top: 20px;
+// }
+
+
+.heading {
+  font-size: 18px;
+  
+}
+
+// .card-body{
+//   max-height: 600px;
+//   overflow-y: auto;
+// }
+
+
+
+.custom-dropdown {
+  max-height: 200px; /* Set the height of the dropdown */
+  overflow-y: auto; /* Make it scrollable if the content exceeds the height */
+  border: 1px solid #ddd; /* Optional: Add a border */
+  background-color: white; /* Ensure the background color matches your dropdown */
+  padding: 0; /* Remove default padding */
+}
+
+.custom-dropdown::-webkit-scrollbar {
+  width: 8px; /* Customize scrollbar width */
+}
+
+
+.pagination-controls button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.pagination-controls button.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.pagination-controls button:disabled {
+  background-color: #eee;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.pagination-controls span {
+  margin: 0 5px;
+  padding: 5px 10px;
+  color: #555;
+}
+
+
+
+
+

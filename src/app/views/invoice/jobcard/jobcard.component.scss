@@ -1,0 +1,390 @@
+.vehicle-history-container {
+    padding: 1rem;
+  }
+  
+  .card.clickable-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .card.clickable-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  // .modal-header {
+  //   display: flex;
+  //   justify-content: space-between;
+  //   align-items: center;
+  // }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: 'flex-end';
+    padding: 1rem;
+  }
+
+
+  #rightButton {
+    position: absolute;
+    top: 25%; 
+    right: 16px; 
+    transform: translateY(-80%); 
+    padding: 3px 20px;
+    font-size: 13px;
+    background-color: #263db5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease; 
+  
+  }
+
+
+
+
+
+
+
+.form-label {
+  margin-bottom: 0;
+  margin-right: 10px;
+}
+
+.small-checkbox {
+  transform: scale(1.2);
+//   / Increases the size of the checkbox /
+}
+
+.form-check-label {
+  font-size: 1.2rem;
+//   Adjusts the font size for the label /
+  margin-left: 10px;
+//   / Adds space between the checkbox and label /
+}
+
+
+
+.veh1 {
+
+  width: 50px;
+}
+
+.l-v1 {
+  width: 80px;
+}
+
+.v1-cnt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between !important;
+  width: 100%;
+}
+
+.sec-column {
+  display: flex;
+  align-items: 'center';
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+}
+
+
+.final-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding-right: 50%;
+  width: 500px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+
+}
+
+.custom-dropdown {
+    max-height: 200px; 
+    overflow-y: auto; 
+    border: 1px solid #ddd; 
+    background-color: white;
+    padding: 0;
+  }
+  
+  .custom-dropdown::-webkit-scrollbar {
+    width: 8px; 
+  }
+
+  .custom-dropdown-location{
+    max-height: 200px; 
+    overflow-y: auto; 
+    border: 1px solid #ddd; 
+    background-color: white;
+    padding: 0;
+    margin-top: 17%;
+
+  }
+
+  .custom-dropdown-location::-webkit-scrollbar {
+    width: 8px; 
+  }
+
+
+
+
+
+
+
+
+
+  h3{
+    margin: 0;
+    padding: 0;
+    font-size: 0.9rem;
+  }
+  .textStyle{
+    // font-size: small;
+    background-color: rgb(239, 234, 234);
+    border-radius: 43px;
+    text-align: center;
+    width: 163px;
+    height: 60px;
+    border: none;
+   line-height: 1.2; 
+   display: inline-block;
+    font-size: 12px;
+     padding: 4px;
+     color: rgb(43, 40, 40);
+   
+  }
+  .invstyle{
+    display: flex;
+     justify-content: space-between; 
+     align-items: center;
+      margin: 0; padding: 0;
+  }
+  .cls-btn{
+    float: right;
+  }
+  .main_container {
+        width: 81%;
+      // max-width: 1200px;
+      height: auto;
+      // / margin: 10px auto; /
+      // / height: auto; /
+      box-sizing: border-box;
+      font-size: 0.85rem;
+      margin-top: 1px;
+      margin-left: 86px;
+      margin-top: -28%;
+  }
+
+
+
+  .circle-plus {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px; 
+    height: 30px; 
+    border-radius: 50%; 
+    background-color: #263db5; 
+    color: white; 
+    font-size: 30px; 
+  }
+  
+  .bold-line {
+    border-width: 1.5px; 
+    // border-style: solid;
+    border-color: black; 
+  }
+  
+  
+  
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: -900px; 
+    width: 900px;
+    height: 100%;
+    background-color: white;
+    // color: white;
+    padding: 30px;
+    box-shadow: -2px 0 5px rgba(195, 192, 192, 0.5);
+    transition: right 0.3s ease; 
+    border-radius: 50px 5px 5px 50px; 
+  }
+  
+  .sidebar.open {
+    right: 0;
+  }
+  
+  
+  
+  
+  .container {
+    display: flex;
+    justify-content: space-between;
+  }
+  .left, .right {
+    width: 45%;
+    padding: 10px;
+    border: none;
+    box-sizing: border-box;
+  }
+  h2 {
+    font-size: 16px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  table, th, td {
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
+  }
+  th, td {
+    padding: 8px;
+    text-align: left;
+    font-size: 0.9rem;
+  }
+  
+  .remarks {
+    border: 5px solid #ddd;
+    padding: 15px; 
+    width: 100%;
+    min-height: 100px; 
+    box-sizing: border-box;
+  }
+  .btnforarrow{
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-top: 197px;
+  
+  }
+
+  
+.header-message {
+  font-size: 1.2em; 
+  text-align: center; 
+  margin: 0; 
+  flex-grow: 1; 
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 50px 0px 0px 50px;
+}
+
+.styleforbutton{
+  display: flex;
+  justify-content: flex-end; 
+  padding: 10px; 
+  background-color: white; 
+}
+.invstyle{
+  margin: 0; padding: 3px;font-size: 0.9rem;
+}
+  
+
+
+
+
+.invoice-cards-container {
+  display: flex;
+  flex-wrap: nowrap; /* Prevents wrapping */
+  overflow-x: auto; /* Enables horizontal scrolling */
+  gap: 10px; /* Space between cards */
+  padding: 1px;
+
+  /* Hide scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.invoice-cards-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
+.invoice-cards-container .card {
+  display: inline-block;
+  padding: 1px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  text-align: center;
+  min-width: 150px; /* Adjust based on your preference */
+}
+
+
+
+
+
+
+//for sliding veh or mob
+.toggle-slider {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 150px;
+  height: 40px;
+  background: #e0e0e0;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+label.toggle-option {
+  flex: 1;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  z-index: 2;
+  color: #555;
+  font-weight: bold;
+}
+
+input[type="radio"]:checked + label.toggle-option {
+  color: #fff;
+}
+
+.slider-background {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background: #007bff;
+  border-radius: 20px;
+  transition: 0.3s ease;
+  z-index: 1;
+}
+
+input[type="radio"]#mob:checked ~ .slider-background {
+  transform: translateX(0%);
+}
+
+input[type="radio"]#veh:checked ~ .slider-background {
+  transform: translateX(100%);
+}
+
+
+
+#color {
+  max-height: 150px; /* Adjust the height as per your requirement */
+  overflow-y: auto;  /* This will add a vertical scrollbar */
+}
+
+

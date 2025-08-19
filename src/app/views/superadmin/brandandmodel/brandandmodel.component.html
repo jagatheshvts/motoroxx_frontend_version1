@@ -1,0 +1,514 @@
+<!-- <div class="header" id="headers">
+    <button class="btn btn-primary" style="float:right" routerLink="/mainpage">MainPage</button>
+</div> -->
+<div *ngIf="superadmin == 'true'">
+    <div class="forpadding"></div>
+    
+    <!-- Bike Brands Expansion Panel -->
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>Bike Brands</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div style="float: right;">
+            <button class="btn btn-primary" (click)="addbrand('bike',addbikebrandpage)">Add Brand</button>
+        </div>
+        <div style="padding: 20px;"> 
+
+        </div>
+        <div class="modal-body">
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col-md-2" *ngFor="let brand of brandKeys">
+                        <div class="card mb-3" id="cards">
+                            <div class="card-body">
+                                <h5 class="carddata">
+                                    <h3>{{ brand }}</h3>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-expansion-panel>
+
+  
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>Car Brands</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div style="float: right;">
+            <button class="btn btn-primary" (click)="addbrand('car',addbikebrandpage)">Add Brand</button>
+        </div>
+
+        <div style="padding: 20px;"> 
+
+        </div>
+        <div class="modal-body">
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col-md-2" *ngFor="let carbrand of carbrandKeys">
+                        <div class="card mb-3" id="cards">
+                            <div class="card-body">
+                                <h5 class="carddata">
+                                    <h3>{{ carbrand }}</h3>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-expansion-panel>
+</div>
+
+
+
+
+<div *ngIf="superadmin == 'false'" >
+    <div class="forpadding"></div>
+    <h4 class="heading">Brands</h4>
+    <div *ngIf="superadmin == 'true'" style="float: right;">
+        <button class="btn btn-primary" (click)="addbrand(addbikebrandpage)">Add Brand</button>
+    </div>
+    <div style="padding: 20px;"></div>
+    <div class="modal-body">
+        <div class="mb-3">
+            <div class="row">
+                <div class="col-md-2" *ngFor="let brand of brandKeys"
+                    (click)="openBrandDetailsDialog(brand,bikeprizedatapage)">
+                    <div class="card mb-3" id="cards">
+                        <div class="card-body">
+                            <h5 class="carddata">
+                                <h3>{{ brand }}</h3>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-2">
+                    <div class="card mb-3" id="cards">
+                        <div class="card-body">
+                            <h5 class="carddata" (click)="openoilDetailsDialog(oilprizedatapage)">
+                                <h3>Oil Data</h3>
+                            </h5>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <h1 class="heading">Updated Package Price </h1>
+<div class="modal-body">
+    <div class="mb-3">
+        <div class="row">
+            <div class="col-md-2" *ngFor="let brand of brandKeys"
+                (click)="openupdatedBrandDetailsDialog(brand,updatedpackages)">
+                <div class="card mb-3" id="cards">
+                    <div class="card-body">
+                        <h5 class="carddata">
+                            <h3>{{ brand }}</h3>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+<ng-template #bikeprizedatapage>
+    <div class="modal-header fixed-header">
+        <div>
+            {{ selectedbrand }}
+        </div>
+        <div>
+            <i  class="i-Close-Window" style="float:right; font-size:24px;"  aria-hidden="true" (click)="closeupdatepopup()"></i>
+        </div>
+    </div>
+    <form (ngSubmit)="updatedprizedetails()">
+        <div class="modal-body">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark fixed-header">
+                    <tr>
+                        <th class="text-center">
+                            <div class="row spacegrade_fortablehead">
+                                Models
+                            </div>
+                        </th>
+                        <th class="text-center">
+                            <div class="row spacegrade_fortablehead">
+                                GSP Regular
+                                <input type="checkbox" [(ngModel)]="gspRegularPriceChecked"
+                                    (change)="toggleGroup('gsp', 'RegularPrice')"
+                                    [ngModelOptions]="{standalone: true}" />
+                            </div>
+                        </th>
+                        <th class="text-center">
+                            <div class="row spacegrade_fortablehead">
+                                GSP Offer1
+                                <input type="checkbox" [(ngModel)]="gspOffer1Checked"
+                                    (change)="toggleGroup('gsp', 'Offer1')" [ngModelOptions]="{standalone: true}" />
+                            </div>
+                        </th>
+                        <th class="text-center">
+                            <div class="row spacegrade_fortablehead">
+
+                                GSP Offer2
+                                <input type="checkbox" [(ngModel)]="gspOffer2Checked"
+                                    (change)="toggleGroup('gsp', 'Offer2')" [ngModelOptions]="{standalone: true}" />
+                            </div>
+                        </th>
+                        <th class="text-center">
+                            <div class="row spacegrade_fortablehead">
+
+                                BSP Regular
+                                <input type="checkbox" [(ngModel)]="bspRegularPriceChecked"
+                                    (change)="toggleGroup('bsp', 'RegularPrice')"
+                                    [ngModelOptions]="{standalone: true}" />
+                            </div>
+                        </th>
+                        <th class="text-center">
+                            <div class="row spacegrade_fortablehead">
+
+                                BSP Offer1
+                                <input type="checkbox" [(ngModel)]="bspOffer1Checked"
+                                    (change)="toggleGroup('bsp', 'Offer1')" [ngModelOptions]="{standalone: true}" />
+                            </div>
+                        </th>
+                        <th class="text-center">
+                            <div class="row spacegrade_fortablehead">
+
+                                BSP Offer2
+                                <input type="checkbox" [(ngModel)]="bspOffer2Checked"
+                                    (change)="toggleGroup('bsp', 'Offer2')" [ngModelOptions]="{standalone: true}" />
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let bike of brandfullbikes; let i = index">
+                        <td>{{ bike.bikename }}</td>
+                        <td>
+                            <input type="text" class="form-control" [(ngModel)]="bike.gsp.regularprice"
+                                name="gspRegularPrice{{i}}" />
+                            <input type="checkbox" [(ngModel)]="bike.gsp.regularprizeselected"
+                                name="gspregularprizeselected{{i}}"
+                                (change)="handleCheckboxChangegsp(bike.gsp, 'regularprizeselected')" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" [(ngModel)]="bike.gsp.offer1"
+                                name="gspOffer1{{i}}" />
+                            <input type="checkbox" [(ngModel)]="bike.gsp.offer1Selected" name="gspOffer1Selected{{i}}"
+                                (change)="handleCheckboxChangegsp(bike.gsp, 'offer1Selected')" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" [(ngModel)]="bike.gsp.offer2"
+                                name="gspOffer2{{i}}" />
+                            <input type="checkbox" [(ngModel)]="bike.gsp.offer2Selected" name="gspOffer2Selected{{i}}"
+                                (change)="handleCheckboxChangegsp(bike.gsp, 'offer2Selected')" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" [(ngModel)]="bike.bsp.regularprice"
+                                name="bspRegularPrice{{i}}" />
+                            <input type="checkbox" [(ngModel)]="bike.bsp.regularprizeselected"
+                                name="bspregularprizeselected{{i}}"
+                                (change)="handleCheckboxChangebsp(bike.bsp, 'regularprizeselected')" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" [(ngModel)]="bike.bsp.offer1"
+                                name="bspOffer1{{i}}" />
+                            <input type="checkbox" [(ngModel)]="bike.bsp.offer1Selected" name="bspOffer1Selected{{i}}"
+                                (change)="handleCheckboxChangebsp(bike.bsp, 'offer1Selected')" />
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" [(ngModel)]="bike.bsp.offer2"
+                                name="bspOffer2{{i}}" />
+                            <input type="checkbox" [(ngModel)]="bike.bsp.offer2Selected" name="bspOffer2Selected{{i}}"
+                                (change)="handleCheckboxChangebsp(bike.bsp, 'offer2Selected')" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer fixed-footer">
+            <button class="btn btn-primary" (click)="addbikes_popup(addbikespage)">Add Models</button>
+            <button style="float:right" type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</ng-template>
+<ng-template #updatedpackages>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th class="text-center">Bike Name</th>
+                <th class="text-center">{{gspheading}}</th>
+                <th class="text-center">{{bspheading}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let bike of brandfullbikes; let i = index">
+                <td style="text-align: left;">{{ bike.bikename }}</td>
+                <td style="text-align: right;">
+                    {{bike.gsp.offerselectedvalue}}
+                </td>
+                <td style="text-align: right;">
+                    {{bike.bsp.offerselectedvalue}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</ng-template>
+
+<ng-template #addbikespage>
+    <div class="modal-header">
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="bikename">Models</label>
+            <input class="form-control" type="text" [(ngModel)]="bikename">
+        </div>
+        <div class="form-group">
+            <label for="gsp">GSP</label>
+            <input class="form-control" type="text" [(ngModel)]="gsp">
+        </div>
+        <div class="form-group">
+            <label for="bsp">BSP</label>
+            <input class="form-control" type="text" [(ngModel)]="bsp">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div>
+            <button class="btn btn-primary" (click)="update_addbikes()">Submit</button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #oilprizedatapage>
+    <div class="modal-header heightforheader ">
+        <div></div>
+        <div>
+            <i  class="i-Close-Window" style="float:right; font-size:24px;"  aria-hidden="true" (click)="closeoilupdatepopup()"></i>
+        </div>
+    </div>
+    <div class="forpadding"></div>
+    <form (ngSubmit)="updateoilprizedetails()">
+        <div class="modal-body ">
+            <h2>Recommend</h2>
+            <div *ngFor="let data of oilarraydata">
+                <div>
+                    <input type="checkbox" name="{{data.id}}_Castrol" [checked]="data.recommend.Castrol"
+                        (change)="updateRecommendation(data, 'Castrol', $event.target.checked)">
+                    <label>Castrol</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="{{data.id}}_Motul" [checked]="data.recommend.Motul"
+                        (change)="updateRecommendation(data, 'Motul', $event.target.checked)">
+                    <label>Motul</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="{{data.id}}_Repsol" [checked]="data.recommend.Repsol"
+                        (change)="updateRecommendation(data, 'Repsol', $event.target.checked)">
+                    <label>Repsol</label>
+                </div>
+            </div>
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark fixed-header">
+                    <tr>
+                        <th class="text-center">
+                            Mineral-100ml
+                        </th>
+                        <th class="text-center">
+                            Synthetic-100ml
+                        </th>
+                        <th class="text-center">
+                            Semi Synthetic-100ml
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div>
+                                <mat-accordion>
+                                    <ng-container *ngFor="let data of oilarraydata ">
+                                        <ng-container *ngFor="let brand of objectKeys(data.mineral.brand)">
+                                            <mat-expansion-panel>
+                                                <mat-expansion-panel-header>
+                                                    <mat-panel-title>
+                                                        {{ brand }}
+                                                    </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                <div>
+                                                    <ng-container
+                                                        *ngFor="let grade of objectKeys(data.mineral.brand[brand])">
+                                                        <div class="row space_grade">
+                                                            <div class="span_to_left">
+                                                                <span>{{grade}}</span>
+                                                                <div class="forpadding"></div>
+                                                                <mat-form-field appearance="outline"
+                                                                    class="buysellinput">
+                                                                    <mat-label>Buying</mat-label>
+                                                                    <input matInput
+                                                                        [(ngModel)]="data.mineral.brand[brand][grade].buying"
+                                                                        [ngModelOptions]="{standalone: true}">
+                                                                </mat-form-field>
+                                                                <div class="forpadding"></div>
+                                                                <mat-form-field appearance="outline"
+                                                                    class="buysellinput">
+                                                                    <mat-label>Selling</mat-label>
+                                                                    <input matInput
+                                                                        [(ngModel)]="data.mineral.brand[brand][grade].selling"
+                                                                        [ngModelOptions]="{standalone: true}">
+                                                                </mat-form-field>
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </mat-expansion-panel>
+                                        </ng-container>
+                                    </ng-container>
+                                </mat-accordion>
+                            </div>
+                            <div class="forpadding"></div>
+                        </td>
+                        <td>
+                            <div>
+                                <mat-accordion>
+                                    <ng-container *ngFor="let data of oilarraydata ">
+                                        <ng-container *ngFor="let brand of objectKeys(data.synthetic.brand)">
+                                            <mat-expansion-panel>
+                                                <mat-expansion-panel-header>
+                                                    <mat-panel-title>
+                                                        {{ brand }}
+                                                    </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                <div>
+                                                    <ng-container
+                                                        *ngFor="let grade of objectKeys(data.synthetic.brand[brand])">
+                                                        <div class="row space_grade">
+                                                            <div class="span_to_left">
+                                                                <span>{{grade}}</span>
+                                                                <div class="forpadding"></div>
+                                                                <mat-form-field appearance="outline"
+                                                                    class="buysellinput">
+                                                                    <mat-label>Buying</mat-label>
+                                                                    <input matInput
+                                                                        [(ngModel)]="data.synthetic.brand[brand][grade].buying"
+                                                                        [ngModelOptions]="{standalone: true}">
+                                                                </mat-form-field>
+                                                                <div class="forpadding"></div>
+                                                                <mat-form-field appearance="outline"
+                                                                    class="buysellinput">
+                                                                    <mat-label>Selling</mat-label>
+                                                                    <input matInput
+                                                                        [(ngModel)]="data.synthetic.brand[brand][grade].selling"
+                                                                        [ngModelOptions]="{standalone: true}">
+                                                                </mat-form-field>
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </mat-expansion-panel>
+                                        </ng-container>
+                                    </ng-container>
+                                </mat-accordion>
+                            </div>
+                            <div class="forpadding"></div>
+                        </td>
+                        <td>
+                            <div>
+                                <mat-accordion>
+                                    <ng-container *ngFor="let data of oilarraydata ">
+                                        <ng-container *ngFor="let brand of objectKeys(data.semisynthetic.brand)">
+                                            <mat-expansion-panel>
+                                                <mat-expansion-panel-header>
+                                                    <mat-panel-title>
+                                                        {{ brand }}
+                                                    </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                <div>
+                                                    <ng-container
+                                                        *ngFor="let grade of objectKeys(data.semisynthetic.brand[brand])">
+                                                        <div class="row space_grade">
+                                                            <div class="span_to_left">
+                                                                <span>{{grade}}</span>
+                                                                <div class="forpadding"></div>
+                                                                <mat-form-field appearance="outline"
+                                                                    class="buysellinput">
+                                                                    <mat-label>Buying</mat-label>
+                                                                    <input matInput
+                                                                        [(ngModel)]="data.semisynthetic.brand[brand][grade].buying"
+                                                                        [ngModelOptions]="{standalone: true}">
+                                                                </mat-form-field>
+                                                                <div class="forpadding"></div>
+                                                                <mat-form-field appearance="outline"
+                                                                    class="buysellinput">
+                                                                    <mat-label>Selling</mat-label>
+                                                                    <input matInput
+                                                                        [(ngModel)]="data.semisynthetic.brand[brand][grade].selling"
+                                                                        [ngModelOptions]="{standalone: true}">
+                                                                </mat-form-field>
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </mat-expansion-panel>
+                                        </ng-container>
+                                    </ng-container>
+                                </mat-accordion>
+                            </div>
+                            <div class="forpadding"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modal-footer fixed-footer ">
+            <button type="button" class="btn btn-primary btn-sm"
+                (click)="addoilbrand_popup(addbrandpage,i,'semisynthetic')">Add brand</button>
+            <button style="float:right" type="submit" class="btn btn-primary btn-sm">Save</button>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #addbrandpage>
+    <div class="modal-header">
+        <h3>Add Oil brand</h3>
+    </div>
+    <div class="modal-body">
+        <div>
+            <mat-form-field>
+                <input type="text" matInput [(ngModel)]="oilbrand">
+                <mat-label>Brand</mat-label>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div>
+            <button class="btn btn-primary" (click)="updateoilbrand()">Save</button>
+        </div>
+    </div>
+</ng-template>
+
+
+
+
+<ng-template #addbikebrandpage>
+    <div style="padding: 5px;"> 
+
+        <div >
+            <i class="i-Close-Window" style="float:right; font-size:20px;" aria-hidden="true" (click)="closedialog()"></i>
+        </div>
+        <div class="modal-body">
+            <div>
+                <label>Brand</label>
+                <input type="text" class="form-control" [(ngModel)]="bikebrand">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div>
+                <button class="btn btn-primary" (click)="submitbrand()">Add Brand</button>
+            </div>
+        </div>
+    </div>
+    </ng-template>

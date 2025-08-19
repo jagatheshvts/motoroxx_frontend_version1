@@ -1,0 +1,120 @@
+<!-- <button class="btn btn-primary" (click)="openNewTemplateModal(addTemplate)">click here</button> -->
+
+<ng-template #addTemplate>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">New Template</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="closebtn()"></button>
+    </div>
+    <div class="modal-body">
+      <label for="newtemplate">Template Name
+        <input type="text" name="" [(ngModel)]="newTemplate">
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark btn-rounded" (click)="saveTemplateName()">save</button>
+    </div>
+  </ng-template>
+
+
+<!--<select [(ngModel)]="selectedValue" class="selectdata" (change)="openNewTemplateModal(addTemplate)">
+    <option value="selecttemplate" disabled>select template</option>
+    <option *ngFor="let item of items" [value]="item">{{item}}</option>
+</select> -->
+<h2 style="text-align: center;">Templates</h2>
+<select [(ngModel)]="selectedValue" class="selectdata" (change)="onTemplateSelect($event, addTemplate)" >
+    <option value="" disabled selected>--select template--</option>
+    <option *ngFor="let item of templates" [value]="item">{{item}}</option>
+    <option value="addNew" >New Template</option>
+</select>
+<button class="btn btn-primary" (click)="toggletemplate()" style="margin-left: 46px;">Add Templates</button>
+<div style="padding: 10px;"></div>
+<div class="templatecontainer" >
+    <div class="container">
+        <div class="inputContainer" *ngFor="let row of inputRows let i = index">
+
+             <div>
+                <label *ngIf="i === 0" style="text-align:start;">Service</label>
+                <input class="form-control" [(ngModel)]="row.spare"  >
+              </div>
+             <div >
+                <label *ngIf="i === 0" style="text-align:start;">Part code</label>
+                <input class="form-control" [(ngModel)]="row.partcode"   >
+              </div>
+             <div >
+                <label *ngIf="i === 0" style="text-align:start;">Description</label>
+                <input class="form-control" [(ngModel)]="row.description"  >
+              </div>
+             <div>
+                <label *ngIf="i === 0" style="text-align:start;">QTY</label>
+                <input class="form-control" [(ngModel)]="row.qty"  >
+              </div>
+             <div>
+                <label *ngIf="i === 0" style="text-align:start;">Rate</label>
+                <input  class="form-control" [(ngModel)]="row.rate" >
+              </div>
+              
+              <div>
+                <label *ngIf="i === 0" style="text-align:start;">Type</label>
+                <select  class="form-control" id="selectValue" [(ngModel)]="inputRows[i].type" (change)="spareLaborSelect($event, i)" >
+                    <option value="" disabled selected>Select</option>
+                    <option value="spare">Spares</option>
+                    <option value="labor">Labour</option>
+                  </select>
+              </div>
+
+              <div>
+                <label *ngIf="i === 0" ></label>
+                <button class="btn btn-primary" (click)="addRows()">+</button>
+              </div>
+
+              <div>
+                <label *ngIf="i === 0"></label>
+                <button class="btn btn-primary delbtn" (click)="removerow(i)"><i class="bi bi-trash"></i></button>
+
+
+              </div>
+              <!-- <label style="display: grid; margin-bottom: 21px">
+                Select
+                <select id="selectValue" [(ngModel)]="inputRows[i].type" (change)="spareLaborSelect($event, i)" >
+                  <option value="" disabled selected>- Select -</option>
+                  <option value="spare">Spares</option>
+                  <option value="labor">Labour</option>
+                </select>
+              </label> -->
+
+
+            <!-- <label for="partcode">Type
+                <input type="text" [(ngModel)]="row.spare"> &nbsp;
+            </label> -->
+            <!-- <label for="partcode">Part code
+                <input type="text" [(ngModel)]="row.partcode" style="width: 107px; display: grid;"> &nbsp;
+            </label> -->
+            <!-- <label for="sparedesc">Description
+                <input type="text" [(ngModel)]="row.description"> &nbsp;
+            </label> -->
+            <!-- <label for="qty" style="display: grid;" class="qty">Quantity
+                <input  type="text" [(ngModel)]="row.qty"> &nbsp;
+            </label>
+            <label for="rate" style="display: grid;" class="qty">Rate
+                <input type="text"  [(ngModel)]="row.rate"> &nbsp;
+            </label>
+            <label style="display: grid; margin-bottom: 21px">
+                Select
+                <select id="selectValue" [(ngModel)]="inputRows[i].type" (change)="spareLaborSelect($event, i)" >
+                  <option value="" disabled selected>- Select -</option>
+                  <option value="spare">Spares</option>
+                  <option value="labor">Labour</option>
+                </select>
+              </label> -->
+              
+            <!-- <div class="addbtn">
+                <button class="btn btn-primary" (click)="addRows()">+</button>
+                <button class="btn btn-primary delbtn" (click)="removerow(i)"><i class="bi bi-trash"></i></button>
+            </div> -->
+            <div style="padding: 30px;"></div>
+        </div>
+        <div class="buttoncontainer" *ngIf="inputRows && inputRows.length > 0" >
+            <button (click)="save()" class="btn btn-primary">save</button>
+        </div>
+    </div>
+</div>

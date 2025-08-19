@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="message-container">
+      <div class="column">
+        <label for="description">Template</label>
+        <input type="text" id="description" [(ngModel)]="template" />
+      </div>
+  
+      <div class="variables-container">
+        <div class="variable-buttons">
+          <label>Variables:</label>
+          <div class="column">
+            <select [(ngModel)]="selectedVariable" (change)="insertVariable(selectedVariable)">
+              <option disabled selected>Select Variable</option>
+              <option *ngFor="let variable of availableVariables" [value]="variable"><strong>{{ variable }}</strong></option>
+            </select>
+          </div>
+        </div>
+      </div>
+  
+      <div class="messagetocustomer-container">
+        <div class="column">
+          <label for="messagetocustomer">Message to customer</label>
+          <textarea id="messagetocustomer" #messageInput [(ngModel)]="messagetocustomer" (input)="updatePreview()"></textarea>
+        </div>
+      </div>
+  
+      <div class="preview-box">
+        <div class="column">
+          <strong>Preview:</strong>
+          <p>{{ formattedMessage }}</p>
+        </div>
+      </div>
+  
+      <button (click)="submitForm()">Save Template</button>
+    </div>
+  </div>
+  

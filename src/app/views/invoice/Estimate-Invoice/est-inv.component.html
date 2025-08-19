@@ -1,0 +1,3658 @@
+<div class="container mt-4">
+  <div class="mb-3">
+    <div class="input-group" style="display: ruby; width: 500px; align-items: center;">
+      <div class="search-bar">
+        <input type="text" placeholder="Search" [(ngModel)]="searchTerm" (input)="onSearch()" style="flex: 1;">
+        <i class="search-icon text-muted i-Magnifi-Glass1"></i>
+      </div>
+
+      <form style="margin-left: 10px;">
+        &nbsp; &nbsp; &nbsp;
+        <mat-form-field appearance="legacy">
+
+          <mat-label>Status Filter</mat-label>
+          <mat-select [(ngModel)]="selectedValue" name="status" (selectionChange)="onStatusChange($event)">
+            <mat-option [value]="1">VehicleIn</mat-option>
+            <mat-option [value]="2">Estimate</mat-option>
+            <mat-option [value]="7">Invoice</mat-option>
+            <mat-option [value]="88">Closed</mat-option>
+            <mat-option [value]="0">Delete</mat-option>
+            <!-- <mat-option [value]="delete">Delete</mat-option> -->
+          </mat-select>
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+
+  <table class="table table-striped table-bordered mt-3">
+    <thead class="table-dark">
+      <tr>
+        <div class="row">
+          <div class="col-md-3">
+            <th>Customer Data</th>
+          </div>
+          <div class="col-md-3">
+            <th>Jobcard Data</th>
+          </div>
+          <div class="col-md-3">
+            <th>Payment</th>
+          </div>
+          <div class="col-md-3">
+            <th>Actions</th>
+          </div>
+        </div>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of getDisplayedData()">
+        <div class="row">
+          <div class="col-md-3">
+            <td>
+              <div><strong>Name:</strong>{{data.customers[0].name}}</div>
+              <div class="forpadding"></div>
+              <div><strong>Mobile:</strong>{{data.customers[0].mobile}}</div>
+              <div class="forpadding"></div>
+              <div *ngIf="data.deletestatus =='1'">
+                <strong>Deleted</strong>
+              </div>
+
+              <i (click)="editcustomers_jobcard(data.customers[0]._id,data._id)" class="i-File-Edit"></i>
+              <!-- <i (click)="editcustomers(data,customeredit)" class="i-File-Edit"></i> -->
+
+
+              <div *ngIf="data.deletestatus !=='1'">
+                <label for="{{data._id}}">Mark As Delete</label> -
+                <input type="checkbox" id="{{data._id}}" (click)="checkboxClicked($event, data._id)">
+              </div>
+              <div class="forpadding"></div>
+
+              <!-- <a style="text-decoration: underline;" (click)="statuseditpopup(editstatuspage,data._id,data)"> {{
+                data.status.value ? data.status.value
+                : 'No Text' }}
+              </a> -->
+              <a style="text-decoration: underline;" > {{
+                data.status.value ? data.status.value
+                : 'No Text' }}
+              </a>
+            </td>
+          </div>
+
+
+          <div class="col-md-3">
+            <td>
+              <div><strong>Complaints:</strong> {{ data.complaintsString }}</div>
+              <div class="forpadding"></div>
+              <div><strong>Remarks:</strong>{{data.remarks ? data.remarks : 'no remarks'}}</div>
+              <div class="forpadding"></div>
+              <div><strong>Created Date:</strong>{{data.createddate}}</div>
+              <div class="forpadding"></div>
+              <div *ngIf="data.service_advisor"><strong>Advisor:</strong>{{data.service_advisor}}</div>
+              <div class="forpadding"></div>
+              <!-- <button type="button" class="btn btn-link btn-sm mt-2 see-more-button"
+                  (click)="jobcardpopup(jobcardpage,data._id,data)">See More</button> -->
+              <button type="button" class="btn btn-link btn-sm mt-2 see-more-button"
+                (click)="vehiclehistorypopup(vehiclehistorypage, data.vehicle_id, data.vehicledetails[0].vh_number, data.vehicledetails[0].brand, data.vehicledetails[0].model)">
+                Vehicle History
+              </button>
+              <button type="button" class="btn btn-link btn-sm mt-2 see-more-button"
+                (click)="vehiclehimagespopup(vehicleimagespage, data._id)">
+                Vehicle Images
+              </button>
+              <button type="button" class="btn btn-link btn-sm mt-2 see-more-button"
+                (click)="navigatejobcardprint(data)">
+                jobcard Print
+              </button>
+              <!-- <button type="button" class="btn btn-link btn-sm mt-2 see-more-button"
+                (click)="customerhistorypopup(customerhistorypage, data.mobile)">
+                Customer History
+              </button> -->
+            </td>
+          </div>
+          <div class="col-md-3">
+            <ng-container *ngIf="data.payment && data.payment.length > 0; else noPayment">
+              <ng-container *ngIf="data.multipleinvoice && data.multipleinvoice.length > 0; else nomulti">
+                <div>
+                  <b>Amt:</b> {{ calculateTotalInvoiceAmount_payment(data.multipleinvoice) }}
+                  <span *ngIf="calculateTotalBalanceAmount_payment(data.payment) > 0">
+                    (<b>Bal:</b> {{ calculateTotalBalanceAmount_multipayment(data.payment,data.multipleinvoice) }} )
+                  </span>
+                </div>
+                <div class="forpadding"></div>
+                <div>
+                  <b>Amt Received:</b> {{ calculateTotalReceivedAmount_payment(data.payment) }} Paid
+                </div>
+              </ng-container>
+
+              <ng-template #nomulti>
+                <!-- <ng-template *ngIf="data.invoice"> -->
+                <div *ngIf="data.invoice ">
+                  <b>Amt:</b> {{ data.invoice.invoice_amount }}
+                  <span *ngIf="calculateTotalBalanceAmount_payment(data.payment) > 0">
+                    ( <b>Bal:</b> {{ calculateTotalBalanceAmount_payment(data.payment) }} )
+                  </span>
+                  <div class="forpadding"></div>
+                  <div>
+                    <b> Amt Received:</b> {{ calculateTotalReceivedAmount_payment(data.payment) }} Paid
+                  </div>
+                </div>
+                <div *ngIf="data.estimate && !data.invoice">
+                  <b>Amt:</b> {{ data.estimate.estimate_amount }}
+                  <span *ngIf="calculateTotalBalanceAmount_payment(data.payment) > 0">
+                    ( <b>Bal:</b> {{ calculateTotalBalanceAmount_payment(data.payment) }} )
+                  </span>
+                  <div class="forpadding"></div>
+                  <div>
+                    <b> Amt Received:</b> {{ calculateTotalReceivedAmount_payment(data.payment) }} Paid
+                  </div>
+                </div>
+                <div *ngIf="!data.estimate && !data.invoice">
+                  <!-- hai -->
+                  <div>
+                    <b> Amt Received:</b> {{ calculateTotalReceivedAmount_payment(data.payment) }} Paid
+                  </div>
+                </div>
+                <!-- </ng-template> -->
+                <ng-template>
+
+
+
+                </ng-template>
+                <!-- <div>No invoices available.</div> -->
+              </ng-template>
+            </ng-container>
+
+
+
+            <ng-template #noPayment>
+              <div>No payments available.</div>
+            </ng-template>
+
+
+
+
+            <!-- <div class="table-payment">
+              <table class="table table-bordered paymenttable">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Mode</th>
+                    <th>Amount</th>
+                    <th>PaymentType</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngIf="data.payment && data.payment.length > 0; else noPayment">
+                    <ng-container *ngFor="let paymentGroup of data.payment">
+                     
+                      <ng-container *ngIf="paymentGroup.payment && paymentGroup.payment.length > 0; else noPayment">
+                        <tr *ngFor="let paymentDetail of paymentGroup.payment">
+                          <td>{{ paymentDetail.date}}</td>
+                          <td>{{ paymentDetail.mode }}</td>
+                          <td>{{ paymentDetail.totalvalue | number: '1.2-2' }}</td>
+                          <td>{{ paymentDetail.paymentType }}</td>
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                  
+                  <ng-template #noPayment>
+                    <tr>
+                      <td colspan="4" class="text-center">No Payment</td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div> -->
+          </div>
+
+          <div class="col-md-3">
+            <td>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <strong>{{ data.vehicledetails[0] ? data.vehicledetails[0].vh_number : 'N/A' }}</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <strong>{{ data.vehicledetails[0] ? data.vehicledetails[0].brand : 'N/A'
+                        }}-{{data.vehicledetails[0] ? data.vehicledetails[0].model : 'N/A'}}</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="forpadding"></div>
+              <!-- <div class="row">
+                  <div class="col-md-12">
+                    <div class="statusdiv">
+                      <button id="status-value" type="button" class="btn btn-primary btn-md edit-status-button"
+                        (click)="statuseditpopup(editstatuspage,data._id,data)"> {{ data.status.value ? data.status.value
+                        : 'No Text' }}
+                      </button>
+                    </div>
+                  </div>
+                </div> -->
+              <div class="row justify-content-center _forpadding1 ">
+                <div class="col-md-4">
+                  <button type="button" class="btn btn-primary btn-md update-spare-button"
+                    style="background-color: rgb(88, 100, 255)"
+                    (click)="updatesparespopup(updatesparespage, data._id,data)">Estimate</button>
+                </div>
+
+                <div class="col-md-4">
+                  <button type="button" class="btn btn-primary btn-md update-spare-button"
+                    style="background-color: rgb(88, 100, 255)"
+                    (click)="updatesinvoiceparespopup(multipleinvoice,updateinvoicesparespage, data._id,data)">Invoice</button>
+                </div>
+
+                <!-- for multiple invoice requirement -->
+                <!-- <div class="col-md-4">
+                  <button type="button" class="btn btn-primary btn-md update-spare-button"
+                    style="background-color: rgb(88, 100, 255)"
+                    (click)="multipleinvoice_popup(multipleinvoice,updateinvoicesparespage ,data._id,data)">Invoice</button>
+                </div> -->
+
+                <div class="col-md-4">
+                  <button type="button" class="btn btn-primary btn-md update-spare-button"
+                    style="background-color: rgb(88, 100, 255)"
+                    (click)="paymentpopup(paymentpage,data)">Payment</button>
+                </div>
+              </div>
+              <!-- for ruff use to edit invoice -->
+              <!-- <div *ngIf="data.estimate">
+                  <button type="button" class="btn btn-primary btn-lg update-spare-button"
+                    (click)="updatesparespopup(editinvoice, data._id)">Edit Invoice</button>
+                </div> -->
+            </td>
+          </div>
+        </div>
+      </tr>
+    </tbody>
+  </table>
+  <!-- commented for pagination testing  original pagination first method-->
+  <!-- <div class="text-center">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" href="#" (click)="onPageChange(currentPage - 1, $event)">Previous</a>
+        </li>
+        <li class="page-item" *ngFor="let page of getPages()" [class.active]="page === currentPage">
+          <a class="page-link" href="#" (click)="onPageChange(page, $event)">{{ customPageLink }} {{ page }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+          <a class="page-link" href="#" (click)="onPageChange(currentPage + 1, $event)">Next</a>
+        </li>
+      </ul>
+    </div> -->
+  <div class="text-center">
+    <ul class="pagination">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" href="#" (click)="onPageChange(currentPage - 1, $event)">Previous</a>
+      </li>
+      <li class="page-item" *ngFor="let page of getPages(10)" [class.active]="page === currentPage">
+        <a class="page-link" href="#" (click)="onPageChange(page, $event)">{{ customPageLink }} {{ page }}</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" (click)="getpagenumbers()">....</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+        <a class="page-link" href="#" (click)="onPageChange(currentPage + 1, $event)">Next</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<ng-template #editinvoice>
+  <i class="i-Close-Window" style="float:right; font-size:24px;" aria-hidden="true" (click)="closedialog()"></i>
+
+  <h1 style="text-align: center;">Update Spares And Labours</h1>
+  <div class="forpadding"></div>
+  <div #scrollContainer class="modal-body" id="update_spares_body">
+    <div *ngFor="let data of servicespares; let i = index">
+      <mat-form-field class="sparelabour">
+        <input matInput placeholder="spare" [(ngModel)]="data.spare" name="spare">
+      </mat-form-field>
+      <mat-form-field class="qtyrate">
+        <input matInput placeholder="qty" [(ngModel)]="data.qty" name="qty">
+      </mat-form-field>
+      <mat-form-field class="rate">
+        <input matInput placeholder="rate" [(ngModel)]="data.rate" name="rate">
+      </mat-form-field>
+    </div>
+    <div class="modal-body" *ngFor="let complaint of complaint_spares ;let i = index">
+      <div class="modal-body" *ngFor="let data of complaint.spares ">
+        <mat-form-field class="sparelabour">
+          <input matInput placeholder="spare" [(ngModel)]="data.spare" name="spare">
+        </mat-form-field>
+        <mat-form-field class="qtyrate">
+          <input matInput placeholder="qty" [(ngModel)]="data.qty" name="qty">
+        </mat-form-field>
+        <mat-form-field class="rate">
+          <input matInput placeholder="rate" [(ngModel)]="data.rate" name="rate">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="input-row" *ngFor="let extraspare of extraspares ;let i = index">
+      <mat-form-field class="sparelabour">
+        <input matInput placeholder="spare" [(ngModel)]="extraspare.spare" name="spare">
+      </mat-form-field>
+
+      <mat-form-field class="qtyrate">
+        <input matInput placeholder="qty" [(ngModel)]="extraspare.qty" name="qty">
+      </mat-form-field>
+
+      <mat-form-field class="rate">
+        <input matInput placeholder="rate" [(ngModel)]="extraspare.rate" name="rate">
+      </mat-form-field>
+    </div>
+
+
+    <div *ngFor="let data of servicelabours; let i = index">
+      <mat-form-field class="sparelabour">
+        <input matInput placeholder="labour" [(ngModel)]="data.name" name="name">
+      </mat-form-field>
+
+      <mat-form-field class="qtyrate">
+        <input matInput placeholder="qty" [(ngModel)]="data.qty" name="qty">
+      </mat-form-field>
+
+      <mat-form-field class="rate">
+        <input matInput placeholder="rate" [(ngModel)]="data.rate" name="rate">
+      </mat-form-field>
+    </div>
+
+    <div class="modal-body" *ngFor="let complaint of complaint_labours ;let i = index">
+      <div class="modal-body" *ngFor="let data of complaint.labour ">
+        <mat-form-field class="sparelabour">
+          <input matInput placeholder="labour" [(ngModel)]="data.name" name="name">
+        </mat-form-field>
+
+        <mat-form-field class="qtyrate">
+          <input matInput placeholder="qty" [(ngModel)]="data.qty" name="qty">
+        </mat-form-field>
+
+        <mat-form-field class="rate">
+          <input matInput placeholder="rate" [(ngModel)]="data.rate" name="rate">
+        </mat-form-field>
+      </div>
+    </div>
+
+
+    <div class="input-row" *ngFor="let extralabours of extralabours ;let i = index">
+      <mat-form-field class="sparelabour">
+        <input matInput placeholder="labour" [(ngModel)]="extralabours.name" name="name">
+      </mat-form-field>
+
+      <mat-form-field class="qtyrate">
+        <input matInput placeholder="qty" [(ngModel)]="extralabours.qty" name="qty">
+      </mat-form-field>
+
+      <mat-form-field class="rate">
+        <input matInput placeholder="rate" [(ngModel)]="extralabours.rate" name="rate">
+      </mat-form-field>
+    </div>
+
+
+    <div class="modal-body" *ngFor="let data of inputDataArray; let i = index">
+      <mat-form-field class="sparelabour">
+        <input matInput placeholder="spare" [(ngModel)]="data.spare" name="spare">
+      </mat-form-field>
+
+      <mat-form-field class="qtyrate">
+        <input matInput placeholder="qty" [(ngModel)]="data.qty" name="qty">
+      </mat-form-field>
+
+      <mat-form-field class="rate">
+        <input matInput placeholder="rate" [(ngModel)]="data.rate" name="rate">
+      </mat-form-field>
+    </div>
+
+    <div class="modal-body" *ngFor="let data of inputLabourDataArray; let i = index">
+      <mat-form-field class="sparelabour">
+        <input matInput placeholder="labour" [(ngModel)]="data.name" name="name">
+      </mat-form-field>
+
+      <mat-form-field class="qtyrate">
+        <input matInput placeholder="qty" [(ngModel)]="data.qty" name="qty">
+      </mat-form-field>
+
+      <mat-form-field class="rate">
+        <input matInput placeholder="rate" [(ngModel)]="data.rate" name="rate">
+      </mat-form-field>
+    </div>
+    <div style="float: right;margin-bottom: 20%;margin-right: 15%;">
+      <button class="btn btn-icon btn-primary" (click)="addInputField()" style="margin-right: 10px;">
+        <i class="i-Edit"></i>
+      </button>
+      <button class="btn btn-icon btn-primary" (click)="addlabourInputField()" style="margin-right: 10px;">
+        <i class="i-Engineering"></i>
+      </button>
+    </div>
+  </div>
+  <div>
+    <button class="btn btn-primary" id="button_for_right_align" (click)="editinvoicedata()"
+      style="margin-right: 10px;">Update</button>
+  </div>
+</ng-template>
+
+<ng-template #customeredit>
+  <div>
+    <mat-form-field>
+      <input type="text" matInput [(ngModel)]="customereditname" class="form-control">
+      <mat-label>Name</mat-label>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field>
+      <input type="text" matInput [(ngModel)]="customereditmobile" class="form-control">
+      <mat-label>Mobile</mat-label>
+    </mat-form-field>
+  </div>
+  <div class="forpadding"></div>
+  <div>
+    <center><button style="margin-bottom: 10px;" class="btn btn-primary" (click)="updatecustomerdata()">Submit</button>
+    </center>
+  </div>
+</ng-template>
+
+<ng-template #updatesparespage>
+
+  <div *ngIf="isLoading" class="loader">Please Wait...</div>
+  <div style="padding: 5px;">
+    <i class="i-Close-Window" style="float:right; font-size:24px;" aria-hidden="true" (click)="closedialog()"></i>
+  </div>
+  <div style="display: flex; justify-content: space-between; align-items: center; padding-left: 35px;margin-right:11%">
+    <div>
+      <h4>{{popupshowcustomername}} - {{popupshowmobile}}</h4>
+      <h4>{{brandforsuggestion}} - {{modelforsuggestion}} - {{popupshowvehcileno}} - Estimate</h4>
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+      <div>
+        <select id="color" placeholder="Choose Colour" class="form-select text-center" [(ngModel)]="selectedtemplate"
+          (change)="onTemplateSelect($event)">
+          <option value="" disabled selected>Select Template</option>
+          <option *ngFor="let key of templateKeys" [value]="key">
+            {{ key }}
+          </option>
+        </select>
+      </div>
+
+      <div>
+        <select id="color" placeholder="Choose Colour" class="form-select text-center" [(ngModel)]="selectedtech"
+          (change)="ontechSelect($event)">
+          <option value="" disabled selected>Select Tech</option>
+          <option *ngFor="let tech of technician" [value]="tech.superadmin_username">
+            {{ tech.superadmin_username }}
+          </option>
+        </select>
+      </div>
+
+      <button class="btn btn-icon btn-primary" (click)="addestimateservicefield()"
+        style="background-color: rgb(88, 100, 255);height:39px">
+        <i >GS</i>
+      </button>
+
+      <button class="btn btn-icon btn-primary" (click)="addInputField()"
+        style="background-color: rgb(88, 100, 255);height:39px">
+        <i class="bi bi-wrench"></i>
+
+      </button>
+      <button class="btn btn-icon btn-primary" (click)="addlabourInputField()"
+        style="background-color: rgb(88, 100, 255);height:39px">
+        <i class="i-Engineering"></i>
+      </button>
+
+      <button class="btn btn-primary estinvbutton" style="background-color: rgb(88, 100, 255);"
+        id="button_for_right_align" (click)="saveData()">
+        Save
+      </button>
+      <button class="btn btn-primary estinvbutton" style="background-color: rgb(88, 100, 255);"
+        id="button_for_right_align" (click)="downloadestimate()">
+        PDF
+      </button>
+    </div>
+  </div>
+
+  <div class="forpadding"></div>
+  <div #scrollContainer class="modal-body" id="update_spares_body">
+
+    <div class="input-row">
+      <div class="input-container partcode">
+        <label style="text-align:start;">Partcode</label>
+      </div>
+      <div class="input-container spare">
+        <label style="text-align:start;">Description</label>
+      </div>
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <label style="text-align:start;">Stock</label>
+      </div>
+
+      <div class="input-container discount">
+        <label style="text-align: start;">UOM</label>
+      </div>
+      <div class="input-container qty">
+        <label style="text-align:start;">Qty</label>
+      </div>
+      <div class="input-container rate">
+        <label style="text-align:right;">Rate</label>
+      </div>
+      <div class="input-container rate">
+        <label style="text-align: right;">Total</label>
+      </div>
+
+      <div class="input-container qty">
+        <label style="text-align: start;">Delete</label>
+      </div>
+    </div>
+
+    <div class="input-row" *ngFor="let data of servicespares; let i = index">
+      <div class="input-container partcode">
+        <input [(ngModel)]="data.partcode" name="rate" style="text-align: end;">
+      </div>
+      <div class="input-container spare">
+        <input [(ngModel)]="data.spare" name="spare">
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="data.inventoryqty" [ngModel]="data.inventoryqty || 'NA'" style="text-align: right;" readonly
+          name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="data.uom" name="dropdown" class="form-control" [ngModel]="data.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input matInput [(ngModel)]="data.qty" name="qty" [ngModel]="data.qty | number:'1.2-2'">
+      </div>
+
+      <div class="input-container rate">
+        <input [(ngModel)]="data.rate" name="rate" style="text-align: end;">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(data.qty, data.rate, '0')?.toFixed(2)">
+      </div>
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(servicespares[i],servicespares)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+
+
+    <div class="input-row" *ngFor="let extraspare of extraspares ;let i = index">
+
+
+      <div class="input-container partcode">
+        <input [(ngModel)]="extraspare.partcode" name="spare{{i}}"
+          (input)="onSpareInputinv_extraChange(i, 'partcodeesti_esti', 'partcode', 'sparearray', 'invoicespares')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'partcodeesti_esti'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'invoicespares')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'invoicespares')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="input-container spare">
+        <input [(ngModel)]="extraspare.spare" name="spare{{i}}"
+          (input)="onSpareInputinv_extraChange(i, 'estimate_extra', 'spare', 'sparearray', 'invoicespares')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'estimate_extra'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'invoicespares')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'invoicespares')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="extraspare.inventoryqty" style="text-align: right;" readonly name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="extraspare.uom" name="dropdown" class="form-control"
+          [ngModel]="extraspare.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input [(ngModel)]="extraspare.qty" name="qty" [ngModel]="extraspare.qty | number:'1.2-2'">
+      </div>
+
+      <div class="input-container rate">
+        <input [(ngModel)]="extraspare.rate" name="rate" style="text-align: end;">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(extraspare.qty, extraspare.rate, '0')?.toFixed(2)">
+      </div>
+
+      <div class="input-container amount" *ngIf="buying">
+        <input [(ngModel)]="extraspare.buyingprice" name="rate" style="text-align: end;">
+      </div>
+
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(extraspares[i],extraspares)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+
+    <div class="input-row" *ngFor="let extralabour of extralabours ;let i = index">
+
+
+
+      <div class="input-container partcode">
+        <input [(ngModel)]="extralabour.partcode"
+          (input)="onSpareInputinv_extraChange(i, 'extraextimate_partcodelabour', 'partcode', 'labourarray', 'invoicespares')">
+        <ul
+          *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'extraextimate_partcodelabour'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'invoicespares')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'invoicespares')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+
+      <div class="input-container spare">
+        <input [(ngModel)]="extralabour.name" name="spare{{i}}"
+          (input)="onSpareInputinv_extraChange(i, 'extraestimate_sparelabour', 'spare', 'labourarray', 'invoicespares')">
+        <ul
+          *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'extraestimate_sparelabour'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'invoicespares')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'invoicespares')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="extralabour.inventoryqty" style="text-align: right;" readonly name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="extralabour.uom" name="dropdown" class="form-control"
+          [ngModel]="extralabour.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input [(ngModel)]="extralabour.qty" name="qty" [ngModel]="extralabour.qty | number:'1.2-2'">
+      </div>
+      <div class="input-container rate">
+        <input [(ngModel)]="extralabour.rate" name="rate" style="text-align: end;">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(extralabour.qty, extralabour.rate, '0')?.toFixed(2)">
+      </div>
+
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(extralabours[i],extralabours)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+
+    </div>
+
+
+    <!-- jagathesh added to add service start -->
+
+    <div class="input-row" *ngFor="let data of inputestimateserviceArray; let i = index">
+
+      <div class="input-container partcode">
+        <input [(ngModel)]="data.partcode" name="partcode-estimate{{i}}"
+          (input)="onSpareInputChange(i, 'partcodeestimateinput', 'partcode', 'sparearray', 'estimatepage')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'partcodeestimateinput'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'sparearray', 'estimatepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'sparearray', 'estimatepage')">
+            {{ suggestion.name }} - {{ suggestion.mrp }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="input-container spare">
+        <input [(ngModel)]="data.spare" name="spare-estimate{{i}}"
+          (input)="onSpareInputChange(i, 'spareestimateinput', 'spare', 'sparearray', 'estimatepage')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'spareestimateinput'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'sparearray', 'estimatepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'sparearray', 'estimatepage')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="data.inventoryqty" [ngModel]="data.inventoryqty || 'NA'" style="text-align: right;" readonly
+          name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="data.uom" name="dropdown" class="form-control" [ngModel]="data.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input [(ngModel)]="data.qty" name="qty" [ngModel]="data.qty | number:'1.2-2'">
+      </div>
+
+      <div class="input-container rate">
+        <input [(ngModel)]="data.rate" name="rate" style="text-align: end;">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;" [value]="calculate_inputinvoice_total(data.qty, data.rate, '0')?.toFixed(2)">
+      </div>
+
+      <div class="input-container amount" *ngIf="buying">
+        <input [(ngModel)]="data.buyingprice" name="rate" style="text-align: end;">
+      </div>
+
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(inputestimateserviceArray[i],inputestimateserviceArray)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+
+    <!-- jagathesh added to add service end -->
+
+    <div class="input-row" *ngFor="let data of inputDataArray; let i = index">
+
+      <div class="input-container partcode">
+        <input [(ngModel)]="data.partcode" name="partcode-estimate{{i}}"
+          (input)="onSpareInputChange(i, 'partcodeestimateinput', 'partcode', 'sparearray', 'estimatepage')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'partcodeestimateinput'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'sparearray', 'estimatepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'sparearray', 'estimatepage')">
+            {{ suggestion.name }} - {{ suggestion.mrp }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="input-container spare">
+        <input [(ngModel)]="data.spare" name="spare-estimate{{i}}"
+          (input)="onSpareInputChange(i, 'spareestimateinput', 'spare', 'sparearray', 'estimatepage')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'spareestimateinput'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'sparearray', 'estimatepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'sparearray', 'estimatepage')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="data.inventoryqty" [ngModel]="data.inventoryqty || 'NA'" style="text-align: right;" readonly
+          name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="data.uom" name="dropdown" class="form-control" [ngModel]="data.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input [(ngModel)]="data.qty" name="qty" [ngModel]="data.qty | number:'1.2-2'">
+      </div>
+
+      <div class="input-container rate">
+        <input [(ngModel)]="data.rate" name="rate" style="text-align: end;">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;" [value]="calculate_inputinvoice_total(data.qty, data.rate, '0')?.toFixed(2)">
+      </div>
+
+      <div class="input-container amount" *ngIf="buying">
+        <input [(ngModel)]="data.buyingprice" name="rate" style="text-align: end;">
+      </div>
+
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(inputDataArray[i],inputDataArray)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="input-row" *ngFor="let data of inputLabourDataArray; let i = index">
+
+      <div class="input-container partcode">
+        <input [(ngModel)]="data.partcode" name="spare-estimate{{i}}"
+          (input)="onSpareInputChange(i, 'labourinputpartcodeestimate', 'partcode', 'labourarray', 'estimatepage')">
+        <ul
+          *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'labourinputpartcodeestimate'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'labourarray', 'estimatepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'labourarray', 'estimatepage')">
+            {{ suggestion.name }} - {{ suggestion.mrp }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="input-container spare">
+        <input [(ngModel)]="data.name" name="labour-estimate{{i}}"
+          (input)="onSpareInputChange(i, 'labourinputspare_estimate', 'spare', 'labourarray', 'estimatepage')">
+        <ul
+          *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'labourinputspare_estimate'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'labourarray', 'estimatepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'labourarray', 'estimatepage')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="data.inventoryqty" [ngModel]="data.inventoryqty || 'NA'" style="text-align: right;" readonly
+          name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="data.uom" name="dropdown" class="form-control" [ngModel]="data.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input [(ngModel)]="data.qty" name="qty" [ngModel]="data.qty | number:'1.2-2'">
+      </div>
+      <div class="input-container rate">
+        <input [(ngModel)]="data.rate" name="rate" style="text-align: end;">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;" [value]="calculate_inputinvoice_total(data.qty, data.rate, '0')?.toFixed(2)">
+      </div>
+
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(inputLabourDataArray[i],inputLabourDataArray)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <hr style="border: 1px dashed black;">
+  <div class="d-flex">
+    <div style="padding-left: 3%;">
+      <label>Remarks</label>
+      <textarea id="remarks" class="form-control" [(ngModel)]="advisor_remarks" placeholder="Enter your remarks here..."
+        style="width: 450px; text-align: left; height: 50px; resize: none"></textarea>
+    </div>
+
+    <div style="display: flex; flex-direction: column; margin-left: 30%;">
+      <label> Total </label>
+      <input [value]="calculateGrandTotal_final('estimatepage')?.toFixed(2)" style="text-align: right;" readonly>
+
+    </div>
+  </div>
+
+</ng-template>
+
+
+<ng-template #updateinvoicesparespage>
+
+  <div *ngIf="isLoading" class="loader">Loading...</div>
+
+  <div style="padding: 5px;">
+    <i class="i-Close-Window" style="float:right; font-size:24px;" aria-hidden="true" (click)="closedialog()"></i>
+
+  </div>
+
+  
+
+ 
+
+
+
+
+  <div style="display: flex; justify-content: space-between; align-items: center; padding-left: 35px;margin-right:11%">
+    <div>
+      <h4>{{popupshowcustomername}} - {{popupshowmobile}}</h4>
+      <h4>{{brandforsuggestion}} - {{modelforsuggestion}} - {{popupshowvehcileno}} - INVOICE</h4>
+    </div>
+    <div *ngIf="!multipleinvoice_card || multipleinvoice_card.length === 0" class="card"
+      style="padding: 15px;margin-right: 7%;" (click)="AddNewInvoice(multipleinvoice,updateinvoicesparespage)">
+      Add Invoice
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+      <div>
+        <select id="color" placeholder="Choose Colour" class="form-select text-center" [(ngModel)]="selectedtemplate"
+          (change)="onTemplateSelect($event)">
+          <option value="" disabled selected>Select Template</option>
+          <option *ngFor="let key of templateKeys" [value]="key">
+            {{ key }}
+          </option>
+        </select>
+      </div>
+
+      <div>
+        <select id="color" placeholder="Choose Colour" class="form-select text-center" [(ngModel)]="selectedtech"
+          (change)="ontechSelect($event)">
+          <option value="" disabled selected>Select Tech</option>
+          <option *ngFor="let tech of technician" [value]="tech.superadmin_username">
+            {{ tech.superadmin_username }}
+          </option>
+        </select>
+      </div>
+
+
+      <button class="btn btn-icon btn-primary" (click)="addinvoiceservicefield()"
+        style="background-color: rgb(88, 100, 255);height:39px">
+        <i>GS</i>
+      </button>
+
+
+      <button class="btn btn-icon btn-primary" (click)="addinvoiceInputField()"
+        style="background-color: rgb(88, 100, 255);height:39px">
+        <i class="bi bi-wrench"></i>
+      </button>
+      <button class="btn btn-icon btn-primary" (click)="addinvoicelabourInputField()"
+        style="background-color: rgb(88, 100, 255);height:39px">
+        <i class="i-Engineering"></i>
+      </button>
+
+      <!-- <button class="btn btn-primary estinvbutton" style="background-color: rgb(88, 100, 255);"
+        id="button_for_right_align" (click)="saveinvoicedata()">
+        Update
+      </button> -->
+      <button *ngIf="!multipleinvoice_card || multipleinvoice_card.length === 0" class="btn btn-primary estinvbutton"
+        style="background-color: rgb(88, 100, 255);" id="button_for_right_align" (click)="saveinvoicedata()">
+        save
+      </button>
+
+      <!-- Show this button when the array has data -->
+      <button *ngIf="multipleinvoice_card && multipleinvoice_card.length > 0" class="btn btn-primary estinvbutton"
+        style="background-color: rgb(88, 100, 255);" id="button_for_right_align" (click)="update_multipleinvoice()">
+        save
+      </button>
+      <button *ngIf="!multipleinvoice_card || multipleinvoice_card.length === 0" class="btn btn-primary estinvbutton"
+        style="background-color: rgb(88, 100, 255);" id="button_for_right_align" (click)="downloadinvoicepdf('single')">
+        PDF
+      </button>
+
+      <button *ngIf="multipleinvoice_card && multipleinvoice_card.length > 0" class="btn btn-primary estinvbutton"
+        style="background-color: rgb(88, 100, 255);" id="button_for_right_align" (click)="downloadinvoicepdf('multi')">
+        PDF
+      </button>
+
+      <!-- <button *ngIf="multipleinvoice_card && multipleinvoice_card.length > 0" class="btn btn-primary estinvbutton" style="background-color: rgb(88, 100, 255);"
+        id="button_for_right_align" (click)="downloadinvoiceprint('multi')">
+        Print
+      </button> -->
+
+      <!-- <button *ngIf="!multipleinvoice_card || multipleinvoice_card.length === 0" class="btn btn-primary estinvbutton" style="background-color: rgb(88, 100, 255);"
+        id="button_for_right_align" (click)="downloadinvoiceprint('single')">
+        Print
+      </button> -->
+
+    </div>
+    <select *ngIf="!multipleinvoice_card || multipleinvoice_card.length === 0" class="form-select form-select-sm"
+        id="button_for_right_align" (change)="downloadinvoiceprint('single',$event.target.value)">
+        <option *ngIf="!multipleinvoice_card || multipleinvoice_card.length === 0" selected>Select Print type</option>
+        <option value="simple">print1</option>
+        <option value="simple-segment">print2 -Segmented</option>
+        <option value="format-3">print3 -Segmented</option>
+      </select>
+
+
+      <select *ngIf="multipleinvoice_card && multipleinvoice_card.length > 0" class="form-select form-select-sm"
+        id="button_for_right_align" (change)="downloadinvoiceprint('multi',$event.target.value)">
+        <option *ngIf="multipleinvoice_card && multipleinvoice_card.length > 0" selected>Select Print type</option>
+        <option value="simple">print1</option>
+        <option value="simple-segment">print2</option>
+        <option value="format-3">print3</option>
+      </select>
+  </div>
+
+  
+
+
+  <div *ngIf="multipleinvoice_card && multipleinvoice_card.length > 0">
+    <div class="row g-3" style="padding: 20px;">
+      <div class="col-md-2" *ngFor="let multipleinvoice of multipleinvoice_card ; let i = index ">
+        <div class="card" tabindex="0" style="height: 60px;padding: 10px;" [ngClass]="{
+          'status-88': multipleinvoice.status?.number == '88',
+          'status-3': multipleinvoice.status?.number == '3',
+          'default-status': !multipleinvoice.status
+        }" (click)="multipleinvoice_carddata(multipleinvoice_card,i)"
+          (keydown.enter)="multipleinvoice_carddata(multipleinvoice_card,i)">
+          <div>
+            <b>INV{{i+1}}-</b>{{multipleinvoice.date | date:'yyyy-MM-dd'}}
+          </div>
+          <div>
+
+            {{multipleinvoice.invoice_amount}}
+          </div>
+        </div>
+
+
+      </div>
+      <div class="card" style="height: 60px;padding: 10px;width: 60px;border-radius: 50%; justify-content: center;
+    align-items: center;" (click)="multipleinvoice_carddata(multipleinvoice_card,'')">
+        <i class="bi bi-plus" style="font-size: 24px;"></i>
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="forpadding"></div>
+  <div #scrollContainer class="modal-body" id="update_spares_body">
+
+    <div class="input-row">
+      <div class="input-container partcode">
+        <label>Partcode</label>
+      </div>
+      <div style="width: 4px">
+
+      </div>
+
+      <div class="input-container spare">
+        <label>Description</label>
+      </div>
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <label style="text-align: right;">Stock</label>
+      </div>
+      <div class="input-container discount">
+        <label style="text-align: center;">UOM</label>
+      </div>
+      <div class="input-container qty">
+        <label style="text-align: right;">Qty</label>
+      </div>
+      <div class="input-container rate">
+        <label style="text-align: right;">Rate</label>
+      </div>
+
+      <div class="input-container qty">
+        <label style="text-align: right;">Dis %</label>
+      </div>
+
+      <div class="input-container rate">
+        <label style="text-align: right;">Total</label>
+
+      </div>
+      <div class="input-container rate" *ngIf="buying">
+        <label style="text-align: right;">Purchase </label>
+      </div>
+
+      <div class="input-container qty" *ngIf="gstvariable!== ''">
+        <label style="text-align: center;">GST</label>
+      </div>
+
+      <div class="input-container rate" *ngIf="gstvariable!== ''">
+        <label style="text-align: right;">Final</label>
+  
+      </div>
+    </div>
+  
+
+    <div class="input-row" *ngFor="let data of servicespares; let i = index">
+      <div class="input-container partcode">
+        <input [(ngModel)]="data.partcode" name="spare">
+      </div>
+      <div style="width: 4px">
+        <input type="checkbox" [(ngModel)]="data.genric" (click)="genricpartcode($event.target.checked,i,'ss')">
+
+      </div>
+      <div class="input-container spare">
+        <input [(ngModel)]="data.spare" name="spare">
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="data.inventoryqty" [ngModel]="data.inventoryqty || 'NA'" style="text-align: right;" readonly
+          name="qty">
+      </div>
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="data.uom" name="dropdown" class="form-control" [ngModel]="data.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+
+      <div class="input-container qty">
+        <input [(ngModel)]="data.qty" [ngModel]="data.qty | number:'1.2-2'" style="text-align: right;" name="qty">
+      </div>
+      <div class="input-container rate">
+        <input [(ngModel)]="data.rate" name="rate" style="text-align: right;">
+      </div>
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="data.discount" maxlength="2" [ngModel]="data.discount || '0'"
+          name="qty{{i}}">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(data.qty, data.rate, data.discount)?.toFixed(2)">
+      </div>
+
+      
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="data.buyingprice" name="buyingprice{{i}}">
+      </div>
+
+
+
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst18" id="gst18" (change)="handleCheckboxChange(data, 'gst18')"
+            name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst28" id="gst28" (change)="handleCheckboxChange(data, 'gst28')"
+            name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+      </div>
+
+
+      <!-- jagathesh gstvalue test start -->
+      <div class="input-container rate" *ngIf="gstvariable!== ''">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total_gst(data.qty, data.rate, data.discount,data.gst18,'package')?.toFixed(2)">
+      </div>
+      <!-- jagathesh gstvalue test end -->
+
+
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(servicespares[i],servicespares)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="input-row" *ngFor="let template of selectedtemplatespares; let i = index">
+      <div class="input-container partcode">
+        <input [(ngModel)]="template.partcode" name="templatespare{{i}}">
+
+      </div>
+
+      <div style="width: 4px">
+        <input type="checkbox" [(ngModel)]="template.genric" (click)="genricpartcode($event.target.checked,i,'temp')">
+
+      </div>
+
+      <div class="input-container spare">
+        <input [(ngModel)]="template.spare" name="templatespare{{i}}">
+
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="template.inventoryqty" [ngModel]="template.inventoryqty || 'NA'" style="text-align: right;"
+          readonly name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="template.uom" name="dropdown" class="form-control"
+          [ngModel]="template.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="template.qty" [ngModel]="template.qty | number:'1.2-2'"
+          name="qty{{i}}">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;" [(ngModel)]="template.rate" name="rate{{i}}">
+      </div>
+
+
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="template.discount" maxlength="2"
+          [ngModel]="template.discount || '0'" name="qty{{i}}">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(template.qty, template.rate, template.discount)?.toFixed(2)">
+      </div>
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="template.buyingprice" name="buyingprice{{i}}">
+      </div>
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="template.gst18" id="gst18{{i}}"
+            (change)="handleCheckboxChange(template, 'gst18')" name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="template.gst28" id="gst28{{i}}"
+            (change)="handleCheckboxChange(template, 'gst28')" name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+      </div>
+      <div>
+        <button class="btn btn-icon btn-primary"
+          (click)="removespares(selectedtemplatespares[i],selectedtemplatespares)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="input-row" *ngFor="let extraspare of extraspares; let i = index">
+      <div class="input-container partcode">
+        <input [(ngModel)]="extraspare.partcode" name="spare{{i}}"
+          (input)="onSpareInputinv_extraChange(i, 'partcodeesti', 'partcode', 'sparearray', 'invoicespares')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'partcodeesti'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'invoicespares')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'invoicespares')">
+            {{ suggestion.name }} - {{ suggestion.MRP }}
+          </li>
+        </ul>
+      </div>
+
+      <div style="width: 4px">
+        <input type="checkbox" [(ngModel)]="extraspare.genric" (click)="genricpartcode($event.target.checked,i,'es')">
+
+      </div>
+
+      <div class="input-container spare">
+        <input [(ngModel)]="extraspare.spare" name="spare{{i}}"
+          (input)="onSpareInputinv_extraChange(i, 'extra', 'spare', 'sparearray', 'invoicespares')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'extra'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'invoicespares')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'invoicespares')">
+            {{ suggestion.name }} - {{ suggestion.MRP }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="extraspare.inventoryqty" style="text-align: right;" name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="extraspare.uom" name="dropdown" class="form-control"
+          [ngModel]="extraspare.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="extraspare.qty" [ngModel]="extraspare.qty | number:'1.2-2'"
+          name="qty{{i}}">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;" [(ngModel)]="extraspare.rate" name="rate{{i}}">
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="extraspare.discount" maxlength="2"
+          [ngModel]="extraspare.discount || '0'" name="qty{{i}}">
+      </div>
+
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(extraspare.qty, extraspare.rate, extraspare.discount)?.toFixed(2)">
+      </div>
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="extraspare.buyingprice" name="buyingprice{{i}}">
+      </div>
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="extraspare.gst18" id="gst18{{i}}"
+            (change)="handleCheckboxChange(extraspare, 'gst18')" name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="extraspare.gst28" id="gst28{{i}}"
+            (change)="handleCheckboxChange(extraspare, 'gst28')" name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+      </div>
+
+      <!-- jagathesh gstvalue test start -->
+      <div class="input-container rate" *ngIf="gstvariable!== ''">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total_gst(extraspare.qty, extraspare.rate, extraspare.discount,extraspare.gst18,'spares')?.toFixed(2)">
+      </div>
+      <!-- jagathesh gstvalue test end -->
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(extraspares[i],extraspares)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+
+    <div *ngFor="let data of servicelabours; let i = index">
+      <mat-form-field class="sparelabour">
+        <input matInput [(ngModel)]="data.name" name="name">
+      </mat-form-field>
+
+      <mat-form-field class="qtyrate">
+        <input matInput [(ngModel)]="data.qty" name="qty">
+      </mat-form-field>
+
+      <mat-form-field class="rate">
+        <input matInput [(ngModel)]="data.rate" name="rate">
+      </mat-form-field>
+
+      <mat-checkbox>
+        <input type="checkbox" [(ngModel)]="data.gst18" id="gst18" (change)="handleCheckboxChange(data, 'gst18')"
+          name="gst18{{i}}">
+        18%
+      </mat-checkbox>
+
+      <mat-checkbox>
+        <input type="checkbox" [(ngModel)]="data.gst28" id="gst28" (change)="handleCheckboxChange(data, 'gst28')"
+          name="gst28{{i}}">
+        28%
+      </mat-checkbox>
+    </div>
+
+    <div class="input-row" *ngFor="let extralabour of extralabours ;let i = index">
+
+      <div class="input-container partcode">
+        <input [(ngModel)]="extralabour.partcode"
+          (input)="onSpareInputinv_extraChange(i, 'extra_partcodelabour', 'partcode', 'labourarray', 'invoicespares')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'extra_partcodelabour'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'invoicespares')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'invoicespares')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <div style="width: 4px">
+        <input type="checkbox" [(ngModel)]="extralabour.genric" (click)="genricpartcode($event.target.checked,i,'el')">
+
+      </div>
+
+
+      <div class="input-container spare">
+        <input [(ngModel)]="extralabour.name" name="spare{{i}}"
+          (input)="onSpareInputinv_extraChange(i, 'extra_sparelabour', 'spare', 'labourarray', 'invoicespares')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'extra_sparelabour'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'invoicespares')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'invoicespares')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="extralabour.inventoryqty" style="text-align: right;" readonly name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="extralabour.uom" name="dropdown" class="form-control"
+          [ngModel]="extralabour.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input matInput style="text-align: right;" [(ngModel)]="extralabour.qty"
+          [ngModel]="extralabour.qty | number:'1.2-2'" name="qty">
+      </div>
+      <div class="input-container rate">
+        <input matInput style="text-align: right;" [(ngModel)]="extralabour.rate" name="rate">
+      </div>
+
+      <div class="input-container qty">
+        <input matInput style="text-align: right;" [(ngModel)]="extralabour.discount" maxlength="2"
+          [ngModel]="extralabour.discount || '0'" name="qty">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(extralabour.qty, extralabour.rate, extralabour.discount)?.toFixed(2)">
+      </div>
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="extralabour.buyingprice" name="buyingprice{{i}}">
+      </div>
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="extralabour.gst18" id="gst18"
+            (change)="handleCheckboxChange(extralabour, 'gst18')" name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="extralabour.gst28" id="gst28"
+            (change)="handleCheckboxChange(extralabour, 'gst28')" name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+
+      </div>
+
+      <!-- jagathesh gstvalue test start -->
+      <div class="input-container rate" *ngIf="gstvariable!== ''">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total_gst(extralabour.qty, extralabour.rate, extralabour.discount,extralabour.gst18,'labour')?.toFixed(2)">
+      </div>
+      <!-- jagathesh gstvalue test end -->
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(extralabours[i],extralabours)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255)">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="input-row" *ngFor="let data of esti_servicespares; let i = index">
+
+      <div class="input-container partcode">
+        <input matInput [(ngModel)]="data.partcode" name="rate">
+      </div>
+
+      <div style="width: 4px">
+        <input type="checkbox" [(ngModel)]="data.genric" (click)="genricpartcode($event.target.checked,i,'estss')">
+
+      </div>
+
+      <div class="input-container spare">
+        <input matInput [(ngModel)]="data.spare" name="spare">
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="data.inventoryqty" [ngModel]="data.inventoryqty || 'NA'" style="text-align: right;"
+          name="qty">
+      </div>
+
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="data.uom" name="dropdown" class="form-control" [ngModel]="data.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" matInput [(ngModel)]="data.qty" [ngModel]="data.qty | number:'1.2-2'"
+          name="qty">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;" matInput [(ngModel)]="data.rate" name="rate">
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="data.discount" maxlength="2" [ngModel]="data.discount || '0'"
+          name="qty{{i}}">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(data.qty, data.rate, data.discount)?.toFixed(2)">
+      </div>
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="data.buyingprice" name="buyingprice{{i}}">
+      </div>
+
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst18" id="gst18" (change)="handleCheckboxChange(data, 'gst18')"
+            name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst28" id="gst28" (change)="handleCheckboxChange(data, 'gst28')"
+            name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+      </div>
+
+      <!-- jagathesh gstvalue test start -->
+      <div class="input-container rate" *ngIf="gstvariable!== ''">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total_gst(data.qty, data.rate, data.discount,data.gst18,'package')?.toFixed(2)">
+      </div>
+      <!-- jagathesh gstvalue test end -->
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(templatespares[i],templatespares)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="input-row" *ngFor="let extraspare of esti_extraspares ;let i = index">
+
+      <div class="input-container partcode">
+        <input [(ngModel)]="extraspare.partcode" name="spare{{i}}"
+          (input)="onSpareInputinv_extraChange(i, 'partcodeesti_spares', 'partcode', 'sparearray', 'estimatespares_invoice')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'partcodeesti_spares'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'estimatespares_invoice')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'estimatespares_invoice')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <div style="width: 4px">
+        <input type="checkbox" [(ngModel)]="extraspare.genric" (click)="genricpartcode($event.target.checked,i,'estes')">
+
+      </div>
+
+
+      <div class="input-container spare">
+        <input [(ngModel)]="extraspare.spare" name="spare{{i}}"
+          (input)="onSpareInputinv_extraChange(i, 'estiextra', 'spare', 'sparearray', 'estimatespares_invoice')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'estiextra'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'estimatespares_invoice')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'estimatespares_invoice')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="extraspare.inventoryqty" style="text-align: right;" name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="extraspare.uom" name="dropdown" class="form-control"
+          [ngModel]="extraspare.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" matInput [(ngModel)]="extraspare.qty"
+          [ngModel]="extraspare.qty | number:'1.2-2'" name="qty">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;" matInput [(ngModel)]="extraspare.rate" name="rate">
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" matInput [(ngModel)]="extraspare.discount" maxlength="2"
+          [ngModel]="extraspare.discount || '0'" name="qty">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(extraspare.qty, extraspare.rate, extraspare.discount)?.toFixed(2)">
+      </div>
+
+
+      <div class="input-container rate" *ngIf="buying">
+        <input matInput placeholder="pur rate" [(ngModel)]="extraspare.buyingprice" name="rate">
+      </div>
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="extraspare.gst18" id="gst18"
+            (change)="handleCheckboxChange(extraspare, 'gst18')" name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="extraspare.gst28" id="gst28"
+            (change)="handleCheckboxChange(extraspare, 'gst28')" name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+      </div>
+
+      <!-- jagathesh gstvalue test start -->
+      <div class="input-container rate" *ngIf="gstvariable!== ''">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total_gst(extraspare.qty, extraspare.rate, extraspare.discount,extraspare.gst18,'spares')?.toFixed(2)">
+      </div>
+      <!-- jagathesh gstvalue test end -->
+
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(esti_extraspares[i],esti_extraspares)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div *ngFor="let data of esti_servicelabours; let i = index">
+      <mat-form-field class="sparelabour">
+        <input matInput [(ngModel)]="data.name" name="name">
+      </mat-form-field>
+
+      <mat-form-field class="qtyrate">
+        <input matInput [(ngModel)]="data.qty" name="qty">
+      </mat-form-field>
+
+      <mat-form-field class="rate">
+        <input matInput [(ngModel)]="data.rate" name="rate">
+      </mat-form-field>
+
+      <mat-checkbox>
+        <input type="checkbox" [(ngModel)]="data.gst18" id="gst18" (change)="handleCheckboxChange(data, 'gst18')"
+          name="gst18{{i}}">
+        18%
+      </mat-checkbox>
+
+      <mat-checkbox>
+        <input type="checkbox" [(ngModel)]="data.gst28" id="gst28" (change)="handleCheckboxChange(data, 'gst28')"
+          name="gst28{{i}}">
+        28%
+      </mat-checkbox>
+
+    </div>
+
+    <div class="input-row" *ngFor="let extralabours of esti_extralabours ;let i = index">
+
+
+      <div class="input-container partcode">
+        <input [(ngModel)]="extralabours.partcode"
+          (input)="onSpareInputinv_extraChange(i, 'extra_partcodelabour', 'partcode', 'labourarray', 'estimatespares_invoice')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'extra_partcodelabour'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'estimatespares_invoice')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'estimatespares_invoice')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <div style="width: 4px">
+        <input type="checkbox" [(ngModel)]="extralabours.genric" (click)="genricpartcode($event.target.checked,i,'estel')">
+
+      </div>
+
+
+      <div class="input-container spare">
+        <input [(ngModel)]="extralabours.name" name="spare{{i}}"
+          (input)="onSpareInputinv_extraChange(i, 'extra_sparelabour', 'spare', 'labourarray', 'estimatespares_invoice')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'extra_sparelabour'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'estimatespares_invoice')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'estimatespares_invoice')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="extralabours.inventoryqty" style="text-align: right;" readonly name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="extralabours.uom" name="dropdown" class="form-control"
+          [ngModel]="extralabours.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" matInput [(ngModel)]="extralabours.qty"
+          [ngModel]="extralabours.qty | number:'1.2-2'" name="qty">
+      </div>
+
+      <div class="input-container rate">
+        <input matInput style="text-align: right;" [(ngModel)]="extralabours.rate" name="rate">
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" matInput [(ngModel)]="extralabours.discount" maxlength="2"
+          [ngModel]="extralabours.discount || '0'" name="qty">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(extralabours.qty, extralabours.rate, extralabours.discount)?.toFixed(2)">
+      </div>
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="extralabours.buyingprice" name="buyingprice{{i}}">
+      </div>
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="extralabours.gst18" id="gst18"
+            (change)="handleCheckboxChange(extralabours, 'gst18')" name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="extralabours.gst28" id="gst28"
+            (change)="handleCheckboxChange(extralabours, 'gst28')" name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+      </div>
+
+       <!-- jagathesh gstvalue test start -->
+       <div class="input-container rate" *ngIf="gstvariable!== ''">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total_gst(extralabours.qty, extralabours.rate, extralabours.discount,extralabours.gst18,'labour')?.toFixed(2)">
+      </div>
+      <!-- jagathesh gstvalue test end -->
+
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(esti_extralabours[i],esti_extralabours)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+
+    <!-- jagathesh added for service spare start -->
+
+    <div class="input-row" *ngFor="let data of inputinvoiceserviceArray; let i = index">
+
+      <div class="input-container partcode">
+        <input [(ngModel)]="data.partcode" name="partcode-invoice{{i}}"
+          (input)="onSpareInputChange(i, 'partcodeinput', 'partcode', 'sparearray', 'invoicepage')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'partcodeinput'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'sparearray', 'invoicepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'sparearray', 'invoicepage')">
+            {{ suggestion.name }} - {{ suggestion.MRP }}
+          </li>
+        </ul>
+      </div>
+
+      <div style="width: 4px">
+        <input type="checkbox" [(ngModel)]="data.genric" (click)="genricpartcode($event.target.checked,i,'iisa')">
+
+      </div>
+
+      <div class="input-container spare">
+        <input [(ngModel)]="data.spare" name="spare-invoice{{i}}"
+          (input)="onSpareInputChange(i, 'spareinput', 'spare', 'sparearray', 'invoicepage')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'spareinput'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'sparearray', 'invoicepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'sparearray', 'invoicepage')">
+            {{ suggestion.name }} - {{ suggestion.MRP }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="data.inventoryqty" [ngModel]="data.inventoryqty || 'NA'" style="text-align: right;"
+          name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="data.uom" name="dropdown" class="form-control" [ngModel]="data.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="data.qty" [ngModel]="data.qty | number:'1.2-2'"
+          name="qty-invoice{{i}}">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;" [(ngModel)]="data.rate" name="rate-invoice{{i}}">
+      </div>
+
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="data.discount" maxlength="2" [ngModel]="data.discount || '0'"
+          name="qty-invoice{{i}}">
+      </div>
+
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(data.qty, data.rate, data.discount)?.toFixed(2)">
+      </div>
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="data.buyingprice" name="rate-invoice{{i}}">
+      </div>
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst18" id="gst18{{i}}" (change)="handleCheckboxChange(data, 'gst18')"
+            name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst28" id="gst28{{i}}" (change)="handleCheckboxChange(data, 'gst28')"
+            name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+      </div>
+
+        <!-- jagathesh gstvalue test start -->
+        <div class="input-container rate" *ngIf="gstvariable!== ''">
+          <input style="text-align: right;"
+            [value]="calculate_extraspareinvoice_total_gst(data.qty, data.rate, data.discount,data.gst18,'spare')?.toFixed(2)">
+        </div>
+        <!-- jagathesh gstvalue test end -->
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(inputinvoiceserviceArray[i],inputinvoiceserviceArray)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255)">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+    <!-- jagathesh added for service spare end -->
+
+
+
+
+
+
+
+
+
+    <div class="input-row" *ngFor="let data of inputinvoiceDataArray; let i = index">
+
+      <div class="input-container partcode">
+        <input [(ngModel)]="data.partcode" name="partcode-invoice{{i}}"
+          (input)="onSpareInputChange(i, 'partcodeinput', 'partcode', 'sparearray', 'invoicepage')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'partcodeinput'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'sparearray', 'invoicepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'sparearray', 'invoicepage')">
+            {{ suggestion.name }} - {{ suggestion.MRP }}
+          </li>
+        </ul>
+      </div>
+
+      <div style="width: 4px">
+        <input type="checkbox" [(ngModel)]="data.genric" (click)="genricpartcode($event.target.checked,i,'iida')">
+
+      </div>
+
+      <!-- real input for spare -->
+      <!-- <div class="input-container spare">
+        <input [(ngModel)]="data.spare" name="spare-invoice{{i}}"
+          (input)="onSpareInputChange(i, 'spareinput', 'spare', 'sparearray', 'invoicepage')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'spareinput'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'sparearray', 'invoicepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'sparearray', 'invoicepage')">
+            {{ suggestion.name }} - {{ suggestion.MRP }}
+          </li>
+        </ul>
+      </div> -->
+
+
+
+      <div class="input-container spare">
+        <div class="input-with-button">
+          <input [(ngModel)]="data.spare" name="spare-invoice{{i}}"
+            (input)="onSpareInputChange(i, 'spareinput', 'spare', 'sparearray', 'invoicepage')">
+          <button *ngIf="inventory_customers" type="button" class="right-button" (click)="inventory_popup(productpage)">
+            +
+          </button>
+        </div>
+      
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'spareinput'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'sparearray', 'invoicepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'sparearray', 'invoicepage')">
+            {{ suggestion.name }} - {{ suggestion.MRP }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="data.inventoryqty" [ngModel]="data.inventoryqty || 'NA'" style="text-align: right;"
+          name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="data.uom" name="dropdown" class="form-control" [ngModel]="data.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="data.qty" [ngModel]="data.qty | number:'1.2-2'"
+          name="qty-invoice{{i}}">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;" [(ngModel)]="data.rate" name="rate-invoice{{i}}">
+      </div>
+
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="data.discount" maxlength="2" [ngModel]="data.discount || '0'"
+          name="qty-invoice{{i}}">
+      </div>
+
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_inputinvoice_total(data.qty, data.rate, data.discount)?.toFixed(2)">
+      </div>
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="data.buyingprice" name="rate-invoice{{i}}">
+      </div>
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst18" id="gst18{{i}}" (change)="handleCheckboxChange(data, 'gst18')"
+            name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst28" id="gst28{{i}}" (change)="handleCheckboxChange(data, 'gst28')"
+            name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+      </div>
+
+        <!-- jagathesh gstvalue test start -->
+        <div class="input-container rate" *ngIf="gstvariable!== ''">
+          <input style="text-align: right;"
+            [value]="calculate_extraspareinvoice_total_gst(data.qty, data.rate, data.discount,data.gst18,'spare')?.toFixed(2)">
+        </div>
+        <!-- jagathesh gstvalue test end -->
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(inputinvoiceDataArray[i],inputinvoiceDataArray)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255)">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="input-row" *ngFor="let data of inputinvoiceLabourDataArray; let i = index">
+
+      <div class="input-container partcode">
+        <input [(ngModel)]="data.partcode" name="partcode-invoice{{i}}"
+          (input)="onSpareInputChange(i, 'labourinputpartcode', 'partcode', 'labourarray', 'invoicepage')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'labourinputpartcode'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'labourarray', 'invoicepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'labourarray', 'invoicepage')">
+            {{ suggestion.name }} - {{ suggestion.mrp }}
+          </li>
+        </ul>
+      </div>
+
+      <div style="width: 4px">
+        <input type="checkbox" [(ngModel)]="data.genric" (click)="genricpartcode($event.target.checked,i,'iila')">
+
+      </div>
+
+      <div class="input-container spare">
+        <input [(ngModel)]="data.name" name="partcode-invoice{{i}}"
+          (input)="onSpareInputChange(i, 'labourinputspare', 'spare', 'labourarray', 'invoicepage')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'labourinputspare'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'labourarray', 'invoicepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'labourarray', 'invoicepage')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="data.inventoryqty" [ngModel]="data.inventoryqty || 'NA'" style="text-align: right;" readonly
+          name="qty">
+      </div>
+
+
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="data.uom" name="dropdown" class="form-control" [ngModel]="data.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="data.qty" [ngModel]="data.qty | number:'1.2-2'" name="qty">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;" [(ngModel)]="data.rate" name="rate">
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="data.discount" maxlength="2" [ngModel]="data.discount || '0'"
+          name="qty">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_inputinvoice_total(data.qty, data.rate, data.discount)?.toFixed(2)">
+      </div>
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="data.buyingprice" name="buyingprice{{i}}">
+      </div>
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst18" id="gst18" (change)="handleCheckboxChange(data, 'gst18')"
+            name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst28" id="gst28" (change)="handleCheckboxChange(data, 'gst28')"
+            name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+      </div>
+
+        <!-- jagathesh gstvalue test start -->
+        <div class="input-container rate" *ngIf="gstvariable!== ''">
+          <input style="text-align: right;"
+            [value]="calculate_extraspareinvoice_total_gst(data.qty, data.rate, data.discount,data.gst18,'labour')?.toFixed(2)">
+        </div>
+        <!-- jagathesh gstvalue test end -->
+
+      <div>
+        <!-- <div *ngIf="i === 0">Action</div> -->
+        <button class="btn btn-icon btn-primary"
+          (click)="removespares(inputinvoiceLabourDataArray[i],inputinvoiceLabourDataArray)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+
+    </div>
+    <div style="float: right;margin-right: 15%;">
+    </div>
+  </div>
+  <hr style="border: 1px dashed black;">
+
+  <!-- <div class="buttonContainer ">  -->
+  <div class="d-flex">
+    <div style="padding-left: 3%;">
+      <label>Remarks</label>
+      <textarea id="remarks" class="form-control" [(ngModel)]="advisor_remarks" placeholder="Enter your remarks here..."
+        style="width: 450px; text-align: left; height: 50px; resize: none"></textarea>
+
+      </div>
+      <div style="display: flex; flex-direction: column; margin-left: 1%;">
+        <label style="text-align: right;"> Next Service </label>
+        <input  style="text-align: right;" [(ngModel)]="nextservice" name="nextservice">
+  
+      </div>
+
+    <!-- <div style="display: flex; flex-direction: column;  margin-left: 23%;">
+      <label>Spare</label>
+      <input [value]="calculate_allspareqty_final()" readonly style="width: 60px;">
+    </div> -->
+
+    <div style="display: flex; flex-direction: column;  margin-left: 10%; ">
+      <label>Discount</label>
+      <input [(ngModel)]="overalldiscount" style="width: 60px;">
+
+    </div>
+    <div style="display: flex; flex-direction: column; margin-left: 1%;">
+      <label style="text-align: right;"> Total </label>
+      <input [value]="calculateGrandTotal_final('invoicepage')?.toFixed(2)" style="text-align: right;" readonly>
+
+    </div>
+    <div style="display: flex; flex-direction: column; margin-left: 1%;" *ngIf="gstvariable!== ''">
+      <label style="text-align: right;"> Final </label>
+      <input [value]="calculateGrandTotal_final_gst('invoicepage')?.toFixed(2)" style="text-align: right;" readonly>
+    </div>
+  </div>
+
+</ng-template>
+
+
+
+<ng-template #jobcardpage>
+
+
+  <div>
+    <i class="i-Close-Window" style="float:right; font-size:24px;" aria-hidden="true" (click)="closedialog()"></i>
+
+  </div>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" style="text-align: center; margin-left: 20%;">JobCard Data</h2>
+
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <!-- <thead>
+              <tr>
+                <th>Data Field</th>
+                <th>Value</th>
+              </tr>
+            </thead> -->
+          <tbody>
+            <ng-container *ngFor="let jocarddata of jobcarddata_byid">
+              <tr>
+                <td><strong>Odometer Reading:</strong></td>
+                <td>{{ jocarddata.odometerreading ? jocarddata.odometerreading : 'no reading' }}</td>
+              </tr>
+              <tr>
+                <td><strong>Fuel Level:</strong></td>
+                <td>{{ jocarddata.leveloffuel }}</td>
+              </tr>
+
+              <tr>
+                <td><strong>Selected Service:</strong></td>
+
+                <!-- <div class="service-section"> -->
+                <td *ngIf="jocarddata.genralservice == '0'">General Service</td>
+                <td *ngIf="jocarddata.genralservice == '1'">Basic Service</td>
+                <!-- <p *ngIf="jocarddata.genralservice == '0'"> General Service</p>
+                      <p *ngIf="jocarddata.genralservice == '1'">Basic Service</p>
+                    </td> -->
+
+                <!-- </div> -->
+              </tr>
+              <tr>
+                <td><strong>Remarks:</strong></td>
+                <td>{{ jocarddata.remarks ? jocarddata.remarks : 'no remarks'}}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- testing to add vehicle status in update spares -->
+<ng-template #editstatuspage>
+
+  <div>
+    <i class="i-Close-Window" style="float:right; font-size:24px;" aria-hidden="true" (click)="closedialog()"></i>
+
+  </div>
+
+  <div class="modal-header" style="margin-left: 40%">
+    <h4 class="modal-title" id="modal-basic-title" style=" font-weight: bold;">Edit Vehicle Status</h4>
+  </div>
+  <div id="modal-body-changestatus" class="modal-body">
+    <form (ngSubmit)="submitStatusUpdate()">
+      <div class="mb-3">
+        <div class="row">
+          <div class="col-md-6" *ngFor="let option of dropdownOptions">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <h3><strong>{{ option.text }}</strong></h3>
+                </h5>
+                <input type="radio" name="selectedStatusKey" [(ngModel)]="selectedStatusKey" [value]="option.key"
+                  id="option{{ option.key }}" class="form-check-input" />
+                <label class="form-check-label" for="option{{ option.key }}">Select</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <center><button type="submit" style="margin-bottom: 15px; padding-top: 10px; width: 20%;"
+          class="btn btn-primary">Save</button></center>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #vehiclehistorypage>
+  <h1 class="historyheading">History ({{vehiclehistory_no}}/{{vehiclehistory_brand}}/{{vehiclehistory_model}})</h1>
+  <div class="vehicle-history-container">
+    <p class="vehicle-entry-count">This Vehicle Entered <strong>{{ jobCardCount }}</strong> Time.</p>
+    <div class="scrollable-container">
+      <div *ngFor="let data of jobcarddata_byid" class="jobcard-container">
+        <div class="jobcard-header">
+          <p><strong>In:</strong>{{data.index}}</p>
+          <p><strong>Vehicle IN:</strong> {{ data.createddate | date:'dd-MM-yyyy' }}</p>
+          <p><strong>Odometer Reading:</strong> {{ data.odometerreading }}</p>
+        </div>
+        <div class="complaints-section">
+          <h3>Complaints:</h3>
+          <ul>
+            <li *ngFor="let complaint of data.complaints">
+              {{ complaint['complaint ' + (data.complaints.indexOf(complaint) + 1)] }}
+            </li>
+          </ul>
+        </div>
+        <div class="service-section">
+          <p *ngIf="data.genralservice == '0'"><strong>Service Type:</strong> General Service</p>
+          <p *ngIf="data.genralservice == '1'"><strong>Service Type:</strong> Basic Service</p>
+        </div>
+        <div class="financial-section">
+
+          <div *ngIf="data.invoice">
+            <button type="button" class="btn btn-link btn-sm mt-2 see-more-button" (click)="toggleSpareDetails(i)">
+              {{ expandedIndex === i ? 'Hide' : 'Show' }} Spare Details
+            </button>
+            <div *ngIf="expandedIndex === i">
+              <ng-container *ngIf="data.invoice.all_spares.length > 0; else noSpares">
+                <table class="spare-table">
+                  <thead>
+                    <tr>
+                      <th>Spare</th>
+                      <th>Qty</th>
+                      <th>Rate</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let spare of data.invoice.all_spares">
+                      <td>{{ spare.spare }}</td>
+                      <td>{{ spare.qty }}</td>
+                      <td>{{ spare.rate }}</td>
+                      <td>{{ spare.amount }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </ng-container>
+              <ng-template #noSpares>
+                <p>No spares</p>
+              </ng-template>
+            </div>
+          </div>
+
+
+          <!-- <div *ngIf="data.invoice">
+              
+              <div *ngIf="expandedIndex === i">
+                <ng-container *ngIf="data.invoice.service_spares.length > 0; else Nopackage">
+                  <table class="spare-table">
+                    <thead>
+                      <tr>
+                        <th>Spare</th>
+                        <th>Qty</th>
+                        <th>Rate</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let spare of data.invoice.service_spares">
+                        <td>{{ spare.spare }}</td>
+                        <td>{{ spare.qty }}</td>
+                        <td>{{ spare.rate }}</td>
+                        <td>{{ spare.amount }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </ng-container>
+                <ng-template #Nopackage>
+                  <p>No Package</p>
+                </ng-template>
+              </div>
+            </div> -->
+
+
+          <div *ngIf="data.invoice">
+
+            <div *ngIf="expandedIndex === i">
+              <ng-container *ngIf="data.invoice.all_labours.length > 0; else nolabours">
+                <table class="spare-table">
+                  <thead>
+                    <tr>
+                      <th>Labour</th>
+                      <th>person</th>
+                      <th>Rate</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let spare of data.invoice.all_labours">
+                      <td>{{ spare.name }}</td>
+                      <td>{{ spare.qty }}</td>
+                      <td>{{ spare.rate }}</td>
+                      <td>{{ spare.amount }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </ng-container>
+              <ng-template #nolabours>
+                <p>No labours</p>
+              </ng-template>
+            </div>
+          </div>
+
+
+
+
+          <p *ngIf="data.estimate"><strong>Estimate Date:</strong> {{ data.estimate.date | date:'dd-MM-yyyy' }}</p>
+          <p *ngIf="data.estimate"><strong>Estimate Amount:</strong> {{ data.estimate.estimate_amount }}</p>
+          <p *ngIf="!data.estimate"><strong>Estimate:</strong> Not Generated</p>
+          <p *ngIf="data.invoice"><strong>Invoice Date:</strong> {{ data.invoice.date | date:'dd-MM-yyyy' }}</p>
+          <p *ngIf="data.invoice"><strong>Invoice Amount:</strong> {{ data.invoice.invoice_amount }}</p>
+          <p *ngIf="!data.invoice"><strong>Invoice:</strong> Not Generated</p>
+        </div>
+        <hr />
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #customerhistorypage>
+  <div class="vehicle-history-container">
+    <div *ngFor="let vehicle of groupedJobcardData" class="vehicle-container">
+      <h2>{{ vehicle.vehicleNumber }} - {{vehicle.vehicleBrand}}/{{ vehicle.vehicleModel }}</h2>
+      <p class="vehicle-entry-count">This Vehicle Entered <strong>{{ vehicle.jobcards.length }}</strong> Time.</p>
+      <div class="scrollable-container">
+        <div *ngFor="let jobcard of vehicle.jobcards" class="jobcard-container">
+          <div *ngFor="let detail of jobcard.jobcard_details; let i = index" class="jobcard-detail">
+            <div class="jobcard-header">
+              <p><strong>In:</strong> {{ detail.serialNumber }}</p>
+              <p><strong>Vehicle IN:</strong> {{ detail.createddate | date:'dd-MM-yyyy' }}</p>
+              <p><strong>Odometer Reading:</strong> {{ detail.odometerreading }}</p>
+            </div>
+            <div class="complaints-section">
+              <h3>Complaints:</h3>
+              <ul>
+                <li *ngFor="let complaint of detail.complaints">
+                  {{ complaint['complaint ' + (detail.complaints.indexOf(complaint) + 1)] }}
+                </li>
+              </ul>
+            </div>
+            <div class="service-section">
+              <p *ngIf="detail.genralservice == '0'"><strong>Service Type:</strong> General Service</p>
+              <p *ngIf="detail.genralservice == '1'"><strong>Service Type:</strong> Basic Service</p>
+            </div>
+            <div class="financial-section">
+              <div *ngIf="detail.invoice">
+                <button type="button" class="btn btn-link btn-sm mt-2 see-more-button" (click)="toggleSpareDetails(i)">
+                  {{ expandedIndex === i ? 'Hide' : 'Show' }} Spare Details
+                </button>
+                <div *ngIf="expandedIndex === i">
+                  <ng-container *ngIf="detail.invoice.all_spares.length > 0; else noSpares">
+                    <table class="spare-table">
+                      <thead>
+                        <tr>
+                          <th>Spare</th>
+                          <th>Qty</th>
+                          <th>Rate</th>
+                          <th>Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let spare of detail.invoice.all_spares">
+                          <td>{{ spare.spare }}</td>
+                          <td>{{ spare.qty }}</td>
+                          <td>{{ spare.rate }}</td>
+                          <td>{{ spare.amount }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </ng-container>
+                  <ng-template #noSpares>
+                    <p>No spares</p>
+                  </ng-template>
+                </div>
+              </div>
+              <div *ngIf="detail.invoice">
+                <div *ngIf="expandedIndex === i">
+                  <ng-container *ngIf="detail.invoice.all_labours.length > 0; else noLabours">
+                    <table class="spare-table">
+                      <thead>
+                        <tr>
+                          <th>Labour</th>
+                          <th>Person</th>
+                          <th>Rate</th>
+                          <th>Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let labour of detail.invoice.all_labours">
+                          <td>{{ labour.name }}</td>
+                          <td>{{ labour.qty }}</td>
+                          <td>{{ labour.rate }}</td>
+                          <td>{{ labour.amount }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </ng-container>
+                  <ng-template #noLabours>
+                    <p>No labours</p>
+                  </ng-template>
+                </div>
+              </div>
+              <p *ngIf="detail.estimate"><strong>Estimate Date:</strong> {{ detail.estimate.date | date:'dd-MM-yyyy' }}
+              </p>
+              <p *ngIf="detail.estimate"><strong>Estimate Amount:</strong> {{ detail.estimate.estimate_amount }}</p>
+              <p *ngIf="!detail.estimate"><strong>Estimate:</strong> Not Generated</p>
+              <p *ngIf="detail.invoice"><strong>Invoice Date:</strong> {{ detail.invoice.date | date:'dd-MM-yyyy' }}</p>
+              <p *ngIf="detail.invoice"><strong>Invoice Amount:</strong> {{ detail.invoice.invoice_amount }}</p>
+              <p *ngIf="!detail.invoice"><strong>Invoice:</strong> Not Generated</p>
+            </div>
+            <hr />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #paymentpage>
+  <div style="padding: 5px;">
+    <i class="i-Close-Window" style="float:right; font-size:24px;" aria-hidden="true" (click)="closepaymentpage()"></i>
+
+  </div>
+
+  <div style="padding: 20px;">
+
+    <div>
+      <div class="card" style="background-color: rgb(88, 100, 255);color: white;">
+        <div style="padding: 20px;text-align: center;">
+          {{name_paymentpage}} ( {{mobile_paymentpage}} ) --{{vno_paymentpage}}
+        </div>
+      </div>
+
+
+      <div *ngIf="multipleinvoice_card && multipleinvoice_card.length > 0">
+        <div class="row g-3" style="padding-top: 10px;">
+
+          <div class="col-md-3" *ngFor="let multipleinvoice of multipleinvoice_card ; let i = index ">
+            <div tabindex="0" class="card" style="height: 60px;padding: 10px;"
+              (keydown.enter)="multiplecard_payment(multipleinvoice_card,i)"
+              (click)="multiplecard_payment(multipleinvoice_card,i)" [ngClass]="{
+                'status-88': multipleinvoice.status?.number == '88',
+                'status-3': multipleinvoice.status?.number == '3',
+                'default-status': !multipleinvoice.status
+              }">
+              <div>
+                <b>INV{{i+1}}-</b>{{multipleinvoice.date | date:'yyyy-MM-dd'}}
+              </div>
+              <div>
+
+                {{multipleinvoice.invoice_amount}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="forpadding">
+
+      </div>
+
+      <div class="cardexist" *ngIf="cardexist">
+
+        <div class="card" style="padding: 20px" *ngIf="isinvoice || isestimate">
+
+          <div class="row d-flex">
+            <div class="col-md-6">
+              <b>Total Amount</b>
+            </div>
+            <div class="col-md-6">
+              <b>{{invamount_paymentpage}}</b>
+            </div>
+          </div>
+          <div class="row d-flex">
+            <div class="col-md-6">
+              <b>Advanced Received</b>
+            </div>
+            <div class="col-md-6">
+              <b>{{total_payment_received}}</b>
+            </div>
+          </div>
+          <div class="row d-flex">
+            <div class="col-md-6">
+              <b>Balance To Pay</b>
+            </div>
+            <div class="col-md-6">
+              <b>{{paymentbalance_amount}}</b>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="padding: 20px" *ngIf=" !isinvoice && !isestimate">
+          <div class="row d-flex">
+            <div class="col-md-6">
+              <b>Advanced Received</b>
+            </div>
+            <div class="col-md-6">
+              <b>{{total_payment_received}}</b>
+            </div>
+          </div>
+
+        </div>
+
+
+        <b>Payments</b>
+
+        <div>
+          <div class="table-payment">
+            <table class="table table-bordered paymenttable">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Mode</th>
+                  <th>Amount</th>
+                  <th>PaymentType</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let payment of paymentdata_forpaypage">
+                  <td>{{payment.date}}</td>
+                  <td>{{payment.mode}}</td>
+                  <td>{{payment.totalvalue | number: '1.2-2'}}</td>
+                  <td>{{payment.paymentType}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="forpadding_paymentpage">
+        </div>
+        <div>
+          <input type="checkbox" (keydown.enter)="isadvancepaymentkeydown()" [(ngModel)]="isAdvance"> <b>Advance</b>
+        </div>
+
+        <div class="forpadding_paymentpage">
+
+        </div>
+
+        <div class="row">
+          <div class="col-md-2">
+            <div class="card paymentcard" [ngStyle]="paymentmode !== 'UPI' ? {'background-color': '#f2f2f2'} : {}"
+              [ngClass]="{'selected-card': paymentmode === 'UPI'}" tabindex="0" (click)="paymentmodeclick('UPI')"
+              (keydown.enter)="paymentmodeclick('UPI')">
+              UPI
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="card paymentcard" [ngStyle]="paymentmode !== 'CARD' ? {'background-color': '#f2f2f2'} : {}"
+              [ngClass]="{'selected-card': paymentmode === 'CARD'}" tabindex="0" (click)="paymentmodeclick('CARD')"
+              (keydown.enter)="paymentmodeclick('CARD')">
+              CARD
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="card paymentcard" [ngStyle]="paymentmode !== 'CASH' ? {'background-color': '#f2f2f2'} : {}"
+              [ngClass]="{'selected-card': paymentmode === 'CASH'}" tabindex="0" (click)="paymentmodeclick('CASH')"
+              (keydown.enter)="paymentmodeclick('CASH')">
+              CASH
+            </div>
+          </div>
+        </div>
+        <div class="forpadding_paymentpage">
+
+        </div>
+
+
+
+        <div *ngIf="!isvehiclein && !isestimate">
+
+          <input type="checkbox" (keydown.enter)="isfinalpaymentkeydown()" [(ngModel)]="isfinalpayment"> <b>Final
+            Payment
+            & Job Close</b>
+        </div>
+        <div class="forpadding_paymentpage">
+
+        </div>
+
+        <div class="row">
+          <div class="col-md-1">
+            Amount
+          </div>
+          <div class="col-md-2">
+            <input type="text" class="form-control" [(ngModel)]="paymentamount">
+
+          </div>
+          <div class="col-md-2">
+            <!-- <button class="btn btn-primary" style="background-color: rgb(88, 100, 255);" (click)="AddPayment()">
+              Add
+  
+            </button> -->
+
+            <button *ngIf="!multipleinvoice_card || multipleinvoice_card.length === 0" class="btn btn-primary"
+              style="background-color: rgb(88, 100, 255);width: 200px;" (click)="proceedpayment()">Accept
+              Payment</button>
+            <button *ngIf="multipleinvoice_card && multipleinvoice_card.length > 0" class="btn btn-primary"
+              style="background-color: rgb(88, 100, 255);width: 200px;" (click)="proceedpayment_multinvoice()"> Accept
+              Payment</button>
+
+          </div>
+
+        </div>
+
+
+        <!-- <div  *ngIf="!isvehiclein && !isestimate">
+  
+          <input type="checkbox"  [(ngModel)]="isfinalpayment"> Final Payment & Job Close
+        </div> -->
+      </div>
+
+      <div class="forpadding_paymentpage">
+
+      </div>
+      <div class="forpadding_paymentpage">
+
+      </div>
+      <div class="forpadding_paymentpage">
+
+      </div>
+
+      <div style="text-align: center;">
+
+
+
+        <!-- <button *ngIf="!multipleinvoice_card || multipleinvoice_card.length === 0" class="btn btn-primary" style="background-color: rgb(88, 100, 255);width: 200px;"
+          (click)="proceedpayment()"> Proceed</button>
+        <button *ngIf="multipleinvoice_card && multipleinvoice_card.length > 0" class="btn btn-primary" style="background-color: rgb(88, 100, 255);width: 200px;"
+          (click)="proceedpayment_multinvoice()"> Proceed</button> -->
+      </div>
+    </div>
+
+  </div>
+
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- working for showing multiple invoice -->
+<ng-template #multipleinvoice>
+
+  <div class="row g-3" style="padding: 20px;">
+    <div style="padding: 5px;">
+      <i class="i-Close-Window" style="float:right; font-size:24px;" aria-hidden="true"
+        (click)="closedialog_multiinv()"></i>
+
+    </div>
+    <div class="col-md-2" style="padding-top: 8px;"
+      *ngFor="let multipleinvoice of multipleinvoice_card ; let i = index ">
+      <div class="card" style="height: 60px;padding: 10px;" (click)="multipleinvoice_carddata(multipleinvoice_card,i)">
+        {{multipleinvoice.date}}
+      </div>
+
+    </div>
+    <div class="card" style="height: 60px;padding: 10px;width: 60px;"
+      (click)="multipleinvoice_carddata(multipleinvoice_card,'')">
+      +
+    </div>
+  </div>
+
+  <div style="display: flex; justify-content: space-between; align-items: center; padding-left: 35px;margin-right:11%">
+    <div>
+      <h4>{{popupshowcustomername}} - {{popupshowmobile}}</h4>
+      <h4>{{brandforsuggestion}} - {{modelforsuggestion}} - {{popupshowvehcileno}} - INVOICE</h4>
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+      <div>
+        <select id="color" placeholder="Choose Colour" class="form-select text-center" [(ngModel)]="selectedtemplate"
+          (change)="onTemplateSelect($event)">
+          <option value="" disabled selected>Select Template</option>
+          <option *ngFor="let key of templateKeys" [value]="key">
+            {{ key }}
+          </option>
+        </select>
+      </div>
+
+      <div>
+        <select id="color" placeholder="Choose Colour" class="form-select text-center" [(ngModel)]="selectedtech"
+          (change)="ontechSelect($event)">
+          <option value="" disabled selected>Select Tech</option>
+          <option *ngFor="let tech of technician" [value]="tech.superadmin_username">
+            {{ tech.superadmin_username }}
+          </option>
+        </select>
+      </div>
+
+
+      <button class="btn btn-icon btn-primary" (click)="addinvoiceInputField()"
+        style="background-color: rgb(88, 100, 255);height:39px">
+        <i class="bi bi-wrench"></i>
+      </button>
+      <button class="btn btn-icon btn-primary" (click)="addinvoicelabourInputField()"
+        style="background-color: rgb(88, 100, 255);height:39px">
+        <i class="i-Engineering"></i>
+      </button>
+
+      <button class="btn btn-primary estinvbutton" style="background-color: rgb(88, 100, 255);"
+        id="button_for_right_align" (click)="update_multipleinvoice()">
+        Update
+      </button>
+
+      <button class="btn btn-primary estinvbutton" style="background-color: rgb(88, 100, 255);"
+        id="button_for_right_align" (click)="downloadinvoicepdf('multi')">
+        PDF
+      </button>
+    </div>
+  </div>
+
+  <div class="forpadding"></div>
+  <div #scrollContainer class="modal-body" id="update_spares_body">
+
+    <div class="input-row">
+      <div class="input-container partcode">
+        <label>Partcode</label>
+      </div>
+
+      <div class="input-container spare">
+        <label>Description</label>
+      </div>
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <label style="text-align: right;">Stock</label>
+      </div>
+      <div class="input-container discount">
+        <label style="text-align: center;">UOM</label>
+      </div>
+      <div class="input-container qty">
+        <label style="text-align: right;">Qty</label>
+      </div>
+      <div class="input-container rate">
+        <label style="text-align: right;">Rate</label>
+      </div>
+
+      <div class="input-container qty">
+        <label style="text-align: right;">Dis %</label>
+      </div>
+
+      <div class="input-container rate">
+        <label style="text-align: right;">Total</label>
+
+      </div>
+      <div class="input-container rate" *ngIf="buying">
+        <label style="text-align: right;">Purchase </label>
+      </div>
+
+      <div class="input-container qty" *ngIf="gstvariable!== ''">
+        <label style="text-align: center;">GST</label>
+      </div>
+    </div>
+
+    <div class="input-row" *ngFor="let data of servicespares; let i = index">
+      <div class="input-container partcode">
+        <input [(ngModel)]="data.partcode" name="spare">
+      </div>
+      <div class="input-container spare">
+        <input [(ngModel)]="data.spare" name="spare">
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="data.inventoryqty" [ngModel]="data.inventoryqty || 'NA'" style="text-align: right;" readonly
+          name="qty">
+      </div>
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="data.uom" name="dropdown" class="form-control" [ngModel]="data.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+
+      <div class="input-container qty">
+        <input [(ngModel)]="data.qty" [ngModel]="data.qty | number:'1.2-2'" style="text-align: right;" name="qty">
+      </div>
+      <div class="input-container rate">
+        <input [(ngModel)]="data.rate" name="rate" style="text-align: right;">
+      </div>
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="data.discount" maxlength="2" [ngModel]="data.discount || '0'"
+          name="qty{{i}}">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(data.qty, data.rate, data.discount)?.toFixed(2)">
+      </div>
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="data.buyingprice" name="buyingprice{{i}}">
+      </div>
+
+
+
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst18" id="gst18" (change)="handleCheckboxChange(data, 'gst18')"
+            name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst28" id="gst28" (change)="handleCheckboxChange(data, 'gst28')"
+            name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+      </div>
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(servicespares[i],servicespares)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="input-row" *ngFor="let template of selectedtemplatespares; let i = index">
+      <div class="input-container partcode">
+        <input [(ngModel)]="template.partcode" name="templatespare{{i}}">
+
+      </div>
+
+      <div class="input-container spare">
+        <input [(ngModel)]="template.spare" name="templatespare{{i}}">
+
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="template.inventoryqty" [ngModel]="template.inventoryqty || 'NA'" style="text-align: right;"
+          readonly name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="template.uom" name="dropdown" class="form-control"
+          [ngModel]="template.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="template.qty" [ngModel]="template.qty | number:'1.2-2'"
+          name="qty{{i}}">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;" [(ngModel)]="template.rate" name="rate{{i}}">
+      </div>
+
+
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="template.discount" maxlength="2"
+          [ngModel]="template.discount || '0'" name="qty{{i}}">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(template.qty, template.rate, template.discount)?.toFixed(2)">
+      </div>
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="template.buyingprice" name="buyingprice{{i}}">
+      </div>
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="template.gst18" id="gst18{{i}}"
+            (change)="handleCheckboxChange(template, 'gst18')" name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="template.gst28" id="gst28{{i}}"
+            (change)="handleCheckboxChange(template, 'gst28')" name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+      </div>
+      <div>
+        <button class="btn btn-icon btn-primary"
+          (click)="removespares(selectedtemplatespares[i],selectedtemplatespares)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="input-row" *ngFor="let extraspare of extraspares; let i = index">
+      <div class="input-container partcode">
+        <input [(ngModel)]="extraspare.partcode" name="spare{{i}}"
+          (input)="onSpareInputinv_extraChange(i, 'partcodeesti', 'partcode', 'sparearray', 'invoicespares')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'partcodeesti'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'invoicespares')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'invoicespares')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="input-container spare">
+        <input [(ngModel)]="extraspare.spare" name="spare{{i}}"
+          (input)="onSpareInputinv_extraChange(i, 'extra', 'spare', 'sparearray', 'invoicespares')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'extra'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'invoicespares')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'sparearray', 'invoicespares')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="extraspare.inventoryqty" style="text-align: right;" readonly name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="extraspare.uom" name="dropdown" class="form-control"
+          [ngModel]="extraspare.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="extraspare.qty" [ngModel]="extraspare.qty | number:'1.2-2'"
+          name="qty{{i}}">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;" [(ngModel)]="extraspare.rate" [ngModel]="extraspare.rate | number:'1.2-2'"
+          name="rate{{i}}">
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="extraspare.discount" maxlength="2"
+          [ngModel]="extraspare.discount || '0'" name="qty{{i}}">
+      </div>
+
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(extraspare.qty, extraspare.rate, extraspare.discount)?.toFixed(2)">
+      </div>
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="extraspare.buyingprice" name="buyingprice{{i}}">
+      </div>
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="extraspare.gst18" id="gst18{{i}}"
+            (change)="handleCheckboxChange(extraspare, 'gst18')" name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="extraspare.gst28" id="gst28{{i}}"
+            (change)="handleCheckboxChange(extraspare, 'gst28')" name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+      </div>
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(extraspares[i],extraspares)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="input-row" *ngFor="let extralabour of extralabours ;let i = index">
+
+      <div class="input-container partcode">
+        <input [(ngModel)]="extralabour.partcode"
+          (input)="onSpareInputinv_extraChange(i, 'extra_partcodelabour', 'partcode', 'labourarray', 'invoicespares')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'extra_partcodelabour'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'invoicespares')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'invoicespares')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+
+      <div class="input-container spare">
+        <input [(ngModel)]="extralabour.name" name="spare{{i}}"
+          (input)="onSpareInputinv_extraChange(i, 'extra_sparelabour', 'spare', 'labourarray', 'invoicespares')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'extra_sparelabour'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'invoicespares')" tabindex="0"
+            (keydown.enter)="onSpareSelect_invextra(i, suggestion, 'labourarray', 'invoicespares')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="extralabour.inventoryqty" style="text-align: right;" readonly name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="extralabour.uom" name="dropdown" class="form-control"
+          [ngModel]="extralabour.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input matInput style="text-align: right;" [(ngModel)]="extralabour.qty"
+          [ngModel]="extralabour.qty | number:'1.2-2'" name="qty">
+      </div>
+      <div class="input-container rate">
+        <input matInput style="text-align: right;" [(ngModel)]="extralabour.rate"
+          [ngModel]="extralabour.rate | number:'1.2-2'" name="rate">
+      </div>
+
+      <div class="input-container qty">
+        <input matInput style="text-align: right;" [(ngModel)]="extralabour.discount" maxlength="2"
+          [ngModel]="extralabour.discount || '0'" name="qty">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_extraspareinvoice_total(extralabour.qty, extralabour.rate, extralabour.discount)?.toFixed(2)">
+      </div>
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="extralabour.buyingprice" name="buyingprice{{i}}">
+      </div>
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="extralabour.gst18" id="gst18"
+            (change)="handleCheckboxChange(extralabour, 'gst18')" name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="extralabour.gst28" id="gst28"
+            (change)="handleCheckboxChange(extralabour, 'gst28')" name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+
+      </div>
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(extralabours[i],extralabours)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255)">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="input-row" *ngFor="let data of inputinvoiceDataArray; let i = index">
+      <div class="input-container partcode">
+        <input [(ngModel)]="data.partcode" name="partcode-invoice{{i}}"
+          (input)="onSpareInputChange(i, 'partcodeinput', 'partcode', 'sparearray', 'invoicepage')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'partcodeinput'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'sparearray', 'invoicepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'sparearray', 'invoicepage')">
+            {{ suggestion.name }} - {{ suggestion.mrp }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="input-container spare">
+        <input [(ngModel)]="data.spare" name="spare-invoice{{i}}"
+          (input)="onSpareInputChange(i, 'spareinput', 'spare', 'sparearray', 'invoicepage')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'spareinput'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'sparearray', 'invoicepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'sparearray', 'invoicepage')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="data.inventoryqty" [ngModel]="data.inventoryqty || 'NA'" style="text-align: right;" readonly
+          name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="data.uom" name="dropdown" class="form-control" [ngModel]="data.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="data.qty" [ngModel]="data.qty | number:'1.2-2'"
+          name="qty-invoice{{i}}">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;" [(ngModel)]="data.rate" name="rate-invoice{{i}}">
+      </div>
+
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="data.discount" maxlength="2" [ngModel]="data.discount || '0'"
+          name="qty-invoice{{i}}">
+      </div>
+
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_inputinvoice_total(data.qty, data.rate, data.discount)?.toFixed(2)">
+      </div>
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="data.buyingprice" name="rate-invoice{{i}}">
+      </div>
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst18" id="gst18{{i}}" (change)="handleCheckboxChange(data, 'gst18')"
+            name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst28" id="gst28{{i}}" (change)="handleCheckboxChange(data, 'gst28')"
+            name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+      </div>
+      <div>
+        <button class="btn btn-icon btn-primary" (click)="removespares(inputinvoiceDataArray[i],inputinvoiceDataArray)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255)">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="input-row" *ngFor="let data of inputinvoiceLabourDataArray; let i = index">
+
+      <div class="input-container partcode">
+        <input [(ngModel)]="data.partcode" name="partcode-invoice{{i}}"
+          (input)="onSpareInputChange(i, 'labourinputpartcode', 'partcode', 'labourarray', 'invoicepage')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'labourinputpartcode'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'labourarray', 'invoicepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'labourarray', 'invoicepage')">
+            {{ suggestion.name }} - {{ suggestion.mrp }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="input-container spare">
+        <input [(ngModel)]="data.name" name="partcode-invoice{{i}}"
+          (input)="onSpareInputChange(i, 'labourinputspare', 'spare', 'labourarray', 'invoicepage')">
+        <ul *ngIf="spareSuggestions[i]?.suggestions.length > 0 && spareSuggestions[i]?.type == 'labourinputspare'"
+          class="custom-dropdown" tabindex="0">
+          <li *ngFor="let suggestion of spareSuggestions[i].suggestions"
+            (click)="onSpareSelect(i, suggestion, 'labourarray', 'invoicepage')" tabindex="0"
+            (keydown.enter)="onSpareSelect(i, suggestion, 'labourarray', 'invoicepage')">
+            {{ suggestion.name }} - {{ suggestion.sellingprize }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- forshowing qty rate of the inventory -->
+      <div class="input-container qty" *ngIf="inventory_customers">
+        <input [(ngModel)]="data.inventoryqty" [ngModel]="data.inventoryqty || 'NA'" style="text-align: right;" readonly
+          name="qty">
+      </div>
+
+      <div class="input-container discount">
+        <select id="dropdown" [(ngModel)]="data.uom" name="dropdown" class="form-control" [ngModel]="data.uom || 'pcs'">
+          <option *ngFor="let option of uom" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="data.qty" [ngModel]="data.qty | number:'1.2-2'" name="qty">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;" [(ngModel)]="data.rate" name="rate">
+      </div>
+
+      <div class="input-container qty">
+        <input style="text-align: right;" [(ngModel)]="data.discount" maxlength="2" [ngModel]="data.discount || '0'"
+          name="qty">
+      </div>
+
+      <div class="input-container rate">
+        <input style="text-align: right;"
+          [value]="calculate_inputinvoice_total(data.qty, data.rate, data.discount)?.toFixed(2)">
+      </div>
+
+      <div class="input-container rate" *ngIf="buying">
+        <input style="text-align: right;" [(ngModel)]="data.buyingprice" name="buyingprice{{i}}">
+      </div>
+
+      <div class="gstContainer" *ngIf="gstvariable!== ''">
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst18" id="gst18" (change)="handleCheckboxChange(data, 'gst18')"
+            name="gst18{{i}}">
+          18%
+        </mat-checkbox>
+        <mat-checkbox>
+          <input type="checkbox" [(ngModel)]="data.gst28" id="gst28" (change)="handleCheckboxChange(data, 'gst28')"
+            name="gst28{{i}}">
+          28%
+        </mat-checkbox>
+      </div>
+
+      <div>
+        <!-- <div *ngIf="i === 0">Action</div> -->
+        <button class="btn btn-icon btn-primary"
+          (click)="removespares(inputinvoiceLabourDataArray[i],inputinvoiceLabourDataArray)"
+          style="margin-right: 10px;background-color: rgb(88, 100, 255);">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+
+    </div>
+    <div style="float: right;margin-right: 15%;">
+    </div>
+  </div>
+  <hr style="border: 1px dashed black;">
+
+  <!-- <div class="buttonContainer ">  -->
+  <div class="d-flex">
+    <div style="padding-left: 3%;">
+      <label>Remarks</label>
+      <textarea id="remarks" class="form-control" [(ngModel)]="advisor_remarks" placeholder="Enter your remarks here..."
+        style="width: 450px; text-align: left; height: 50px; resize: none"></textarea>
+    </div>
+
+
+    <div style="display: flex; flex-direction: column;  margin-left: 30%; ">
+      <label>Discount</label>
+      <input [(ngModel)]="overalldiscount" style="width: 60px;">
+    </div>
+    <div style="display: flex; flex-direction: column; margin-left: 1%;">
+      <label> Total </label>
+      <input [value]="calculateGrandTotal_final('invoicepage')?.toFixed(2)" style="text-align: right;" readonly>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<!-- <ng-template #vehicleimagespage>
+  <div *ngIf="isLoading">Loading...</div>
+
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  
+  <div *ngIf="!isLoading && imageBytesList.length > 0">
+    <div *ngFor="let image of imageBytesList">
+      <img [src]="image" alt="Vehicle Photo" style="width: 200px; height: auto; margin: 10px;" />
+    </div>
+  </div>
+</ng-template> -->
+
+<ng-template #vehicleimagespage>
+
+  <div style="padding: 5px;">
+    <i class="i-Close-Window" style="float:right; font-size:24px;" aria-hidden="true"
+      (click)="close_vehiclepopup()"></i>
+
+  </div>
+  <div *ngIf="isLoading" class="loading">Loading...</div>
+
+  <div *ngIf="errorMessage || (!isLoading && imageBytesList.length === 0)" class="error-message">
+    {{ errorMessage ? errorMessage : 'No vehicle photos available.' }}
+  </div>
+
+  <div *ngIf="!isLoading && imageBytesList.length > 0" class="image-container">
+    <div *ngFor="let image of imageBytesList" class="image-wrapper">
+      <img [src]="image" alt="Vehicle Photo" class="vehicle-image" />
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+
+
+
+
+<ng-template #productpage>
+  <div class="col-md-12">
+      <div style="display: flex;padding: 10px;">
+          <i (click)="closeproductdialog()" class="i-Close-Window" style="width: 25px; margin-left: auto;font-size:24px"></i>
+      </div>
+      <div class="card mb-4 shadow-sm">
+          <div class="card-body">
+              <h4 class="card-title mb-4 text-left" style="color: grey;font-size: x-large ">Add Product Details</h4>
+
+              <div class="row g-3">
+                  <div class="col-md-4">
+                      <label for="brand" class="form-label">Select Supplier</label>
+                      <select class="form-select" [(ngModel)]="productobj.supplier_id">
+                          <option *ngFor="let supplier of allsupplierdata" [ngValue]="supplier._id">{{supplier.name}}
+                          </option>
+                      </select>
+                  </div>
+
+                  <div class="itemsdetails">
+                      <h4 style="color: grey; " class="itemsPlaceholder"><strong>Items</strong></h4>
+                      <div class="borderContainer">
+                          <div class="row">
+
+
+                              <div class="col-md-4 position-relative" *ngIf="singlebrand">
+                                  <label for="brand" class="form-label">Select Brand</label>
+
+                                  <input type="text" class="form-control" placeholder="Search Brand"
+                                      [(ngModel)]="selectedBrandName" (input)="filterBrands()"
+                                      (focus)="showDropdown = true" (blur)="hidebrandDropdown()" />
+
+                                  <!-- <ul *ngIf="showDropdown" class="dropdown-menu show custom-dropdown"
+                                      [style.position]="'absolute'" [style.zIndex]="1000" [style.width]="'100%'">
+                                      <li *ngFor="let brand of branddata" class="dropdown-item" (click)="selectBrand(brand)">
+                                          {{brand}}
+                                      </li>
+                                      <button class="btn btn-primary" (click)="openbrandpopup(brandpage)">add New</button>
+                                  </ul> -->
+                              </div>
+
+
+
+                              <div *ngIf="!singlebrand" class="col-md-4 position-relative">
+                                  <label for="brand" class="form-label">Select Brand</label>
+
+                                  <input type="text" class="form-control" placeholder="Search Brand"
+                                      [(ngModel)]="selectedBrandName" (input)="filterBrands()"
+                                      (focus)="showDropdown = true" (blur)="hidebrandDropdown()" />
+
+                                  <ul *ngIf="showDropdown" class="dropdown-menu show custom-dropdown"
+                                      [style.position]="'absolute'" [style.zIndex]="1000" [style.width]="'100%'">
+                                      <li *ngFor="let brand of branddata" class="dropdown-item" (click)="selectBrand(brand)">
+                                          {{brand}}
+                                      </li>
+                                      <button class="btn btn-primary" (click)="openbrandpopup(brandpage)">add New</button>
+                                  </ul>
+                              </div>
+
+                              <div class="col-md-4 position-relative">
+                                  <label for="Category" class="form-label">Select Model</label>
+                                  <input type="text" class="form-control" placeholder="Search Model"
+                                      [(ngModel)]="selectedmodelname" (input)="filterCategory()"
+                                      (focus)="showmodelDropdown = true"  (blur)="hidemodelDropdown()" />
+                                  <ul *ngIf="showmodelDropdown"
+                                      class="dropdown-menu show custom-dropdown" [style.position]="'absolute'" [style.zIndex]="1000"
+                                      [style.width]="'100%'">
+                                      <li *ngFor="let model of seletedbrand_model" class="dropdown-item"
+                                          (click)="selectmodel(model)">
+                                          {{ model.bikename }}
+                                      </li>
+                                      <button class="btn btn-primary" (click)="openmodelpopup(modelpage)">add New</button>
+                                  </ul>
+                              </div>
+
+                              <!-- <div class="col-md-4 position-relative">
+                                  <label for="Category" class="form-label">Select Category</label>
+                                  <input type="text" class="form-control" placeholder="Search Category"
+                                      [(ngModel)]="selectedcategoryname" (input)="filterCategory()"
+                                      (focus)="showcategoryDropdown = true"  (blur)="hidecategoryDropdown()" />
+                                  <ul *ngIf="showcategoryDropdown"
+                                      class="dropdown-menu show custom-dropdown" [style.position]="'absolute'" [style.zIndex]="1000"
+                                      [style.width]="'100%'">
+                                      <li *ngFor="let Category of categorydata" class="dropdown-item"
+                                          (click)="selectcategory(Category)">
+                                          {{ Category.category }}
+                                      </li>
+                                      <button class="btn btn-primary" (click)="opencategorypopup(categorypage)">add New</button>
+                                  </ul>
+                              </div> -->
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="productdetails">
+                      <h4 style="color: grey; " class="productPlaceholder"><strong>product</strong></h4>
+                      <div class="borderContainer">
+                          <div class="row">
+                              <div class="col-md-4">
+                                  <label for="serialno" class="form-label">Product S.No</label>
+                                  <input type="text" class="form-control" id="serialno"
+                                      [(ngModel)]="productobj.serial_no">
+                              </div>
+                              <div class="col-md-4">
+                                  <label for="productid" class="form-label">Part Code</label>
+                                  <input type="text" class="form-control" id="productid"
+                                      [(ngModel)]="productobj.partcode" (blur)="checkFullProductId(productobj.partcode)">
+                              </div>
+                              <div class="col-md-4">
+                                  <label for="productid" class="form-label">Product ID</label>
+                                  <input type="text" class="form-control" id="productid"
+                                      [(ngModel)]="productobj.product_id" (blur)="checkFullProductId(productobj.product_id)">
+                              </div>
+                              <div class="col-md-4">
+                                  <label for="product_name" class="form-label">Product Name</label>
+                                  <input type="text" class="form-control" id="product_name"
+                                      [(ngModel)]="productobj.product_name">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="amounttdetails">
+                      <h4 style="color: grey; " class="amountPlaceholder"><strong>Amount</strong></h4>
+                      <div class="borderContainer">
+                          <div class="row">
+                              <div class="col-md-4">
+                                  <label for="hsn_no" class="form-label">HSN Code</label>
+                                  <input type="text"  class="form-control" id="hsn_no" [(ngModel)]="productobj.HSN">
+                              </div>
+                            
+                              <div class="col-md-4">
+                                  <label for="mrp" class="form-label">MRP</label>
+                                  <input type="number" class="form-control" id="mrp" [(ngModel)]="productobj.MRP"
+                                      (focus)="clearOnFocus('MRP')" (blur)="formatOnBlur('MRP')">
+                              </div>
+
+                              <div class="col-md-4">
+                                  <label for="maxDiscount" class="form-label">Max Discount%</label>
+                                  <input type="text" class="form-control" id="maxDiscount" maxlength="2"
+                                      [(ngModel)]="productobj.maximum_discount">
+                              </div>
+
+                              <div class="col-md-3">
+                                  <label for="category" class="form-label">Select GST</label>
+                                  <select class="form-select" [(ngModel)]="productobj.GST_ID">
+                                      <!-- <option [ngValue]="'28'">5%</option> -->
+                                      <option [ngValue]="'18'">18%</option>
+                                      <option [ngValue]="'28'">28%</option>
+                                  </select>
+                              </div>
+                           
+                              <div class="col-md-3">
+                                  <label for="maxDiscount" class="form-label">IGST</label>
+                                  <input type="text" class="form-control" id="maxDiscount" 
+                                      [(ngModel)]="productobj.IGST"    (focus)="clearOnFocus('IGST')" (blur)="formatOnBlur('IGST')">
+                              </div>
+                              <div class="col-md-3">
+                                  <label for="maxDiscount" class="form-label">SGST</label>
+                                  <input type="text" class="form-control" id="maxDiscount" 
+                                      [(ngModel)]="productobj.SGST" (focus)="clearOnFocus('SGST')" (blur)="formatOnBlur('SGST')">
+                              </div>
+                              <div class="col-md-3">
+                                  <label for="maxDiscount" class="form-label">CGST</label>
+                                  <input type="text" class="form-control" id="maxDiscount" 
+                                      [(ngModel)]="productobj.CGST" (focus)="clearOnFocus('CGST')" (blur)="formatOnBlur('CGST')">
+                              </div>
+
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="measurementdetails">
+                      <h4 style="color: grey; " class="measurementPlaceholder"><strong>Measurement</strong></h4>
+                      <div class="borderContainer">
+                          <div class="row">
+                              <div class="col-md-4">
+                                  <label for="qty" class="form-label">Quantity</label>
+                                  <input type="number" class="form-control" id="qty" [(ngModel)]="productobj.qty" 
+                                  (focus)="clearOnFocus('qty')" (blur)="formatOnBlur('qty')">
+                              </div>
+
+                              <div class="col-md-4">
+                                  <label for="rol" class="form-label">Reorder Level</label>
+                                  <input type="number" class="form-control" id="rol" [(ngModel)]="productobj.ROL"
+                                      (focus)="clearOnFocus('ROL')" (blur)="formatOnBlur('ROL')">
+                              </div>
+                              <div class="col-md-4">
+                                  <label for="roq" class="form-label">Reorder Quantity</label>
+                                  <input type="number" class="form-control" id="roq" [(ngModel)]="productobj.ROQ"
+                                      (focus)="clearOnFocus('ROQ')" (blur)="formatOnBlur('ROQ')">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-12">
+                      <label for="description" class="form-label">Description</label>
+                      <textarea class="form-control" id="description" rows="4"
+                          [(ngModel)]="productobj.product_desc"></textarea>
+                  </div>
+                  <div class="col-md-12 text-center mt-4">
+                      <button type="submit" class="btn btn-primary btn-rounded" id="productsave"
+                          (click)="productsave()">Save</button>
+                  </div>
+
+              </div>
+          </div>
+      </div>
+  </div>
+</ng-template>
+
+
+
+<!-- <ng-template #conform_mrp_popup>
+  <div style="padding: 10px;">
+
+      <h3>Already There Is a Product With The Amount of {{checkedproductmrp}}</h3>
+      <h3>Do You Want to Update the MRP as {{productobj.MRP}}?</h3>
+      <div class="button-container">
+          <button class="btn btn-primary btn-rounded" (click)="conform_mrp_popup_process('no')">No</button>
+          <button class="btn btn-primary btn-rounded" (click)="conform_mrp_popup_process('yes')">Yes</button>
+      </div>
+  </div>
+</ng-template> -->

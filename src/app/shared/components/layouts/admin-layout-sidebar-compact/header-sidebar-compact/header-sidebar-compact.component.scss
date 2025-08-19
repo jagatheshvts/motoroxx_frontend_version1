@@ -1,0 +1,34 @@
+
+
+.blue-icon {
+    font-size: 25px;
+    color: rgb(187, 180, 180); 
+    transition: color 0.3s ease; 
+}
+.blue-icon:hover,
+.blue-icon:focus {
+    color: lightblue;
+    transform: scale(1.1);  
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.active-icon {
+    color: rgb(88, 100, 255);
+  }
+.tooltip-text {
+    color: blue;
+    font-size: 12px;  
+    position: absolute;
+    z-index: 1;
+    top: 100%;  
+    left: 50%;
+    transform: translateX(-50%);  
+    transition: opacity 0.3s;
+}
+.tooltip-container.tooltip-text {
+    opacity: 1;
+}
